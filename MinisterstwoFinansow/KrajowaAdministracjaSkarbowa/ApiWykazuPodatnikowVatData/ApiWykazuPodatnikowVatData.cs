@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ApiWykazuPodatnikowVatData
+﻿namespace ApiWykazuPodatnikowVatData
 {
     public class ApiWykazuPodatnikowVatData
     {
