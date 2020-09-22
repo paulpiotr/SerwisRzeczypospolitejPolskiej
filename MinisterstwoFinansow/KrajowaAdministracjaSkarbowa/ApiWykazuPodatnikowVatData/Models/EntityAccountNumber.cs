@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class ApiWykazuPodatnikowVatDataEntityAccountNumber
+    #region public partial class EntityAccountNumber
     /// <summary>
-    /// Model danych ApiWykazuPodatnikowVatDataEntityAccountNumber
+    /// Model danych EntityAccountNumber
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntityAccountNumber", Schema = "ApiWykazuPodatnikowVat")]
-    public partial class ApiWykazuPodatnikowVatDataEntityAccountNumber
+    [Table("EntityAccountNumber", Schema = "ApiWykazuPodatnikowVat")]
+    public partial class EntityAccountNumber
     {
         #region public Guid Id { get; set; }
         /// <summary>
@@ -21,20 +21,20 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityId { get; set; }
+        #region public Guid? EntityId { get; set; }
         /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? ApiWykazuPodatnikowVatDataEntityId { get; set; }
+        public Guid? EntityId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntity ApiWykazuPodatnikowVatDataEntity { get; set; }
+        #region public virtual Entity Entity { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityId))]
-        [InverseProperty("ApiWykazuPodatnikowVatDataEntityAccountNumber")]
-        public virtual ApiWykazuPodatnikowVatDataEntity ApiWykazuPodatnikowVatDataEntity { get; set; }
+        [ForeignKey(nameof(EntityId))]
+        [InverseProperty("EntityAccountNumber")]
+        public virtual Entity Entity { get; set; }
         #endregion
 
         #region public string AccountNumber { get; set; }

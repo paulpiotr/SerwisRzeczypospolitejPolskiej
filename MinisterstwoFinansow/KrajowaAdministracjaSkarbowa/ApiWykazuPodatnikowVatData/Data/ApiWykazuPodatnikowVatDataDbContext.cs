@@ -21,32 +21,39 @@ namespace ApiWykazuPodatnikowVatData.Data
         private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
-        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        #region public virtual DbSet<Entity> Entity { get; set; }
         /// <summary>
-        /// Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
+        /// Model danych Entity, oryginalnie Entity
         /// </summary>
-        public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        public virtual DbSet<Entity> Entity { get; set; }
         #endregion
 
-        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPesel> ApiWykazuPodatnikowVatDataEntityPesel { get; set; }
+        #region public virtual DbSet<EntityPesel> EntityPesel { get; set; }
         /// <summary>
-        /// Model danych ApiWykazuPodatnikowVatDataEntityPesel, oryginalnie Pesel
+        /// Model danych EntityPesel, oryginalnie Pesel
         /// </summary>
-        public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPesel> ApiWykazuPodatnikowVatDataEntityPesel { get; set; }
+        public virtual DbSet<EntityPesel> EntityPesel { get; set; }
         #endregion
 
-        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
+        #region public virtual DbSet<EntityPerson> EntityPerson { get; set; }
         /// <summary>
-        /// Model danych ApiWykazuPodatnikowVatDataEntityPerson, oryginalnie EntityPerson
+        /// Model danych EntityPerson, oryginalnie EntityPerson
         /// </summary>
-        public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
+        public virtual DbSet<EntityPerson> EntityPerson { get; set; }
         #endregion
 
-        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
+        #region public virtual DbSet<EntityAccountNumber> EntityAccountNumber { get; set; }
         /// <summary>
-        /// Model danych ApiWykazuPodatnikowVatDataEntityAccountNumber
+        /// Model danych EntityAccountNumber
         /// </summary>
-        public virtual DbSet<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
+        public virtual DbSet<EntityAccountNumber> EntityAccountNumber { get; set; }
+        #endregion
+
+        #region public virtual DbSet<EntityCheck> EntityCheck { get; set; }
+        /// <summary>
+        /// Model danych EntityCheck
+        /// </summary>
+        public virtual DbSet<EntityCheck> EntityCheck { get; set; }
         #endregion
 
         #region public ApiWykazuPodatnikowVatDataDbContext()

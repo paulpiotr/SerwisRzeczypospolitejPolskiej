@@ -5,23 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class ApiWykazuPodatnikowVatDataEntity, Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
+    #region public partial class Entity, Model danych Entity, oryginalnie Entity
     /// <summary>
-    /// Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
+    /// Model danych Entity, oryginalnie Entity
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntity", Schema = "ApiWykazuPodatnikowVat")]
-    public partial class ApiWykazuPodatnikowVatDataEntity
+    [Table("Entity", Schema = "ApiWykazuPodatnikowVat")]
+    public partial class Entity
     {
-        #region public ApiWykazuPodatnikowVatDataEntity()
+        #region public Entity()
         /// <summary>
-        /// Konstruktor ApiWykazuPodatnikowVatDataEntity()
+        /// Konstruktor Entity()
         /// </summary>
-        public ApiWykazuPodatnikowVatDataEntity()
+        public Entity()
         {
-            Representative = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
-            AuthorizedClerk = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
-            Partner = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
-            //AccountNumber = new HashSet<ApiWykazuPodatnikowVatDataEntityAccountNumber>();
+            Representative = new HashSet<EntityPerson>();
+            AuthorizedClerk = new HashSet<EntityPerson>();
+            Partner = new HashSet<EntityPerson>();
+            //AccountNumber = new HashSet<EntityAccountNumber>();
         }
         #endregion
 
@@ -84,19 +84,19 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Regon { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        #region public Guid? EntityPeselId { get; set; }
         /// <summary>
-        /// Powiązanie do tabeli ApiWykazuPodatnikowVatDataEntityPesel
+        /// Powiązanie do tabeli EntityPesel
         /// Numer Pesel
         /// </summary>
         [Display(Name = "Numer Pesel", Prompt = "Wybierz powiązanie numeru pesel", Description = "Numer pesel")]
-        public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        public Guid? EntityPeselId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPeselId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntityPesel.ApiWykazuPodatnikowVatDataEntity))]
-        public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
+        #region public virtual EntityPesel Pesel { get; set; }
+        [ForeignKey(nameof(EntityPeselId))]
+        [InverseProperty(nameof(EntityPesel.Entity))]
+        public virtual EntityPesel Pesel { get; set; }
         #endregion
 
         #region public string Krs { get; set; }
@@ -145,13 +145,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Representatives { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representative { get; set; }
+        #region public virtual ICollection<EntityPerson> Representative { get; set; }
         /// <summary>
         ///Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL
         /// </summary>
         [Display(Name = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby wchodzące w skład organu uprawnionego do reprezentowania podmiotu", Description = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i / lub PESEL")]
         [InverseProperty("Representative")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representative { get; set; }
+        public virtual ICollection<EntityPerson> Representative { get; set; }
         #endregion
 
         #region public string AuthorizedClerks { get; set; }
@@ -165,13 +165,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string AuthorizedClerks { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerk { get; set; }
+        #region public virtual ICollection<EntityPerson> AuthorizedClerk { get; set; }
         /// <summary>
         /// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
         /// </summary>
         [Display(Name = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby prokurentów oraz ich numery NIP i/lub PESEL", Description = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL")]
         [InverseProperty("AuthorizedClerk")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerk { get; set; }
+        public virtual ICollection<EntityPerson> AuthorizedClerk { get; set; }
         #endregion
 
         #region public string Partners { get; set; }
@@ -185,13 +185,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Partners { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partner { get; set; }
+        #region public virtual ICollection<EntityPerson> Partner { get; set; }
         /// <summary>
         /// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL
         /// </summary>
         [Display(Name = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Prompt = "Dodaj osoby wspólników Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Description = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL")]
         [InverseProperty("Partner")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partner { get; set; }
+        public virtual ICollection<EntityPerson> Partner { get; set; }
         #endregion
 
         #region public DateTime? RegistrationLegalDate { get; set; }
@@ -263,13 +263,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string RemovalBasis { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityAccountNumber> AccountNumber { get; set; }
+        #region public virtual ICollection<EntityAccountNumber> AccountNumber { get; set; }
         /// <summary>
         /// Numery kont bankowych w formacie NRB
         /// </summary>
         [Display(Name = "Numery kont bankowych w formacie NRB", Prompt = "Dodaj numery kont bankowych w formacie NRB", Description = "Numery kont bankowych w formacie NRB")]
-        [InverseProperty("ApiWykazuPodatnikowVatDataEntity")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
+        [InverseProperty("Entity")]
+        public virtual ICollection<EntityAccountNumber> EntityAccountNumber { get; set; }
         #endregion
 
         #region public bool HasVirtualAccounts { get; set; }

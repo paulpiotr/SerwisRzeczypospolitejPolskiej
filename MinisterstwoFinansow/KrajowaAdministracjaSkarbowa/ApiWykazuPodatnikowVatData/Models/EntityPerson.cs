@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class ApiWykazuPodatnikowVatDataEntityPerson
+    #region public partial class EntityPerson
     /// <summary>
-    /// Model danych ApiWykazuPodatnikowVatDataEntityPerson, oryginalnie EntityPerson
+    /// Model danych EntityPerson, oryginalnie EntityPerson
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntityPerson", Schema = "ApiWykazuPodatnikowVat")]
-    public partial class ApiWykazuPodatnikowVatDataEntityPerson
+    [Table("EntityPerson", Schema = "ApiWykazuPodatnikowVat")]
+    public partial class EntityPerson
     {
         #region public Guid Id { get; set; }, identyfikator, klucz główny
         /// <summary>
@@ -20,68 +20,68 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativesId { get; set; }
+        #region public Guid? EntityRepresentativesId { get; set; }
         /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativesId { get; set; }
+        public Guid? EntityRepresentativesId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntity Representative { get; set; }
+        #region public virtual Entity Representative { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityRepresentativesId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.Representative))]
-        public virtual ApiWykazuPodatnikowVatDataEntity Representative { get; set; }
+        [ForeignKey(nameof(EntityRepresentativesId))]
+        [InverseProperty(nameof(Entity.Representative))]
+        public virtual Entity Representative { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId { get; set; }
+        #region public Guid? EntityAuthorizedClerksId { get; set; }
         /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId { get; set; }
+        public Guid? EntityAuthorizedClerksId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntity AuthorizedClerk { get; set; }
+        #region public virtual Entity AuthorizedClerk { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.AuthorizedClerk))]
-        public virtual ApiWykazuPodatnikowVatDataEntity AuthorizedClerk { get; set; }
+        [ForeignKey(nameof(EntityAuthorizedClerksId))]
+        [InverseProperty(nameof(Entity.AuthorizedClerk))]
+        public virtual Entity AuthorizedClerk { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityPartnersId { get; set; }
+        #region public Guid? EntityPartnersId { get; set; }
         /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? ApiWykazuPodatnikowVatDataEntityPartnersId { get; set; }
+        public Guid? EntityPartnersId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntity Partner { get; set; }
+        #region public virtual Entity Partner { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPartnersId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.Partner))]
-        public virtual ApiWykazuPodatnikowVatDataEntity Partner { get; set; }
+        [ForeignKey(nameof(EntityPartnersId))]
+        [InverseProperty(nameof(Entity.Partner))]
+        public virtual Entity Partner { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        #region public Guid? EntityPeselId { get; set; }
         /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntityPesel jako Guid?
+        /// Odniesienie (klucz obcy) do tabeli EntityPesel jako Guid?
         /// </summary>
-        public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        public Guid? EntityPeselId { get; set; }
         #endregion
 
-        #region public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
+        #region public virtual EntityPesel Pesel { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntityPesel
+        /// Kolekcja objektów tabeli EntityPesel
         /// </summary>
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPeselId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntityPesel.ApiWykazuPodatnikowVatDataEntityPerson))]
-        public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
+        [ForeignKey(nameof(EntityPeselId))]
+        [InverseProperty(nameof(EntityPesel.EntityPerson))]
+        public virtual EntityPesel Pesel { get; set; }
         #endregion
 
         #region public string CompanyName { get; set; }, Nazwa firmy

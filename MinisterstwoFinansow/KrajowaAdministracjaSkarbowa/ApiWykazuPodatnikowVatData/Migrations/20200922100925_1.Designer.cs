@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20200922091944_1")]
+    [Migration("20200922100925_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,13 +21,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.Entity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityPeselId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AuthorizedClerks")
@@ -43,6 +40,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
+
+                    b.Property<Guid?>("EntityPeselId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("HasVirtualAccounts")
                         .HasColumnName("HasVirtualAccounts")
@@ -127,12 +127,12 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityPeselId");
+                    b.HasIndex("EntityPeselId");
 
-                    b.ToTable("ApiWykazuPodatnikowVatDataEntity","ApiWykazuPodatnikowVat");
+                    b.ToTable("Entity","ApiWykazuPodatnikowVat");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityAccountNumber", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,8 +144,35 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(32)")
                         .HasMaxLength(32);
 
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityId")
+                    b.Property<DateTime>("DateOfCreate")
+                        .HasColumnName("DateOfCreate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DateOfModification")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("DateOfModification")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("EntityId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
+
+                    b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
+                });
+
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityCheck", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountAssigned")
+                        .HasColumnName("AccountAssigned")
+                        .HasColumnType("varchar(3)")
+                        .HasMaxLength(3);
 
                     b.Property<DateTime>("DateOfCreate")
                         .HasColumnName("DateOfCreate")
@@ -156,29 +183,24 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime>("RequestDateTime")
+                        .HasColumnName("RequestDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RequestId")
+                        .HasColumnName("RequestId")
+                        .HasColumnType("varchar(18)")
+                        .HasMaxLength(18);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityId");
-
-                    b.ToTable("ApiWykazuPodatnikowVatDataEntityAccountNumber","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityCheck","ApiWykazuPodatnikowVat");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityPerson", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityPartnersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityPeselId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApiWykazuPodatnikowVatDataEntityRepresentativesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CompanyName")
@@ -194,6 +216,18 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
+
+                    b.Property<Guid?>("EntityAuthorizedClerksId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EntityPartnersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EntityPeselId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EntityRepresentativesId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
                         .HasColumnName("FirstName")
@@ -212,18 +246,18 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId");
+                    b.HasIndex("EntityAuthorizedClerksId");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityPartnersId");
+                    b.HasIndex("EntityPartnersId");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityPeselId");
+                    b.HasIndex("EntityPeselId");
 
-                    b.HasIndex("ApiWykazuPodatnikowVatDataEntityRepresentativesId");
+                    b.HasIndex("EntityRepresentativesId");
 
-                    b.ToTable("ApiWykazuPodatnikowVatDataEntityPerson","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityPesel", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPesel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,40 +280,40 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApiWykazuPodatnikowVatDataEntityPesel","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityPesel","ApiWykazuPodatnikowVat");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.Entity", b =>
                 {
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityPesel", "Pesel")
-                        .WithMany("ApiWykazuPodatnikowVatDataEntity")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityPeselId");
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.EntityPesel", "Pesel")
+                        .WithMany("Entity")
+                        .HasForeignKey("EntityPeselId");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityAccountNumber", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
                 {
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", "ApiWykazuPodatnikowVatDataEntity")
-                        .WithMany("ApiWykazuPodatnikowVatDataEntityAccountNumber")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityId");
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Entity")
+                        .WithMany("EntityAccountNumber")
+                        .HasForeignKey("EntityId");
                 });
 
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityPerson", b =>
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>
                 {
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", "AuthorizedClerk")
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "AuthorizedClerk")
                         .WithMany("AuthorizedClerk")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId");
+                        .HasForeignKey("EntityAuthorizedClerksId");
 
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", "Partner")
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Partner")
                         .WithMany("Partner")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityPartnersId");
+                        .HasForeignKey("EntityPartnersId");
 
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntityPesel", "Pesel")
-                        .WithMany("ApiWykazuPodatnikowVatDataEntityPerson")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityPeselId");
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.EntityPesel", "Pesel")
+                        .WithMany("EntityPerson")
+                        .HasForeignKey("EntityPeselId");
 
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.ApiWykazuPodatnikowVatDataEntity", "Representative")
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Representative")
                         .WithMany("Representative")
-                        .HasForeignKey("ApiWykazuPodatnikowVatDataEntityRepresentativesId");
+                        .HasForeignKey("EntityRepresentativesId");
                 });
 #pragma warning restore 612, 618
         }

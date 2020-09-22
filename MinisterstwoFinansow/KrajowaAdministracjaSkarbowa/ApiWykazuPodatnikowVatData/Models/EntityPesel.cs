@@ -5,21 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class ApiWykazuPodatnikowVatDataEntityPesel, Model danych ApiWykazuPodatnikowVatDataEntityPesel, oryginalnie Entity
+    #region public partial class EntityPesel, Model danych EntityPesel, oryginalnie Entity
     /// <summary>
-    /// Model danych ApiWykazuPodatnikowVatDataEntityPesel, oryginalnie Pesel
+    /// Model danych EntityPesel, oryginalnie Pesel
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntityPesel", Schema = "ApiWykazuPodatnikowVat")]
-    public partial class ApiWykazuPodatnikowVatDataEntityPesel
+    [Table("EntityPesel", Schema = "ApiWykazuPodatnikowVat")]
+    public partial class EntityPesel
     {
-        #region public ApiWykazuPodatnikowVatDataEntityPesel()
+        #region public EntityPesel()
         /// <summary>
         /// 
         /// </summary>
-        public ApiWykazuPodatnikowVatDataEntityPesel()
+        public EntityPesel()
         {
-            ApiWykazuPodatnikowVatDataEntity = new HashSet<ApiWykazuPodatnikowVatDataEntity>();
-            ApiWykazuPodatnikowVatDataEntityPerson = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
+            Entity = new HashSet<Entity>();
+            EntityPerson = new HashSet<EntityPerson>();
         }
         #endregion
 
@@ -64,20 +64,20 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? DateOfModification { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        #region public virtual ICollection<Entity> Entity { get; set; }
         /// <summary>
-        /// public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        /// public virtual ICollection<Entity> Entity { get; set; }
         /// </summary>
         [InverseProperty("Pesel")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        public virtual ICollection<Entity> Entity { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
+        #region public virtual ICollection<EntityPerson> EntityPerson { get; set; }
         /// <summary>
-        /// public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
+        /// public virtual ICollection<Entity> EntityPerson { get; set; }
         /// </summary>
         [InverseProperty("Pesel")]
-        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
+        public virtual ICollection<EntityPerson> EntityPerson { get; set; }
         #endregion
     }
     #endregion

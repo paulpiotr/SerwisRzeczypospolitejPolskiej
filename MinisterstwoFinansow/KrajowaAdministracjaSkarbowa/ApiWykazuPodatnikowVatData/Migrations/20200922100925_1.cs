@@ -11,7 +11,24 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 name: "ApiWykazuPodatnikowVat");
 
             migrationBuilder.CreateTable(
-                name: "ApiWykazuPodatnikowVatDataEntityPesel",
+                name: "EntityCheck",
+                schema: "ApiWykazuPodatnikowVat",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    AccountAssigned = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true),
+                    RequestDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    RequestId = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: true),
+                    DateOfCreate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DateOfModification = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntityCheck", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntityPesel",
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
@@ -22,11 +39,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiWykazuPodatnikowVatDataEntityPesel", x => x.Id);
+                    table.PrimaryKey("PK_EntityPesel", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiWykazuPodatnikowVatDataEntity",
+                name: "Entity",
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
@@ -35,7 +52,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     Nip = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true),
                     StatusVat = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
                     Regon = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true),
-                    ApiWykazuPodatnikowVatDataEntityPeselId = table.Column<Guid>(nullable: true),
+                    EntityPeselId = table.Column<Guid>(nullable: true),
                     Krs = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true),
                     ResidenceAddress = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true),
                     WorkingAddress = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true),
@@ -55,49 +72,49 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiWykazuPodatnikowVatDataEntity", x => x.Id);
+                    table.PrimaryKey("PK_Entity", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityPesel_ApiWykazuPodatnikowVatDataEntityPeselId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityPeselId,
+                        name: "FK_Entity_EntityPesel_EntityPeselId",
+                        column: x => x.EntityPeselId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntityPesel",
+                        principalTable: "EntityPesel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiWykazuPodatnikowVatDataEntityAccountNumber",
+                name: "EntityAccountNumber",
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ApiWykazuPodatnikowVatDataEntityId = table.Column<Guid>(nullable: true),
+                    EntityId = table.Column<Guid>(nullable: true),
                     AccountNumber = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false),
                     DateOfCreate = table.Column<DateTime>(type: "datetime", nullable: false),
                     DateOfModification = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiWykazuPodatnikowVatDataEntityAccountNumber", x => x.Id);
+                    table.PrimaryKey("PK_EntityAccountNumber", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntityAccountNumber_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityId,
+                        name: "FK_EntityAccountNumber_Entity_EntityId",
+                        column: x => x.EntityId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntity",
+                        principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiWykazuPodatnikowVatDataEntityPerson",
+                name: "EntityPerson",
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ApiWykazuPodatnikowVatDataEntityRepresentativesId = table.Column<Guid>(nullable: true),
-                    ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId = table.Column<Guid>(nullable: true),
-                    ApiWykazuPodatnikowVatDataEntityPartnersId = table.Column<Guid>(nullable: true),
-                    ApiWykazuPodatnikowVatDataEntityPeselId = table.Column<Guid>(nullable: true),
+                    EntityRepresentativesId = table.Column<Guid>(nullable: true),
+                    EntityAuthorizedClerksId = table.Column<Guid>(nullable: true),
+                    EntityPartnersId = table.Column<Guid>(nullable: true),
+                    EntityPeselId = table.Column<Guid>(nullable: true),
                     CompanyName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     FirstName = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true),
                     LastName = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
@@ -107,90 +124,94 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiWykazuPodatnikowVatDataEntityPerson", x => x.Id);
+                    table.PrimaryKey("PK_EntityPerson", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId,
+                        name: "FK_EntityPerson_Entity_EntityAuthorizedClerksId",
+                        column: x => x.EntityAuthorizedClerksId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntity",
+                        principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityPartnersId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityPartnersId,
+                        name: "FK_EntityPerson_Entity_EntityPartnersId",
+                        column: x => x.EntityPartnersId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntity",
+                        principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntityPesel_ApiWykazuPodatnikowVatDataEntityPeselId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityPeselId,
+                        name: "FK_EntityPerson_EntityPesel_EntityPeselId",
+                        column: x => x.EntityPeselId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntityPesel",
+                        principalTable: "EntityPesel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityRepresentativesId",
-                        column: x => x.ApiWykazuPodatnikowVatDataEntityRepresentativesId,
+                        name: "FK_EntityPerson_Entity_EntityRepresentativesId",
+                        column: x => x.EntityRepresentativesId,
                         principalSchema: "ApiWykazuPodatnikowVat",
-                        principalTable: "ApiWykazuPodatnikowVatDataEntity",
+                        principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntity_ApiWykazuPodatnikowVatDataEntityPeselId",
+                name: "IX_Entity_EntityPeselId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntity",
-                column: "ApiWykazuPodatnikowVatDataEntityPeselId");
+                table: "Entity",
+                column: "EntityPeselId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntityAccountNumber_ApiWykazuPodatnikowVatDataEntityId",
+                name: "IX_EntityAccountNumber_EntityId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntityAccountNumber",
-                column: "ApiWykazuPodatnikowVatDataEntityId");
+                table: "EntityAccountNumber",
+                column: "EntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId",
+                name: "IX_EntityPerson_EntityAuthorizedClerksId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntityPerson",
-                column: "ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId");
+                table: "EntityPerson",
+                column: "EntityAuthorizedClerksId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntityPartnersId",
+                name: "IX_EntityPerson_EntityPartnersId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntityPerson",
-                column: "ApiWykazuPodatnikowVatDataEntityPartnersId");
+                table: "EntityPerson",
+                column: "EntityPartnersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntityPeselId",
+                name: "IX_EntityPerson_EntityPeselId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntityPerson",
-                column: "ApiWykazuPodatnikowVatDataEntityPeselId");
+                table: "EntityPerson",
+                column: "EntityPeselId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiWykazuPodatnikowVatDataEntityPerson_ApiWykazuPodatnikowVatDataEntityRepresentativesId",
+                name: "IX_EntityPerson_EntityRepresentativesId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "ApiWykazuPodatnikowVatDataEntityPerson",
-                column: "ApiWykazuPodatnikowVatDataEntityRepresentativesId");
+                table: "EntityPerson",
+                column: "EntityRepresentativesId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApiWykazuPodatnikowVatDataEntityAccountNumber",
+                name: "EntityAccountNumber",
                 schema: "ApiWykazuPodatnikowVat");
 
             migrationBuilder.DropTable(
-                name: "ApiWykazuPodatnikowVatDataEntityPerson",
+                name: "EntityCheck",
                 schema: "ApiWykazuPodatnikowVat");
 
             migrationBuilder.DropTable(
-                name: "ApiWykazuPodatnikowVatDataEntity",
+                name: "EntityPerson",
                 schema: "ApiWykazuPodatnikowVat");
 
             migrationBuilder.DropTable(
-                name: "ApiWykazuPodatnikowVatDataEntityPesel",
+                name: "Entity",
+                schema: "ApiWykazuPodatnikowVat");
+
+            migrationBuilder.DropTable(
+                name: "EntityPesel",
                 schema: "ApiWykazuPodatnikowVat");
         }
     }
