@@ -14,23 +14,19 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[AspNetRoles]"
+         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntity]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[AspNetUserClaims]"
+         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityAccountNumber]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[AspNetUserLogins]"
+         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPerson]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[AspNetUserRoles]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[AspNetUsers]"
+         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPesel]"
       }
    ],
    "UseDatabaseNames": false,

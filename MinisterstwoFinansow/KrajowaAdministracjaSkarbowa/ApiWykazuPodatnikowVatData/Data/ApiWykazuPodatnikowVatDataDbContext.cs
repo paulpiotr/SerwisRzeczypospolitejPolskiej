@@ -21,6 +21,13 @@ namespace ApiWykazuPodatnikowVatData.Data
         private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
+        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        /// <summary>
+        /// Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
+        /// </summary>
+        public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        #endregion
+
         #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPesel> ApiWykazuPodatnikowVatDataEntityPesel { get; set; }
         /// <summary>
         /// Model danych ApiWykazuPodatnikowVatDataEntityPesel, oryginalnie Pesel
@@ -35,11 +42,11 @@ namespace ApiWykazuPodatnikowVatData.Data
         public virtual DbSet<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
         #endregion
 
-        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        #region public virtual DbSet<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
         /// <summary>
-        /// Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
+        /// Model danych ApiWykazuPodatnikowVatDataEntityAccountNumber
         /// </summary>
-        public virtual DbSet<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
+        public virtual DbSet<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
         #endregion
 
         #region public ApiWykazuPodatnikowVatDataDbContext()

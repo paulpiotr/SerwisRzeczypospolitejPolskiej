@@ -9,7 +9,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych ApiWykazuPodatnikowVatDataEntityPesel, oryginalnie Pesel
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntityPesel", Schema = "dbo")]
+    [Table("ApiWykazuPodatnikowVatDataEntityPesel", Schema = "ApiWykazuPodatnikowVat")]
     public partial class ApiWykazuPodatnikowVatDataEntityPesel
     {
         #region public ApiWykazuPodatnikowVatDataEntityPesel()
@@ -64,15 +64,15 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? DateOfModification { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntities { get; set; }
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
         /// <summary>
-        /// public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntities { get; set; }
+        /// public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
         /// </summary>
         [InverseProperty("Pesel")]
         public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntity { get; set; }
         #endregion
 
-        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPersons { get; set; }
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
         /// <summary>
         /// public virtual ICollection<ApiWykazuPodatnikowVatDataEntity> ApiWykazuPodatnikowVatDataEntityPerson { get; set; }
         /// </summary>

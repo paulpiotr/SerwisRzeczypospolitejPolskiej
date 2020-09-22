@@ -8,6 +8,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych ApiWykazuPodatnikowVatDataEntityPerson, oryginalnie EntityPerson
     /// </summary>
+    [Table("ApiWykazuPodatnikowVatDataEntityPerson", Schema = "ApiWykazuPodatnikowVat")]
     public partial class ApiWykazuPodatnikowVatDataEntityPerson
     {
         #region public Guid Id { get; set; }, identyfikator, klucz główny
@@ -19,12 +20,68 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public Guid ApiWykazuPodatnikowVatDataEntityId, klucz obcy, odniesienie do rekordu w tabeli ApiWykazuPodatnikowVatDataEntity
+        #region public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativesId { get; set; }
         /// <summary>
-        /// Guid ApiWykazuPodatnikowVatDataEntityId, klucz obcy, odniesienie do rekordu w tabeli ApiWykazuPodatnikowVatDataEntity
+        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
         /// </summary>
-        [Display(Name = "Odniesienie do rekordu w tabeli ApiWykazuPodatnikowVatDataEntity", Prompt = "Wybierz odniesienie do rekordu w tabeli ApiWykazuPodatnikowVatDataEntity", Description = "Odniesienie do rekordu w tabeli ApiWykazuPodatnikowVatDataEntity")]
-        public Guid? ApiWykazuPodatnikowVatDataEntityId { get; set; }
+        public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativesId { get; set; }
+        #endregion
+
+        #region public virtual ApiWykazuPodatnikowVatDataEntity Representative { get; set; }
+        /// <summary>
+        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// </summary>
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityRepresentativesId))]
+        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.Representative))]
+        public virtual ApiWykazuPodatnikowVatDataEntity Representative { get; set; }
+        #endregion
+
+        #region public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId { get; set; }
+        /// <summary>
+        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// </summary>
+        public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId { get; set; }
+        #endregion
+
+        #region public virtual ApiWykazuPodatnikowVatDataEntity AuthorizedClerk { get; set; }
+        /// <summary>
+        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// </summary>
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId))]
+        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.AuthorizedClerk))]
+        public virtual ApiWykazuPodatnikowVatDataEntity AuthorizedClerk { get; set; }
+        #endregion
+
+        #region public Guid? ApiWykazuPodatnikowVatDataEntityPartnersId { get; set; }
+        /// <summary>
+        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntity jako Guid?
+        /// </summary>
+        public Guid? ApiWykazuPodatnikowVatDataEntityPartnersId { get; set; }
+        #endregion
+
+        #region public virtual ApiWykazuPodatnikowVatDataEntity Partner { get; set; }
+        /// <summary>
+        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntity
+        /// </summary>
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPartnersId))]
+        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.Partner))]
+        public virtual ApiWykazuPodatnikowVatDataEntity Partner { get; set; }
+        #endregion
+
+        #region public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        /// <summary>
+        /// Odniesienie (klucz obcy) do tabeli ApiWykazuPodatnikowVatDataEntityPesel jako Guid?
+        /// </summary>
+        public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
+        #endregion
+
+        #region public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
+        /// <summary>
+        /// Kolekcja objektów tabeli ApiWykazuPodatnikowVatDataEntityPesel
+        /// </summary>
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPeselId))]
+        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntityPesel.ApiWykazuPodatnikowVatDataEntityPerson))]
+        public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
         #endregion
 
         #region public string CompanyName { get; set; }, Nazwa firmy
@@ -33,9 +90,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("CompanyName", TypeName = "varchar(256)")]
         [Display(Name = "Nazwa firmy", Prompt = "Wpisz nazwę firmy", Description = "Nazwa firmy")]
-        [Required]
         [StringLength(256)]
-        [MinLength(1)]
         [MaxLength(256)]
         public string CompanyName { get; set; }
         #endregion
@@ -62,28 +117,12 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string LastName { get; set; }
         #endregion
 
-        #region public Guid? ApiWykazuPodatnikowVatDataEntityPersonPeselId { get; set; }
-        /// <summary>
-        /// public Guid? ApiWykazuPodatnikowVatDataEntityPersonPeselId { get; set; }
-        /// Numer Pesel
-        /// </summary>
-        [Display(Name = "Numer Pesel", Prompt = "Wpisz pesel", Description = "Numer pesel")]
-        public Guid? ApiWykazuPodatnikowVatDataEntityPersonPeselId { get; set; }
-        #endregion
-
-        #region public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPersonPeselId))]
-        [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntityPesel.ApiWykazuPodatnikowVatDataEntityPerson))]
-        public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
-        #endregion
-
         #region public string Nip { get; set; }, Numer nip
         /// <summary>
         /// Numer nip
         /// </summary>
         [Column("Nip", TypeName = "varchar(10)")]
         [Display(Name = "Numer nip", Prompt = "Wpisz nip", Description = "Numer nip")]
-        [Required]
         [StringLength(10)]
         [MinLength(10)]
         [MaxLength(10)]

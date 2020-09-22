@@ -9,10 +9,23 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych ApiWykazuPodatnikowVatDataEntity, oryginalnie Entity
     /// </summary>
-    [Table("ApiWykazuPodatnikowVatDataEntity", Schema = "dbo")]
+    [Table("ApiWykazuPodatnikowVatDataEntity", Schema = "ApiWykazuPodatnikowVat")]
     public partial class ApiWykazuPodatnikowVatDataEntity
     {
-        #region public Guid Id { get; set; }, identyfikator, klucz główny
+        #region public ApiWykazuPodatnikowVatDataEntity()
+        /// <summary>
+        /// Konstruktor ApiWykazuPodatnikowVatDataEntity()
+        /// </summary>
+        public ApiWykazuPodatnikowVatDataEntity()
+        {
+            Representative = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
+            AuthorizedClerk = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
+            Partner = new HashSet<ApiWykazuPodatnikowVatDataEntityPerson>();
+            //AccountNumber = new HashSet<ApiWykazuPodatnikowVatDataEntityAccountNumber>();
+        }
+        #endregion
+
+        #region public Guid Id { get; set; }
         /// <summary>
         /// Guid Id identyfikator, klucz główny
         /// </summary>
@@ -21,7 +34,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public string Name { get; set; }, Firma (nazwa) lub imię i nazwisko
+        #region public string Name { get; set; }
         /// <summary>
         /// Firma (nazwa) lub imię i nazwisko
         /// </summary>
@@ -34,39 +47,36 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Name { get; set; }
         #endregion
 
-        #region public string Nip { get; set; }, Numer nip
+        #region public string Nip { get; set; }
         /// <summary>
         /// Numer nip
         /// </summary>
         [Column("Nip", TypeName = "varchar(10)")]
         [Display(Name = "Numer nip", Prompt = "Wpisz nip", Description = "Numer nip")]
-        [Required]
         [StringLength(10)]
         [MinLength(10)]
         [MaxLength(10)]
         public string Nip { get; set; }
         #endregion
 
-        #region public string StatusVat { get; set; }, Status podatnika VAT, - Czynny lub Zwolniony lub Niezarejestrowany
+        #region public string StatusVat { get; set; }
         /// <summary>
         /// Status podatnika VAT, - Czynny lub Zwolniony lub Niezarejestrowany
         /// </summary>
         [Column("StatusVat", TypeName = "varchar(32)")]
         [Display(Name = "Status podatnika VAT", Prompt = "Wybierz status podatnika VAT", Description = "Status podatnika VAT, (Czynny lub Zwolniony lub Niezarejestrowany)")]
-        [Required]
         [StringLength(32)]
         [MinLength(1)]
         [MaxLength(32)]
         public string StatusVat { get; set; }
         #endregion
 
-        #region public string Regon { get; set; }, Numer regon
+        #region public string Regon { get; set; }
         /// <summary>
         /// Numer regon
         /// </summary>
         [Column("Regon", TypeName = "varchar(14)")]
         [Display(Name = "Regon", Prompt = "Wpisz regon", Description = "Numer regon")]
-        [Required]
         [StringLength(14)]
         [MinLength(9)]
         [MaxLength(14)]
@@ -89,13 +99,12 @@ namespace ApiWykazuPodatnikowVatData.Models
         public virtual ApiWykazuPodatnikowVatDataEntityPesel Pesel { get; set; }
         #endregion
 
-        #region public string Krs { get; set; }, Numer Krs
+        #region public string Krs { get; set; }
         /// <summary>
         /// Numer Krs
         /// </summary>
         [Column("Krs", TypeName = "varchar(10)")]
         [Display(Name = "Numer Krs", Prompt = "Wpisz numer Krs", Description = "Numer Krs")]
-        [Required]
         [StringLength(10)]
         [MinLength(10)]
         [MaxLength(10)]
@@ -103,64 +112,89 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Krs { get; set; }
         #endregion
 
-        #region public string ResidenceAddress { get; set; }, Adres siedziby
+        #region public string ResidenceAddress { get; set; }
         /// <summary>
         /// Adres siedziby
         /// </summary>
         [Column("ResidenceAddress", TypeName = "varchar(200)")]
         [Display(Name = "Adres siedziby", Prompt = "Wpisz adres siedziby", Description = "Adres siedziby")]
-        [Required]
         [StringLength(200)]
-        [MinLength(1)]
         [MaxLength(200)]
         public string ResidenceAddress { get; set; }
         #endregion
 
-        #region public string WorkingAddress { get; set; }, Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania
+        #region public string WorkingAddress { get; set; }
         /// <summary>
         /// Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania
         /// </summary>
         [Column("WorkingAddress", TypeName = "varchar(200)")]
         [Display(Name = "Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania", Prompt = "Wpisz adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania w przypadku braku adresu stałego miejsca prowadzenia działalności", Description = "Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania w przypadku braku adresu stałego miejsca prowadzenia działalności")]
-        [Required]
         [StringLength(200)]
-        [MinLength(1)]
         [MaxLength(200)]
         public string WorkingAddres { get; set; }
         #endregion
 
-        //#region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representatives { get; set; }
-        ///// <summary>
-        /////Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL
-        /////representatives:
-        /////type: array
-        /////items:
-        /////$ref: '#/components/schemas/EntityPerson'
-        ///// </summary>
-        //[Display(Name = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby wchodzące w skład organu uprawnionego do reprezentowania podmiotu", Description = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i / lub PESEL")]
-        //[InverseProperty("Representatives")]
-        //public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representatives { get; set; }
-        //#endregion
+        #region public string Representatives { get; set; }
+        /// <summary>
+        ///Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL
+        /// </summary>
+        [Column("Representatives", TypeName = "text")]
+        [Display(Name = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby wchodzące w skład organu uprawnionego do reprezentowania podmiotu", Description = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i / lub PESEL")]
+        [StringLength(2147483647)]
+        [MaxLength(2147483647)]
+        public string Representatives { get; set; }
+        #endregion
 
-        //#region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerks { get; set; }
-        ///// <summary>
-        ///// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
-        ///// </summary>
-        //[Display(Name = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby prokurentów oraz ich numery NIP i/lub PESEL", Description = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL")]
-        //[InverseProperty("AuthorizedClerks")]
-        //public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerks { get; set; }
-        //#endregion
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representative { get; set; }
+        /// <summary>
+        ///Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL
+        /// </summary>
+        [Display(Name = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby wchodzące w skład organu uprawnionego do reprezentowania podmiotu", Description = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i / lub PESEL")]
+        [InverseProperty("Representative")]
+        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Representative { get; set; }
+        #endregion
 
-        //#region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partners { get; set; }
-        ///// <summary>
-        ///// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL
-        ///// </summary>
-        //[Display(Name = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Prompt = "Dodaj osoby wspólników Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Description = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL")]
-        //[InverseProperty("Partners")]
-        //public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partners { get; set; }
-        //#endregion
+        #region public string AuthorizedClerks { get; set; }
+        /// <summary>
+        /// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
+        /// </summary>
+        [Column("AuthorizedClerks", TypeName = "text")]
+        [Display(Name = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby prokurentów oraz ich numery NIP i/lub PESEL", Description = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL")]
+        [StringLength(2147483647)]
+        [MaxLength(2147483647)]
+        public string AuthorizedClerks { get; set; }
+        #endregion
 
-        #region public DateTime? RegistrationLegalDate, Data rejestracji jako podatnika VAT
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerk { get; set; }
+        /// <summary>
+        /// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
+        /// </summary>
+        [Display(Name = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby prokurentów oraz ich numery NIP i/lub PESEL", Description = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL")]
+        [InverseProperty("AuthorizedClerk")]
+        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> AuthorizedClerk { get; set; }
+        #endregion
+
+        #region public string Partners { get; set; }
+        /// <summary>
+        /// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL
+        /// </summary>
+        [Column("Partners", TypeName = "text")]
+        [Display(Name = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Prompt = "Dodaj osoby wspólników Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Description = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL")]
+        [StringLength(2147483647)]
+        [MaxLength(2147483647)]
+        public string Partners { get; set; }
+        #endregion
+
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partner { get; set; }
+        /// <summary>
+        /// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL
+        /// </summary>
+        [Display(Name = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Prompt = "Dodaj osoby wspólników Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Description = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL")]
+        [InverseProperty("Partner")]
+        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityPerson> Partner { get; set; }
+        #endregion
+
+        #region public DateTime? RegistrationLegalDate { get; set; }
         /// <summary>
         /// Data rejestracji jako podatnika VAT
         /// </summary>
@@ -169,7 +203,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? RegistrationLegalDate { get; set; }
         #endregion
 
-        #region public DateTime? RestorationDate, Data odmowy rejestracji jako podatnika VAT
+        #region public DateTime? RegistrationDenialDate { get; set; }
         /// <summary>
         /// Data odmowy rejestracji jako podatnika VAT
         /// </summary>
@@ -178,7 +212,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? RegistrationDenialDate { get; set; }
         #endregion
 
-        #region public string RegistrationDenialBasis { get; set; }, Podstawa prawna odmowy rejestracji
+        #region public string RegistrationDenialBasis { get; set; }
         /// <summary>
         /// Podstawa prawna odmowy rejestracji
         /// </summary>
@@ -189,7 +223,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string RegistrationDenialBasis { get; set; }
         #endregion
 
-        #region public DateTime? RestorationDate { get; set; }, Data przywrócenia jako podatnika VAT
+        #region public DateTime? RestorationDate { get; set; }
         /// <summary>
         /// Data przywrócenia jako podatnika VAT
         /// </summary>
@@ -198,7 +232,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? RestorationDate { get; set; }
         #endregion
 
-        #region public string RestorationBasis { get; set; }, Podstawa prawna przywrócenia jako podatnika VAT
+        #region public string RestorationBasis { get; set; }
         /// <summary>
         /// Podstawa prawna przywrócenia jako podatnika VAT
         /// </summary>
@@ -209,7 +243,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string RestorationBasis { get; set; }
         #endregion
 
-        #region public DateTime? RemovalDate { get; set; } Data wykreślenia odmowy rejestracji jako podatnika VAT
+        #region public DateTime? RemovalDate { get; set; }
         /// <summary>
         /// Data przywrócenia jako podatnika VAT
         /// </summary>
@@ -218,7 +252,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? RemovalDate { get; set; }
         #endregion
 
-        #region public string RemovalBasis { get; set; }, Podstawa prawna wykreślenia odmowy rejestracji jako podatnika VAT
+        #region public string RemovalBasis { get; set; }
         /// <summary>
         /// Podstawa prawna przywrócenia jako podatnika VAT
         /// </summary>
@@ -229,19 +263,16 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string RemovalBasis { get; set; }
         #endregion
 
-        #region accountNumbers to do
-        //accountNumbers:
-        //  type: array
-        //  items:
-        //    type: string
-        //    minLength: 26
-        //    maxLength: 26
-        //    example: '90249000050247256316596736'
-        //    description: |
-        //      Numer konta bankowego w formacie NRB
+        #region public virtual ICollection<ApiWykazuPodatnikowVatDataEntityAccountNumber> AccountNumber { get; set; }
+        /// <summary>
+        /// Numery kont bankowych w formacie NRB
+        /// </summary>
+        [Display(Name = "Numery kont bankowych w formacie NRB", Prompt = "Dodaj numery kont bankowych w formacie NRB", Description = "Numery kont bankowych w formacie NRB")]
+        [InverseProperty("ApiWykazuPodatnikowVatDataEntity")]
+        public virtual ICollection<ApiWykazuPodatnikowVatDataEntityAccountNumber> ApiWykazuPodatnikowVatDataEntityAccountNumber { get; set; }
         #endregion
 
-        #region public bool HasVirtualAccounts { get; set; }, Podmiot posiada maski kont wirtualnych
+        #region public bool HasVirtualAccounts { get; set; }
         /// <summary>
         /// Podmiot posiada maski kont wirtualnych
         /// </summary>
@@ -250,7 +281,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public bool HasVirtualAccounts { get; set; }
         #endregion
 
-        #region public DateTime DateOfCreate, Data utworzenia
+        #region public DateTime DateOfCreate { get; set; }
         /// <summary>
         /// Data utworzenia
         /// </summary>
@@ -259,7 +290,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime DateOfCreate { get; set; }
         #endregion
 
-        #region public DateTime? DateOfModification, Data modyfikacji
+        #region public DateTime? DateOfModification { get; set; }
         /// <summary>
         /// Data modyfikacji
         /// </summary>
