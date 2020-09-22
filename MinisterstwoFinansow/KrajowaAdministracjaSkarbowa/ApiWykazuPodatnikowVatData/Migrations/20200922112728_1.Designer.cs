@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20200922100925_1")]
+    [Migration("20200922112728_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("AuthorizedClerks")
                         .HasColumnName("AuthorizedClerks")
@@ -120,6 +121,12 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(32)")
                         .HasMaxLength(32);
 
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
                     b.Property<string>("WorkingAddres")
                         .HasColumnName("WorkingAddress")
                         .HasColumnType("varchar(200)")
@@ -127,7 +134,29 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityPeselId");
+                    b.HasIndex("EntityPeselId")
+                        .IsUnique()
+                        .HasName("IX_EntityEntityPeselId")
+                        .HasFilter("[EntityPeselId] IS NOT NULL");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_EntityId");
+
+                    b.HasIndex("Krs")
+                        .HasName("IX_EntityKrs");
+
+                    b.HasIndex("Name")
+                        .HasName("IX_EntityName");
+
+                    b.HasIndex("Nip")
+                        .HasName("IX_EntityNip");
+
+                    b.HasIndex("Regon")
+                        .HasName("IX_EntityRegon");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("Entity","ApiWykazuPodatnikowVat");
                 });
@@ -136,7 +165,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
@@ -156,9 +186,27 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.Property<Guid?>("EntityId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountNumber")
+                        .IsUnique()
+                        .HasName("IX_EntityAccountNumberAccountNumber");
+
                     b.HasIndex("EntityId");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_EntityAccountNumberId");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .IsUnique()
+                        .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
                 });
@@ -167,7 +215,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("AccountAssigned")
                         .HasColumnName("AccountAssigned")
@@ -192,7 +241,23 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(18)")
                         .HasMaxLength(18);
 
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_EntityCheckId");
+
+                    b.HasIndex("RequestId")
+                        .HasName("IX_EntityCheckRequestId");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityCheck","ApiWykazuPodatnikowVat");
                 });
@@ -201,7 +266,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("CompanyName")
                         .HasColumnName("CompanyName")
@@ -217,16 +283,16 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid?>("EntityAuthorizedClerksId")
+                    b.Property<Guid?>("EntityAuthorizedClerkId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EntityPartnersId")
+                    b.Property<Guid?>("EntityPartnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("EntityPeselId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EntityRepresentativesId")
+                    b.Property<Guid?>("EntityRepresentativeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
@@ -244,15 +310,38 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(10)")
                         .HasMaxLength(10);
 
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityAuthorizedClerksId");
+                    b.HasIndex("CompanyName")
+                        .HasName("IX_EntityPersonCompanyName");
 
-                    b.HasIndex("EntityPartnersId");
+                    b.HasIndex("EntityAuthorizedClerkId")
+                        .HasName("IX_EntityPersonEntityAuthorizedClerkId");
 
-                    b.HasIndex("EntityPeselId");
+                    b.HasIndex("EntityPartnerId")
+                        .HasName("IX_EntityPersonEntityPartnerId");
 
-                    b.HasIndex("EntityRepresentativesId");
+                    b.HasIndex("EntityPeselId")
+                        .HasName("IX_EntityPersonEntityPeselId");
+
+                    b.HasIndex("EntityRepresentativeId")
+                        .HasName("IX_EntityPersonEntityRepresentativeId");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_EntityPersonId");
+
+                    b.HasIndex("Nip")
+                        .HasName("IX_EntityNip");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
                 });
@@ -261,7 +350,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<DateTime>("DateOfCreate")
                         .HasColumnName("DateOfCreate")
@@ -278,7 +368,25 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(11)")
                         .HasMaxLength(11);
 
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_EntityPeselId");
+
+                    b.HasIndex("Pesel")
+                        .IsUnique()
+                        .HasName("IX_EntityPeselPesel");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .IsUnique()
+                        .HasName("IX_EntityPeselUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityPesel","ApiWykazuPodatnikowVat");
                 });
@@ -301,11 +409,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "AuthorizedClerk")
                         .WithMany("AuthorizedClerk")
-                        .HasForeignKey("EntityAuthorizedClerksId");
+                        .HasForeignKey("EntityAuthorizedClerkId");
 
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Partner")
                         .WithMany("Partner")
-                        .HasForeignKey("EntityPartnersId");
+                        .HasForeignKey("EntityPartnerId");
 
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.EntityPesel", "Pesel")
                         .WithMany("EntityPerson")
@@ -313,7 +421,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Representative")
                         .WithMany("Representative")
-                        .HasForeignKey("EntityRepresentativesId");
+                        .HasForeignKey("EntityRepresentativeId");
                 });
 #pragma warning restore 612, 618
         }

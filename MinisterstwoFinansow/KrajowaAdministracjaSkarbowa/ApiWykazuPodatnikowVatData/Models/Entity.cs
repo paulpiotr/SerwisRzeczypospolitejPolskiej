@@ -34,6 +34,18 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        /// <summary>
+        /// Jednoznaczny identyfikator zalogowanego użytkownika
+        /// Unique identifier of the logged in user
+        /// </summary>
+        [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
+        [StringLength(512)]
+        [Required]
+        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #endregion
+
         #region public string Name { get; set; }
         /// <summary>
         /// Firma (nazwa) lub imię i nazwisko

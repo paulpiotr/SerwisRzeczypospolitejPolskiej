@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class EntityPesel, Model danych EntityPesel, oryginalnie Entity
+    #region public partial class EntityPesel
     /// <summary>
     /// Model danych EntityPesel, oryginalnie Pesel
     /// </summary>
@@ -23,7 +23,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         }
         #endregion
 
-        #region public Guid Id { get; set; }, identyfikator, klucz główny
+        #region public Guid Id { get; set; }
         /// <summary>
         /// Guid Id identyfikator, klucz główny
         /// </summary>
@@ -32,7 +32,19 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public string Pesel { get; set; }, Numer pesel
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        /// <summary>
+        /// Jednoznaczny identyfikator zalogowanego użytkownika
+        /// Unique identifier of the logged in user
+        /// </summary>
+        [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
+        [StringLength(512)]
+        [Required]
+        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #endregion
+
+        #region public string Pesel { get; set; }
         /// <summary>
         /// Numer pesel
         /// </summary>
@@ -45,7 +57,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Pesel { get; set; }
         #endregion
 
-        #region public DateTime DateOfCreate, Data utworzenia
+        #region public DateTime DateOfCreate { get; set; }
         /// <summary>
         /// Data utworzenia
         /// </summary>
@@ -54,7 +66,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime DateOfCreate { get; set; }
         #endregion
 
-        #region public DateTime? DateOfModification, Data modyfikacji
+        #region public DateTime? DateOfModification { get; set; }
         /// <summary>
         /// Data modyfikacji
         /// </summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +18,18 @@ namespace ApiWykazuPodatnikowVatData.Models
         [Key]
         [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
         public Guid Id { get; set; }
+        #endregion
+
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        /// <summary>
+        /// Jednoznaczny identyfikator zalogowanego użytkownika
+        /// Unique identifier of the logged in user
+        /// </summary>
+        [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
+        [StringLength(512)]
+        [Required]
+        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
         #endregion
 
         #region public string AccountAssigned { get; set; }

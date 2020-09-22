@@ -69,13 +69,13 @@ namespace ApiWykazuPodatnikowVatData.EF.Data
 
             modelBuilder.Entity<ApiWykazuPodatnikowVatDataEntityPerson>(entity =>
             {
-                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId);
+                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityAuthorizedClerkId);
 
-                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityPartnersId);
+                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityPartnerId);
 
                 entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityPeselId);
 
-                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityRepresentativesId);
+                entity.HasIndex(e => e.ApiWykazuPodatnikowVatDataEntityRepresentativeId);
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 

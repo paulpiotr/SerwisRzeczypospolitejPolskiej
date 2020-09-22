@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
@@ -15,7 +15,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
+                    UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
                     AccountAssigned = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true),
                     RequestDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     RequestId = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: true),
@@ -32,7 +33,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
+                    UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
                     Pesel = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
                     DateOfCreate = table.Column<DateTime>(type: "datetime", nullable: false),
                     DateOfModification = table.Column<DateTime>(type: "datetime", nullable: true)
@@ -47,7 +49,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
+                    UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
                     Nip = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true),
                     StatusVat = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
@@ -87,7 +90,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
+                    UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
                     EntityId = table.Column<Guid>(nullable: true),
                     AccountNumber = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false),
                     DateOfCreate = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -110,10 +114,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 schema: "ApiWykazuPodatnikowVat",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    EntityRepresentativesId = table.Column<Guid>(nullable: true),
-                    EntityAuthorizedClerksId = table.Column<Guid>(nullable: true),
-                    EntityPartnersId = table.Column<Guid>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
+                    UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
+                    EntityRepresentativeId = table.Column<Guid>(nullable: true),
+                    EntityAuthorizedClerkId = table.Column<Guid>(nullable: true),
+                    EntityPartnerId = table.Column<Guid>(nullable: true),
                     EntityPeselId = table.Column<Guid>(nullable: true),
                     CompanyName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     FirstName = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true),
@@ -126,15 +131,15 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 {
                     table.PrimaryKey("PK_EntityPerson", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EntityPerson_Entity_EntityAuthorizedClerksId",
-                        column: x => x.EntityAuthorizedClerksId,
+                        name: "FK_EntityPerson_Entity_EntityAuthorizedClerkId",
+                        column: x => x.EntityAuthorizedClerkId,
                         principalSchema: "ApiWykazuPodatnikowVat",
                         principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EntityPerson_Entity_EntityPartnersId",
-                        column: x => x.EntityPartnersId,
+                        name: "FK_EntityPerson_Entity_EntityPartnerId",
+                        column: x => x.EntityPartnerId,
                         principalSchema: "ApiWykazuPodatnikowVat",
                         principalTable: "Entity",
                         principalColumn: "Id",
@@ -147,8 +152,8 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EntityPerson_Entity_EntityRepresentativesId",
-                        column: x => x.EntityRepresentativesId,
+                        name: "FK_EntityPerson_Entity_EntityRepresentativeId",
+                        column: x => x.EntityRepresentativeId,
                         principalSchema: "ApiWykazuPodatnikowVat",
                         principalTable: "Entity",
                         principalColumn: "Id",
@@ -156,10 +161,56 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entity_EntityPeselId",
+                name: "IX_EntityEntityPeselId",
                 schema: "ApiWykazuPodatnikowVat",
                 table: "Entity",
-                column: "EntityPeselId");
+                column: "EntityPeselId",
+                unique: true,
+                filter: "[EntityPeselId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityKrs",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "Krs");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityName",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityNip",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "Nip");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityRegon",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "Regon");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityUniqueIdentifierOfTheLoggedInUser",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "Entity",
+                column: "UniqueIdentifierOfTheLoggedInUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityAccountNumberAccountNumber",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityAccountNumber",
+                column: "AccountNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityAccountNumber_EntityId",
@@ -168,28 +219,107 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                 column: "EntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityPerson_EntityAuthorizedClerksId",
+                name: "IX_EntityAccountNumberId",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "EntityPerson",
-                column: "EntityAuthorizedClerksId");
+                table: "EntityAccountNumber",
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityPerson_EntityPartnersId",
+                name: "IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser",
                 schema: "ApiWykazuPodatnikowVat",
-                table: "EntityPerson",
-                column: "EntityPartnersId");
+                table: "EntityAccountNumber",
+                column: "UniqueIdentifierOfTheLoggedInUser",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityPerson_EntityPeselId",
+                name: "IX_EntityCheckId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityCheck",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityCheckRequestId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityCheck",
+                column: "RequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityCheckUniqueIdentifierOfTheLoggedInUser",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityCheck",
+                column: "UniqueIdentifierOfTheLoggedInUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonCompanyName",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "CompanyName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonEntityAuthorizedClerkId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "EntityAuthorizedClerkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonEntityPartnerId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "EntityPartnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonEntityPeselId",
                 schema: "ApiWykazuPodatnikowVat",
                 table: "EntityPerson",
                 column: "EntityPeselId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityPerson_EntityRepresentativesId",
+                name: "IX_EntityPersonEntityRepresentativeId",
                 schema: "ApiWykazuPodatnikowVat",
                 table: "EntityPerson",
-                column: "EntityRepresentativesId");
+                column: "EntityRepresentativeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityNip",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "Nip");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPersonUniqueIdentifierOfTheLoggedInUser",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPerson",
+                column: "UniqueIdentifierOfTheLoggedInUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPeselId",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPesel",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPeselPesel",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPesel",
+                column: "Pesel",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityPeselUniqueIdentifierOfTheLoggedInUser",
+                schema: "ApiWykazuPodatnikowVat",
+                table: "EntityPesel",
+                column: "UniqueIdentifierOfTheLoggedInUser",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

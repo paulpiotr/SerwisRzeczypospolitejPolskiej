@@ -20,50 +20,62 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public Guid? EntityRepresentativesId { get; set; }
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        /// <summary>
+        /// Jednoznaczny identyfikator zalogowanego użytkownika
+        /// Unique identifier of the logged in user
+        /// </summary>
+        [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
+        [StringLength(512)]
+        [Required]
+        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #endregion
+
+        #region public Guid? EntityRepresentativeId { get; set; }
         /// <summary>
         /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? EntityRepresentativesId { get; set; }
+        public Guid? EntityRepresentativeId { get; set; }
         #endregion
 
         #region public virtual Entity Representative { get; set; }
         /// <summary>
         /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(EntityRepresentativesId))]
+        [ForeignKey(nameof(EntityRepresentativeId))]
         [InverseProperty(nameof(Entity.Representative))]
         public virtual Entity Representative { get; set; }
         #endregion
 
-        #region public Guid? EntityAuthorizedClerksId { get; set; }
+        #region public Guid? EntityAuthorizedClerkId { get; set; }
         /// <summary>
         /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? EntityAuthorizedClerksId { get; set; }
+        public Guid? EntityAuthorizedClerkId { get; set; }
         #endregion
 
         #region public virtual Entity AuthorizedClerk { get; set; }
         /// <summary>
         /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(EntityAuthorizedClerksId))]
+        [ForeignKey(nameof(EntityAuthorizedClerkId))]
         [InverseProperty(nameof(Entity.AuthorizedClerk))]
         public virtual Entity AuthorizedClerk { get; set; }
         #endregion
 
-        #region public Guid? EntityPartnersId { get; set; }
+        #region public Guid? EntityPartnerId { get; set; }
         /// <summary>
         /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
-        public Guid? EntityPartnersId { get; set; }
+        public Guid? EntityPartnerId { get; set; }
         #endregion
 
         #region public virtual Entity Partner { get; set; }
         /// <summary>
         /// Kolekcja objektów tabeli Entity
         /// </summary>
-        [ForeignKey(nameof(EntityPartnersId))]
+        [ForeignKey(nameof(EntityPartnerId))]
         [InverseProperty(nameof(Entity.Partner))]
         public virtual Entity Partner { get; set; }
         #endregion
@@ -117,7 +129,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string LastName { get; set; }
         #endregion
 
-        #region public string Nip { get; set; }, Numer nip
+        #region public string Nip { get; set; }
         /// <summary>
         /// Numer nip
         /// </summary>

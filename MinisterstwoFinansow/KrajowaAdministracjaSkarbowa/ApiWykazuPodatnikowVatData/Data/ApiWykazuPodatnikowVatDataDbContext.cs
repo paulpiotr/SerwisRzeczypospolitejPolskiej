@@ -4,8 +4,6 @@ using NetAppCommon;
 using System;
 using System.Reflection;
 
-//#nullable disable
-
 namespace ApiWykazuPodatnikowVatData.Data
 {
     /// <summary>
@@ -118,11 +116,11 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new DocumentHeaderConfiguration());
-            //modelBuilder.ApplyConfiguration(new DocumentPositionConfiguration());
-            //modelBuilder.ApplyConfiguration(new DocumentAttachmentConfiguration());
-            //modelBuilder.ApplyConfiguration(new DocumentOfContractorDepositsAndWithdrawalsConfiguration());
-            //modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityAccountNumberConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityCheckConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityPersonConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityPeselConfiguration());
         }
         #endregion
 

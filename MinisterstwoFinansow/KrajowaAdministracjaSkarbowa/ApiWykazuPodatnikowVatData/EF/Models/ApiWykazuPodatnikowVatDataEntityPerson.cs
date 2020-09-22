@@ -11,9 +11,9 @@ namespace ApiWykazuPodatnikowVatData.EF.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativesId { get; set; }
-        public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId { get; set; }
-        public Guid? ApiWykazuPodatnikowVatDataEntityPartnersId { get; set; }
+        public Guid? ApiWykazuPodatnikowVatDataEntityRepresentativeId { get; set; }
+        public Guid? ApiWykazuPodatnikowVatDataEntityAuthorizedClerkId { get; set; }
+        public Guid? ApiWykazuPodatnikowVatDataEntityPartnerId { get; set; }
         public Guid? ApiWykazuPodatnikowVatDataEntityPeselId { get; set; }
         [StringLength(256)]
         public string CompanyName { get; set; }
@@ -28,16 +28,16 @@ namespace ApiWykazuPodatnikowVatData.EF.Models
         [Column(TypeName = "datetime")]
         public DateTime? DateOfModification { get; set; }
 
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityAuthorizedClerksId))]
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityAuthorizedClerkId))]
         [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.ApiWykazuPodatnikowVatDataEntityPersonApiWykazuPodatnikowVatDataEntityAuthorizedClerks))]
         public virtual ApiWykazuPodatnikowVatDataEntity ApiWykazuPodatnikowVatDataEntityAuthorizedClerks { get; set; }
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPartnersId))]
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPartnerId))]
         [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.ApiWykazuPodatnikowVatDataEntityPersonApiWykazuPodatnikowVatDataEntityPartners))]
         public virtual ApiWykazuPodatnikowVatDataEntity ApiWykazuPodatnikowVatDataEntityPartners { get; set; }
         [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityPeselId))]
         [InverseProperty("ApiWykazuPodatnikowVatDataEntityPerson")]
         public virtual ApiWykazuPodatnikowVatDataEntityPesel ApiWykazuPodatnikowVatDataEntityPesel { get; set; }
-        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityRepresentativesId))]
+        [ForeignKey(nameof(ApiWykazuPodatnikowVatDataEntityRepresentativeId))]
         [InverseProperty(nameof(ApiWykazuPodatnikowVatDataEntity.ApiWykazuPodatnikowVatDataEntityPersonApiWykazuPodatnikowVatDataEntityRepresentatives))]
         public virtual ApiWykazuPodatnikowVatDataEntity ApiWykazuPodatnikowVatDataEntityRepresentatives { get; set; }
     }
