@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +8,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych EntityPesel, oryginalnie Pesel
     /// </summary>
+    [NotMapped]
     [Table("EntityPesel", Schema = "ApiWykazuPodatnikowVat")]
     public partial class EntityPesel
     {
@@ -18,8 +18,8 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         public EntityPesel()
         {
-            Entity = new HashSet<Entity>();
-            EntityPerson = new HashSet<EntityPerson>();
+            //Entity = new HashSet<Entity>();
+            //EntityPerson = new HashSet<EntityPerson>();
         }
         #endregion
 
@@ -76,21 +76,21 @@ namespace ApiWykazuPodatnikowVatData.Models
         public DateTime? DateOfModification { get; set; }
         #endregion
 
-        #region public virtual ICollection<Entity> Entity { get; set; }
-        /// <summary>
-        /// public virtual ICollection<Entity> Entity { get; set; }
-        /// </summary>
-        [InverseProperty("Pesel")]
-        public virtual ICollection<Entity> Entity { get; set; }
-        #endregion
+        //#region public virtual ICollection<Entity> Entity { get; set; }
+        ///// <summary>
+        ///// public virtual ICollection<Entity> Entity { get; set; }
+        ///// </summary>
+        //[InverseProperty("Pesel")]
+        //public virtual ICollection<Entity> Entity { get; set; }
+        //#endregion
 
-        #region public virtual ICollection<EntityPerson> EntityPerson { get; set; }
-        /// <summary>
-        /// public virtual ICollection<Entity> EntityPerson { get; set; }
-        /// </summary>
-        [InverseProperty("Pesel")]
-        public virtual ICollection<EntityPerson> EntityPerson { get; set; }
-        #endregion
+        //#region public virtual ICollection<EntityPerson> EntityPerson { get; set; }
+        ///// <summary>
+        ///// public virtual ICollection<Entity> EntityPerson { get; set; }
+        ///// </summary>
+        //[InverseProperty("Pesel")]
+        //public virtual ICollection<EntityPerson> EntityPerson { get; set; }
+        //#endregion
     }
     #endregion
 }

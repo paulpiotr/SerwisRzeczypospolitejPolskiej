@@ -80,20 +80,33 @@ namespace ApiWykazuPodatnikowVatData.Models
         public virtual Entity Partner { get; set; }
         #endregion
 
-        #region public Guid? EntityPeselId { get; set; }
-        /// <summary>
-        /// Odniesienie (klucz obcy) do tabeli EntityPesel jako Guid?
-        /// </summary>
-        public Guid? EntityPeselId { get; set; }
-        #endregion
+        //#region public Guid? EntityPeselId { get; set; }
+        ///// <summary>
+        ///// Odniesienie (klucz obcy) do tabeli EntityPesel jako Guid?
+        ///// </summary>
+        //public Guid? EntityPeselId { get; set; }
+        //#endregion
 
-        #region public virtual EntityPesel Pesel { get; set; }
+        //#region public virtual EntityPesel Pesel { get; set; }
+        ///// <summary>
+        ///// Kolekcja objektów tabeli EntityPesel
+        ///// </summary>
+        //[ForeignKey(nameof(EntityPeselId))]
+        //[InverseProperty(nameof(EntityPesel.EntityPerson))]
+        //public virtual EntityPesel Pesel { get; set; }
+        //#endregion
+
+        #region public string Pesel { get; set; }
         /// <summary>
-        /// Kolekcja objektów tabeli EntityPesel
+        /// Numer pesel
         /// </summary>
-        [ForeignKey(nameof(EntityPeselId))]
-        [InverseProperty(nameof(EntityPesel.EntityPerson))]
-        public virtual EntityPesel Pesel { get; set; }
+        [Column("Pesel", TypeName = "varchar(11)")]
+        [Display(Name = "Pesel", Prompt = "Wpisz pesel", Description = "Numer pesel")]
+        [StringLength(11)]
+        [MinLength(11)]
+        [MaxLength(11)]
+        [RegularExpression(@"^\d{11}$")]
+        public string Pesel { get; set; }
         #endregion
 
         #region public string CompanyName { get; set; }, Nazwa firmy

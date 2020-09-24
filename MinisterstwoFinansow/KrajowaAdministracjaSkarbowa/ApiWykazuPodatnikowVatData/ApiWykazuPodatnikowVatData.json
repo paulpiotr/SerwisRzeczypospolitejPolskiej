@@ -1,0 +1,9 @@
+{
+  //"RestClientUrl": "https://wl-test.mf.gov.pl",
+  "RestClientUrl": "https://wl-api.mf.gov.pl",
+  //"CacheLifetimeForSiteQueries": 86400,
+  "CacheLifetimeForSiteQueries": 0,
+  "ConnectionStrings": {
+    "ApiWykazuPodatnikowVatDataDbContext": "Data Source=ISK-PP\\SQLEXPRESS; Database=IUIntegrationSystemData; MultipleActiveResultSets=true; Integrated Security=True; Trusted_Connection=Yes; User Id=IUIntegrationSystemDataApi; Password=pTdp/6P:Z-ZP86dS%Q:U!ZK34`2UvB=v;"
+  }
+}

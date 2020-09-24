@@ -41,8 +41,12 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasName("IX_EntityPersonEntityPartnerId")
                 .IsUnique(false);
 
-            entity.HasIndex(e => e.EntityPeselId)
-                .HasName("IX_EntityPersonEntityPeselId")
+            //entity.HasIndex(e => e.EntityPeselId)
+            //    .HasName("IX_EntityPersonEntityPeselId")
+            //    .IsUnique(false);
+
+            entity.HasIndex(e => e.Pesel)
+                .HasName("IX_EntityPersonPesel")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.CompanyName)

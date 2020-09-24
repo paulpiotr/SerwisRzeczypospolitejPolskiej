@@ -68,6 +68,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfCreate", TypeName = "datetime")]
         [Display(Name = "Data Utworzenia", Prompt = "Wpisz lub wybierz datę utworzenia", Description = "Data utworzenia")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateOfCreate { get; set; }
         #endregion
 
@@ -77,7 +78,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfModification", TypeName = "datetime")]
         [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfModification { get; set; }
         #endregion
     }

@@ -27,7 +27,7 @@ namespace ApiWykazuPodatnikowVatData.Data
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
                 .HasName("IX_EntityPeselUniqueIdentifierOfTheLoggedInUser")
-                .IsUnique(true);
+                .IsUnique(false);
 
             entity.HasIndex(e => e.Pesel)
                 .HasName("IX_EntityPeselPesel")

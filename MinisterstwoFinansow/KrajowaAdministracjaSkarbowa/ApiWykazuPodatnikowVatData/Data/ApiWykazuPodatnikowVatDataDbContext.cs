@@ -19,6 +19,13 @@ namespace ApiWykazuPodatnikowVatData.Data
         private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
+        #region private static readonly string _connectionStrings
+        /// <summary>
+        /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji.
+        /// </summary>
+        private static readonly string _connectionStrings = DataContext.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "ApiWykazuPodatnikowVatData.json");
+        #endregion
+
         #region public virtual DbSet<Entity> Entity { get; set; }
         /// <summary>
         /// Model danych Entity, oryginalnie Entity
@@ -94,8 +101,8 @@ namespace ApiWykazuPodatnikowVatData.Data
             {
                 if (!optionsBuilder.IsConfigured)
                 {
-                    //_log4net.Info(DataContext.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext"));
-                    optionsBuilder.UseSqlServer(DataContext.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext"));
+                    //_log4net.Info(_connectionStrings);
+                    optionsBuilder.UseSqlServer(_connectionStrings);
                 }
             }
             catch (Exception e)
@@ -120,7 +127,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             modelBuilder.ApplyConfiguration(new EntityCheckConfiguration());
             modelBuilder.ApplyConfiguration(new EntityConfiguration());
             modelBuilder.ApplyConfiguration(new EntityPersonConfiguration());
-            modelBuilder.ApplyConfiguration(new EntityPeselConfiguration());
+            //modelBuilder.ApplyConfiguration(new EntityPeselConfiguration());
         }
         #endregion
 

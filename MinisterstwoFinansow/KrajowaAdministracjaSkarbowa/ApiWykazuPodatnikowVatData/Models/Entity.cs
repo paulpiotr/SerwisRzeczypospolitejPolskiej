@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
-    #region public partial class Entity, Model danych Entity, oryginalnie Entity
+    #region public partial class Entity
     /// <summary>
     /// Model danych Entity, oryginalnie Entity
     /// </summary>
@@ -96,19 +96,32 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string Regon { get; set; }
         #endregion
 
-        #region public Guid? EntityPeselId { get; set; }
-        /// <summary>
-        /// Powiązanie do tabeli EntityPesel
-        /// Numer Pesel
-        /// </summary>
-        [Display(Name = "Numer Pesel", Prompt = "Wybierz powiązanie numeru pesel", Description = "Numer pesel")]
-        public Guid? EntityPeselId { get; set; }
-        #endregion
+        //#region public Guid? EntityPeselId { get; set; }
+        ///// <summary>
+        ///// Powiązanie do tabeli EntityPesel
+        ///// Numer Pesel
+        ///// </summary>
+        //[Display(Name = "Numer Pesel", Prompt = "Wybierz powiązanie numeru pesel", Description = "Numer pesel")]
+        //public Guid? EntityPeselId { get; set; }
+        //#endregion
 
-        #region public virtual EntityPesel Pesel { get; set; }
-        [ForeignKey(nameof(EntityPeselId))]
-        [InverseProperty(nameof(EntityPesel.Entity))]
-        public virtual EntityPesel Pesel { get; set; }
+        //#region public virtual EntityPesel Pesel { get; set; }
+        //[ForeignKey(nameof(EntityPeselId))]
+        //[InverseProperty(nameof(EntityPesel.Entity))]
+        //public virtual EntityPesel Pesel { get; set; }
+        //#endregion
+
+        #region public string Pesel { get; set; }
+        /// <summary>
+        /// Numer pesel
+        /// </summary>
+        [Column("Pesel", TypeName = "varchar(11)")]
+        [Display(Name = "Pesel", Prompt = "Wpisz pesel", Description = "Numer pesel")]
+        [StringLength(11)]
+        [MinLength(11)]
+        [MaxLength(11)]
+        [RegularExpression(@"^\d{11}$")]
+        public string Pesel { get; set; }
         #endregion
 
         #region public string Krs { get; set; }
@@ -143,18 +156,16 @@ namespace ApiWykazuPodatnikowVatData.Models
         [Display(Name = "Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania", Prompt = "Wpisz adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania w przypadku braku adresu stałego miejsca prowadzenia działalności", Description = "Adres stałego miejsca prowadzenia działalności lub adres miejsca zamieszkania w przypadku braku adresu stałego miejsca prowadzenia działalności")]
         [StringLength(200)]
         [MaxLength(200)]
-        public string WorkingAddres { get; set; }
+        public string WorkingAddress { get; set; }
         #endregion
 
-        #region public string Representatives { get; set; }
+        #region public IEnumerable<EntityPerson> Representatives { get; set; }
         /// <summary>
         ///Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL
         /// </summary>
-        [Column("Representatives", TypeName = "text")]
+        [NotMapped]
         [Display(Name = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby wchodzące w skład organu uprawnionego do reprezentowania podmiotu", Description = "Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i / lub PESEL")]
-        [StringLength(2147483647)]
-        [MaxLength(2147483647)]
-        public string Representatives { get; set; }
+        public IEnumerable<EntityPerson> Representatives { get; set; }
         #endregion
 
         #region public virtual ICollection<EntityPerson> Representative { get; set; }
@@ -166,15 +177,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public virtual ICollection<EntityPerson> Representative { get; set; }
         #endregion
 
-        #region public string AuthorizedClerks { get; set; }
+        #region public IEnumerable<EntityPerson> AuthorizedClerks { get; set; }
         /// <summary>
         /// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
         /// </summary>
-        [Column("AuthorizedClerks", TypeName = "text")]
+        [NotMapped]
         [Display(Name = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL", Prompt = "Dodaj osoby prokurentów oraz ich numery NIP i/lub PESEL", Description = "Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL")]
-        [StringLength(2147483647)]
-        [MaxLength(2147483647)]
-        public string AuthorizedClerks { get; set; }
+        public IEnumerable<EntityPerson> AuthorizedClerks { get; set; }
         #endregion
 
         #region public virtual ICollection<EntityPerson> AuthorizedClerk { get; set; }
@@ -186,15 +195,13 @@ namespace ApiWykazuPodatnikowVatData.Models
         public virtual ICollection<EntityPerson> AuthorizedClerk { get; set; }
         #endregion
 
-        #region public string Partners { get; set; }
+        #region public IEnumerable<EntityPerson> Partners { get; set; }
         /// <summary>
         /// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL
-        /// </summary>
-        [Column("Partners", TypeName = "text")]
+        /// </summary
+        [NotMapped]
         [Display(Name = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Prompt = "Dodaj osoby wspólników Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL", Description = "Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numery NIP i/lub PESEL")]
-        [StringLength(2147483647)]
-        [MaxLength(2147483647)]
-        public string Partners { get; set; }
+        public IEnumerable<EntityPerson> Partners { get; set; }
         #endregion
 
         #region public virtual ICollection<EntityPerson> Partner { get; set; }
@@ -284,6 +291,15 @@ namespace ApiWykazuPodatnikowVatData.Models
         public virtual ICollection<EntityAccountNumber> EntityAccountNumber { get; set; }
         #endregion
 
+        #region public IEnumerable<EntityAccountNumber> AccountNumbers { get; set; }
+        /// <summary>
+        /// Numery kont bankowych w formacie NRB
+        /// </summary>
+        [NotMapped]
+        [Display(Name = "Numery kont bankowych w formacie NRB", Prompt = "Dodaj numery kont bankowych w formacie NRB", Description = "Numery kont bankowych w formacie NRB")]
+        public IEnumerable<string> AccountNumbers { get; set; }
+        #endregion
+
         #region public bool HasVirtualAccounts { get; set; }
         /// <summary>
         /// Podmiot posiada maski kont wirtualnych
@@ -299,6 +315,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfCreate", TypeName = "datetime")]
         [Display(Name = "Data Utworzenia", Prompt = "Wpisz lub wybierz datę utworzenia", Description = "Data utworzenia")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateOfCreate { get; set; }
         #endregion
 
@@ -308,7 +325,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfModification", TypeName = "datetime")]
         [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfModification { get; set; }
         #endregion
     }

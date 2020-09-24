@@ -26,24 +26,15 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newsequentialid())");
 
-                    b.Property<string>("AuthorizedClerks")
-                        .HasColumnName("AuthorizedClerks")
-                        .HasColumnType("text")
-                        .HasMaxLength(2147483647);
-
                     b.Property<DateTime>("DateOfCreate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfCreate")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime?>("DateOfModification")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
-
-                    b.Property<Guid?>("EntityPeselId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("HasVirtualAccounts")
                         .HasColumnName("HasVirtualAccounts")
@@ -65,10 +56,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("Partners")
-                        .HasColumnName("Partners")
-                        .HasColumnType("text")
-                        .HasMaxLength(2147483647);
+                    b.Property<string>("Pesel")
+                        .HasColumnName("Pesel")
+                        .HasColumnType("varchar(11)")
+                        .HasMaxLength(11);
 
                     b.Property<string>("RegistrationDenialBasis")
                         .HasColumnName("RegistrationDenialBasis")
@@ -97,11 +88,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnName("RemovalDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Representatives")
-                        .HasColumnName("Representatives")
-                        .HasColumnType("text")
-                        .HasMaxLength(2147483647);
-
                     b.Property<string>("ResidenceAddress")
                         .HasColumnName("ResidenceAddress")
                         .HasColumnType("varchar(200)")
@@ -127,17 +113,12 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(512)")
                         .HasMaxLength(512);
 
-                    b.Property<string>("WorkingAddres")
+                    b.Property<string>("WorkingAddress")
                         .HasColumnName("WorkingAddress")
                         .HasColumnType("varchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EntityPeselId")
-                        .IsUnique()
-                        .HasName("IX_EntityEntityPeselId")
-                        .HasFilter("[EntityPeselId] IS NOT NULL");
 
                     b.HasIndex("Id")
                         .IsUnique()
@@ -151,6 +132,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("Nip")
                         .HasName("IX_EntityNip");
+
+                    b.HasIndex("Pesel")
+                        .IsUnique()
+                        .HasName("IX_EntityPesel")
+                        .HasFilter("[Pesel] IS NOT NULL");
 
                     b.HasIndex("Regon")
                         .HasName("IX_EntityRegon");
@@ -175,13 +161,12 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasMaxLength(32);
 
                     b.Property<DateTime>("DateOfCreate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfCreate")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime?>("DateOfModification")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
 
@@ -207,7 +192,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasName("IX_EntityAccountNumberId");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .IsUnique()
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
@@ -295,9 +279,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.Property<Guid?>("EntityPartnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EntityPeselId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("EntityRepresentativeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -316,6 +297,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(10)")
                         .HasMaxLength(10);
 
+                    b.Property<string>("Pesel")
+                        .HasColumnName("Pesel")
+                        .HasColumnType("varchar(11)")
+                        .HasMaxLength(11);
+
                     b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
                         .IsRequired()
                         .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
@@ -333,9 +319,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("EntityPartnerId")
                         .HasName("IX_EntityPersonEntityPartnerId");
 
-                    b.HasIndex("EntityPeselId")
-                        .HasName("IX_EntityPersonEntityPeselId");
-
                     b.HasIndex("EntityRepresentativeId")
                         .HasName("IX_EntityPersonEntityRepresentativeId");
 
@@ -346,64 +329,13 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("Nip")
                         .HasName("IX_EntityNip");
 
+                    b.HasIndex("Pesel")
+                        .HasName("IX_EntityPersonPesel");
+
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
-                });
-
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPesel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("(newsequentialid())");
-
-                    b.Property<DateTime>("DateOfCreate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("DateOfCreate")
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<DateTime?>("DateOfModification")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("DateOfModification")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Pesel")
-                        .IsRequired()
-                        .HasColumnName("Pesel")
-                        .HasColumnType("varchar(11)")
-                        .HasMaxLength(11);
-
-                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
-                        .IsRequired()
-                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
-                        .HasColumnType("varchar(512)")
-                        .HasMaxLength(512);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasName("IX_EntityPeselId");
-
-                    b.HasIndex("Pesel")
-                        .IsUnique()
-                        .HasName("IX_EntityPeselPesel");
-
-                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .IsUnique()
-                        .HasName("IX_EntityPeselUniqueIdentifierOfTheLoggedInUser");
-
-                    b.ToTable("EntityPesel","ApiWykazuPodatnikowVat");
-                });
-
-            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.Entity", b =>
-                {
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.EntityPesel", "Pesel")
-                        .WithMany("Entity")
-                        .HasForeignKey("EntityPeselId");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
@@ -422,10 +354,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Partner")
                         .WithMany("Partner")
                         .HasForeignKey("EntityPartnerId");
-
-                    b.HasOne("ApiWykazuPodatnikowVatData.Models.EntityPesel", "Pesel")
-                        .WithMany("EntityPerson")
-                        .HasForeignKey("EntityPeselId");
 
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Representative")
                         .WithMany("Representative")
