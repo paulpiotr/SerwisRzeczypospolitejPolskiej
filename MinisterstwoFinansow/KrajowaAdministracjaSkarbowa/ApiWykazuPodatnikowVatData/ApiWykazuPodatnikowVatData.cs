@@ -69,7 +69,45 @@ namespace ApiWykazuPodatnikowVatData
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
                         {
-                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && w.DateOfModification >= DateTime.Now.AddSeconds((double)_cacheLifetimeForSiteQueries * -1)).FirstOrDefault();
+                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && w.DateOfModification >= DateTime.Now.AddSeconds((double)_cacheLifetimeForSiteQueries * -1)).Include(W => W.EntityAccountNumber).FirstOrDefault();
+                        }
+                    }
+                    return null;
+                });
+            }
+            catch (Exception e)
+            {
+                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+            }
+            return null;
+        }
+        #endregion
+
+        #region private static async Task<Entity> FindByNipAsync(string nip)
+        /// <summary>
+        /// Znajdź podmiot według numeru NIP
+        /// Find entity by tax identification NIP number
+        /// </summary>
+        /// <param name="nip">
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$],
+        /// NIP tax identification number as string [^\d{10}$]
+        /// </param>
+        /// <returns>
+        /// Podmiot jako obiekt Entity lub null,
+        /// Entity as an Entity or null object
+        /// </returns>
+        private static async Task<Entity> FindByNipAsync(string nip)
+        {
+            try
+            {
+                return await Task.Run(async () =>
+                {
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    {
+                        bool canConnectAsync = await context.Database.CanConnectAsync();
+                        if (canConnectAsync)
+                        {
+                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault();
                         }
                     }
                     return null;
@@ -91,10 +129,12 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="nips">
         /// Lista maksymalnie 30 numerów NIP rozdzielonych przecinkami
         /// A list of up to 30 NIP, separated by commas
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
+        /// NIP tax identification number as string [^\d{10}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByNipsAsync(string nips)
         {
@@ -111,7 +151,7 @@ namespace ApiWykazuPodatnikowVatData
                             List<string> nipList = new List<string>(nips.Split(',')).ToList();
                             if (null != nipList && nipList.Count > 0)
                             {
-                                return context.Entity.Where(w => nipList.Contains(w.Nip)).ToList();
+                                return context.Entity.Where(w => nipList.Contains(w.Nip)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -134,10 +174,12 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="nips">
         /// Lista maksymalnie 30 numerów NIP rozdzielonych przecinkami
         /// A list of up to 30 NIP, separated by commas
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
+        /// NIP tax identification number as string [^\d{10}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByNipsAndModificationDateAsync(string nips)
         {
@@ -158,7 +200,7 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     return entityList;
                                 }
-                                return context.Entity.Where(w => nipList.Contains(w.Nip)).ToList();
+                                return context.Entity.Where(w => nipList.Contains(w.Nip)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -220,10 +262,12 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="regons">
         /// Lista maksymalnie 30 numerów REGON rozdzielonych przecinkami
         /// A list of up to 30 REGON, separated by commas
+        /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
+        /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByRegonsAsync(string regons)
         {
@@ -240,7 +284,7 @@ namespace ApiWykazuPodatnikowVatData
                             List<string> regonList = new List<string>(regons.Split(',')).ToList();
                             if (null != regonList && regonList.Count > 0)
                             {
-                                return context.Entity.Where(w => regonList.Contains(w.Regon)).ToList();
+                                return context.Entity.Where(w => regonList.Contains(w.Regon)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -263,10 +307,12 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="regons">
         /// Lista maksymalnie 30 numerów REGON rozdzielonych przecinkami
         /// A list of up to 30 REGON, separated by commas
+        /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
+        /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByRegonsAndModificationDateAsync(string regons)
         {
@@ -287,7 +333,7 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     return entityList;
                                 }
-                                return context.Entity.Where(w => regonList.Contains(w.Regon)).ToList();
+                                return context.Entity.Where(w => regonList.Contains(w.Regon)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -333,7 +379,7 @@ namespace ApiWykazuPodatnikowVatData
                             }
                             else
                             {
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).ToList();
+                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -372,7 +418,7 @@ namespace ApiWykazuPodatnikowVatData
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
                         {
-                            return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).ToList();
+                            return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                         }
                     }
                     return null;
@@ -396,8 +442,8 @@ namespace ApiWykazuPodatnikowVatData
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByBankAccountsAsync(string bankAccounts)
         {
@@ -413,7 +459,7 @@ namespace ApiWykazuPodatnikowVatData
                             List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
                             if (null != bankAccountsList && bankAccountsList.Count > 0)
                             {
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).ToList();
+                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -438,8 +484,8 @@ namespace ApiWykazuPodatnikowVatData
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         private static async Task<List<Entity>> FindByBankAccountsAndModificationDateAsync(string bankAccounts)
         {
@@ -459,7 +505,7 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     return null;
                                 }
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).ToList();
+                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
                             }
                         }
                     }
@@ -652,8 +698,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region private static async Task<Entity> AddOrModifyEntity(Entity entity)
         /// <summary>
-        /// Dodaj lub zaktualizuj rekord w bazie danych.
-        /// Add or update a record in the database.
+        /// Dodaj lub zaktualizuj rekord w bazie danych
+        /// Add or update a record in the database
         /// </summary>
         /// <param name="entity">
         /// Parametr Entity
@@ -719,7 +765,7 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                 }
-                                return context.Entity.Where(w => !string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip).FirstOrDefault();
+                                return context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip) || (!string.IsNullOrWhiteSpace(w.Regon) && !string.IsNullOrWhiteSpace(entity.Regon) && w.Regon == entity.Regon) || (!string.IsNullOrWhiteSpace(w.Pesel) && !string.IsNullOrWhiteSpace(entity.Pesel) && w.Pesel == entity.Pesel)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault() ?? entity;
                             }
                         }
                     }
@@ -771,7 +817,7 @@ namespace ApiWykazuPodatnikowVatData
                             Entity entity = response.Data.Result.Subject;
                             if (null != entity)
                             {
-                                return await AddOrModifyEntity(entity);
+                                await AddOrModifyEntity(entity);
                             }
                         }
                     }
@@ -895,7 +941,7 @@ namespace ApiWykazuPodatnikowVatData
                                         }
                                     }
                                 }
-                                return await FindByBankAccountAsync(bankAccount);
+                                return await FindByBankAccountAsync(bankAccount) ?? entityList;
                             }
                         }
                     }
@@ -918,10 +964,12 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="nips">
         /// Lista maksymalnie 30 numerów NIP rozdzielonych przecinkami
         /// A list of up to 30 NIP, separated by commas
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
+        /// NIP tax identification number as string [^\d{10}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         public static async Task<List<Entity>> ApiFindByNipsAsync(string nips)
         {
@@ -957,7 +1005,7 @@ namespace ApiWykazuPodatnikowVatData
                                         }
                                     }
                                 }
-                                return await FindByNipsAsync(nips);
+                                return await FindByNipsAsync(nips) ?? entityList;
                             }
                         }
                     }
@@ -974,16 +1022,20 @@ namespace ApiWykazuPodatnikowVatData
 
         #region public static async Task<Entity> ApiFindByRegonsAsync(string regons)
         /// <summary>
+        /// https://wl-test.mf.gov.pl/api/search/regons/{regons}?date={date format yyyy-MM-dd}
+        /// https://wl-api.mf.gov.pl/api/search/regons/{regons}?date={date format yyyy-MM-dd}
         /// Znajdź podmioty wedłóg listy numerów REGON
         /// Find entities according to the list of REGON numbers
         /// </summary>
         /// <param name="regons">
         /// Lista maksymalnie 30 numerów REGON rozdzielonych przecinkami
         /// A list of up to 30 REGON, separated by commas
+        /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
+        /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         public static async Task<List<Entity>> ApiFindByRegonsAsync(string regons)
         {
@@ -1019,7 +1071,7 @@ namespace ApiWykazuPodatnikowVatData
                                         }
                                     }
                                 }
-                                return await FindByRegonsAsync(regons);
+                                return await FindByRegonsAsync(regons) ?? entityList;
                             }
                         }
                     }
@@ -1036,18 +1088,18 @@ namespace ApiWykazuPodatnikowVatData
 
         #region public static async Task<Entity> ApiFindByBankAccountsAsync(string bankAccounts)
         /// <summary>
-        /// Znajdź podmioty wedłóg listy numerów rachunków NRB
-        /// Find entities by the list of NRB account numbers
         /// GET https://wl-test.mf.gov.pl/api/search/bank-accounts/{bankAccounts}?date={date format yyyy-MM-dd}
         /// GET https://wl-api.mf.gov.pl/api/search/bank-accounts/{bankAccounts}?date={date format yyyy-MM-dd}
+        /// Znajdź podmioty wedłóg listy numerów rachunków NRB
+        /// Find entities by the list of NRB account numbers
         /// </summary>
         /// <param name="bankAccounts">
         /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
-        /// Lista podmiotów jako List <Entity>
-        /// Entity list as List <Entity>
+        /// Lista podmiotów jako List obiektów Entity lub null
+        /// List of entities as List of Entity objects or null
         /// </returns>
         public static async Task<List<Entity>> ApiFindByBankAccountsAsync(string bankAccounts)
         {
@@ -1091,7 +1143,7 @@ namespace ApiWykazuPodatnikowVatData
                                         }
                                     }
                                 }
-                                return await FindByBankAccountsAsync(bankAccounts);
+                                return await FindByBankAccountsAsync(bankAccounts) ?? entityList;
                             }
                         }
                     }
@@ -1108,8 +1160,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region public static async Task<EntityCheck> ApiCheckBankAccountByNipAsync (string nip, string bankAccount)
         /// <summary>
-        /// Sprawdź, czy dany rachunek jest przypisany do podmiotu według numeru rachunku bankowego NRB i numeru NIP
-        /// Check if a given account is assigned to the entity according to the NRB bank account number and NIP number
+        /// Sprawdź, czy dany rachunek jest przypisany do podmiotu według numeru NIP i numeru rachunku bankowego NRB
+        /// Check if a given account is assigned to the entity according to the NIP number and NRB bank account number
         /// https://wl-test.mf.gov.pl/api/check/nip/{nip}/bank-account/{bankAccount}?date={date format yyyy-MM-dd}
         /// https://wl-api.mf.gov.pl/api/check/nip/{nip}/bank-account/{bankAccount}?date={date format yyyy-MM-dd}
         /// </summary>

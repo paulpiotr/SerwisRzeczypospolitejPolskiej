@@ -68,6 +68,7 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// </summary>
         public ApiWykazuPodatnikowVatDataDbContext()
         {
+            //this.Configuration.LazyLoadingEnabled = false;
         }
         #endregion
 

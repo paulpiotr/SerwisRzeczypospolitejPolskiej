@@ -21,7 +21,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             Representative = new HashSet<EntityPerson>();
             AuthorizedClerk = new HashSet<EntityPerson>();
             Partner = new HashSet<EntityPerson>();
-            //AccountNumber = new HashSet<EntityAccountNumber>();
+            EntityAccountNumber = new HashSet<EntityAccountNumber>();
         }
         #endregion
 
