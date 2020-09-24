@@ -4,14 +4,16 @@ using ApiWykazuPodatnikowVatData.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    partial class ApiWykazuPodatnikowVatDataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200924164920_4")]
+    partial class _4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,15 +207,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("AccountAssigned")
-                        .IsRequired()
                         .HasColumnName("AccountAssigned")
                         .HasColumnType("varchar(3)")
                         .HasMaxLength(3);
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnName("AccountNumber")
-                        .HasColumnType("varchar(32)")
-                        .HasMaxLength(32);
 
                     b.Property<DateTime>("DateOfCreate")
                         .ValueGeneratedOnAddOrUpdate()
@@ -222,6 +218,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime?>("DateOfModification")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
 
@@ -235,18 +232,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(14)")
                         .HasMaxLength(14);
 
-                    b.Property<string>("RequestDateTime")
-                        .IsRequired()
+                    b.Property<DateTime>("RequestDateTime")
                         .HasColumnName("RequestDateTime")
-                        .HasColumnType("varchar(19)")
-                        .HasMaxLength(19);
-
-                    b.Property<DateTime?>("RequestDateTimeAsDate")
-                        .HasColumnName("RequestDateTimeAsDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("RequestId")
-                        .IsRequired()
                         .HasColumnName("RequestId")
                         .HasColumnType("varchar(18)")
                         .HasMaxLength(18);
@@ -259,18 +249,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountNumber")
-                        .HasName("IX_EntityCheckAccountNumber");
-
                     b.HasIndex("Id")
                         .IsUnique()
                         .HasName("IX_EntityCheckId");
-
-                    b.HasIndex("Nip")
-                        .HasName("IX_EntityCheckNip");
-
-                    b.HasIndex("Regon")
-                        .HasName("IX_EntityCheckRegon");
 
                     b.HasIndex("RequestId")
                         .HasName("IX_EntityCheckRequestId");

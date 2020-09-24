@@ -4,14 +4,16 @@ using ApiWykazuPodatnikowVatData.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    partial class ApiWykazuPodatnikowVatDataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200924172625_8")]
+    partial class _8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,10 +242,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnName("RequestDateTime")
                         .HasColumnType("varchar(19)")
                         .HasMaxLength(19);
-
-                    b.Property<DateTime?>("RequestDateTimeAsDate")
-                        .HasColumnName("RequestDateTimeAsDate")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("RequestId")
                         .IsRequired()

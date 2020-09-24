@@ -29,6 +29,18 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
+            entity.HasIndex(e => e.Nip)
+                .HasName("IX_EntityCheckNip")
+                .IsUnique(false);
+
+            entity.HasIndex(e => e.Regon)
+                .HasName("IX_EntityCheckRegon")
+                .IsUnique(false);
+
+            entity.HasIndex(e => e.AccountNumber)
+                .HasName("IX_EntityCheckAccountNumber")
+                .IsUnique(false);
+
             entity.HasIndex(e => e.RequestId)
                 .HasName("IX_EntityCheckRequestId")
                 .IsUnique(false);

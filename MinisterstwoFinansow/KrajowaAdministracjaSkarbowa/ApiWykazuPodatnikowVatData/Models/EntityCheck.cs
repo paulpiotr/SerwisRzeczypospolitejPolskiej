@@ -32,12 +32,54 @@ namespace ApiWykazuPodatnikowVatData.Models
         public string UniqueIdentifierOfTheLoggedInUser { get; set; }
         #endregion
 
+        #region public string Nip { get; set; }
+        /// <summary>
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
+        /// NIP tax identification number as string [^\d{10}$]
+        /// </summary>
+        [Column("Nip", TypeName = "varchar(10)")]
+        [Display(Name = "Numer nip", Prompt = "Wpisz nip", Description = "Numer nip")]
+        [StringLength(10)]
+        [MinLength(10)]
+        [MaxLength(10)]
+        [RegularExpression(@"^\d{10}$")]
+        public string Nip { get; set; }
+        #endregion
+
+        #region public string Regon { get; set; }
+        /// <summary>
+        /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
+        /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
+        /// </summary>
+        [Column("Regon", TypeName = "varchar(14)")]
+        [Display(Name = "Regon", Prompt = "Wpisz regon", Description = "Numer regon")]
+        [StringLength(14)]
+        [MinLength(9)]
+        [MaxLength(14)]
+        [RegularExpression(@"^\d{9}$|^\d{14}$")]
+        public string Regon { get; set; }
+        #endregion
+
+        #region public string AccountNumber { get; set; }
+        /// <summary>
+        /// Numer konta bankowego w formacie NRB
+        /// </summary>
+        [Column("AccountNumber", TypeName = "varchar(32)")]
+        [Display(Name = "Numer konta bankowego w formacie NRB", Prompt = "Wpisz numer konta bankowego w formacie NRB", Description = "Numer konta bankowego w formacie NRB")]
+        [StringLength(32)]
+        [MinLength(26)]
+        [MaxLength(32)]
+        [RegularExpression(@"^\d{26}$")]
+        public string AccountNumber { get; set; }
+        #endregion
+
         #region public string AccountAssigned { get; set; }
         /// <summary>
         /// Czy rachunek przypisany do podmiotu czynnego
         /// </summary>
         [Column("AccountAssigned", TypeName = "varchar(3)")]
         [Display(Name = "Czy rachunek przypisany do podmiotu czynnego", Prompt = "Wybierz, czy rachunek jest przypisany do podmiotu czynnego", Description = "Czy rachunek przypisany do podmiotu czynnego")]
+        [Required]
         [StringLength(3)]
         [MinLength(3)]
         [MaxLength(3)]
@@ -46,11 +88,24 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public DateTime RequestDateTime
         /// <summary>
-        /// Data wysłania żądania
+        /// Data wysłania żądania w formacie string
         /// </summary>
-        [Column("RequestDateTime", TypeName = "datetime")]
+        [Column("RequestDateTime", TypeName = "varchar(19)")]
         [Display(Name = "Data wysłania żądania", Prompt = "Wpisz lub wybierz datę wysłania żądania", Description = "Data wysłania żądania")]
-        public DateTime RequestDateTime { get; set; }
+        [Required]
+        [StringLength(19)]
+        [MinLength(19)]
+        [MaxLength(19)]
+        public string RequestDateTime { get; set; }
+        #endregion
+
+        #region public DateTime? RequestDateTimeAsDate { get; set; }
+        /// <summary>
+        /// Data wysłania żądania w formacie datetime
+        /// </summary>
+        [Column("RequestDateTimeAsDate", TypeName = "datetime")]
+        [Display(Name = "Data wysłania żądania", Prompt = "Wpisz lub wybierz datę wysłania żądania", Description = "Data wysłania żądania")]
+        public DateTime? RequestDateTimeAsDate { get; set; }
         #endregion
 
         #region public string RequestId { get; set; }
@@ -59,6 +114,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("RequestId", TypeName = "varchar(18)")]
         [Display(Name = "Numer (id) odpowiedzi", Prompt = "Wpisz numer (id) odpowiedzi", Description = "Numer (id) odpowiedzi")]
+        [Required]
         [StringLength(18)]
         [MinLength(18)]
         [MaxLength(18)]
@@ -71,6 +127,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfCreate", TypeName = "datetime")]
         [Display(Name = "Data Utworzenia", Prompt = "Wpisz lub wybierz datę utworzenia", Description = "Data utworzenia")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateOfCreate { get; set; }
         #endregion
 
@@ -80,7 +137,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfModification", TypeName = "datetime")]
         [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfModification { get; set; }
         #endregion
     }

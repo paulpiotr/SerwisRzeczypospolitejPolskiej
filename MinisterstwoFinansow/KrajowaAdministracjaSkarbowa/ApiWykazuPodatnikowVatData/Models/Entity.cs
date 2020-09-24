@@ -61,13 +61,14 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public string Nip { get; set; }
         /// <summary>
-        /// Numer nip
+        /// Numer identyfikacji podatkowej NIP jako string
         /// </summary>
         [Column("Nip", TypeName = "varchar(10)")]
         [Display(Name = "Numer nip", Prompt = "Wpisz nip", Description = "Numer nip")]
         [StringLength(10)]
         [MinLength(10)]
         [MaxLength(10)]
+        [RegularExpression(@"^\d{10}$")]
         public string Nip { get; set; }
         #endregion
 
@@ -85,7 +86,8 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public string Regon { get; set; }
         /// <summary>
-        /// Numer regon
+        /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
+        /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </summary>
         [Column("Regon", TypeName = "varchar(14)")]
         [Display(Name = "Regon", Prompt = "Wpisz regon", Description = "Numer regon")]
