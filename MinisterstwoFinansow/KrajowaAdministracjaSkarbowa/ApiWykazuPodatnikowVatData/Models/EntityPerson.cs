@@ -144,10 +144,10 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public string Nip { get; set; }
         /// <summary>
-        /// Numer nip
+        /// Numer NIP
         /// </summary>
         [Column("Nip", TypeName = "varchar(10)")]
-        [Display(Name = "Numer nip", Prompt = "Wpisz nip", Description = "Numer nip")]
+        [Display(Name = "Numer NIP", Prompt = "Wpisz nip", Description = "Numer NIP")]
         [StringLength(10)]
         [MinLength(10)]
         [MaxLength(10)]

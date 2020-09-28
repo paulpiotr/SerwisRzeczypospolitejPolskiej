@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,8 @@ namespace ApiWykazuPodatnikowVatData.Models
 {
     #region public partial class EntityAccountNumber
     /// <summary>
-    /// Model danych EntityAccountNumber
+    /// Model danych numery rachunków bankowych podmiotu jako EntityAccountNumber
+    /// Data model Entity's bank account numbers as EntityAccountNumber
     /// </summary>
     [Table("EntityAccountNumber", Schema = "ApiWykazuPodatnikowVat")]
     public partial class EntityAccountNumber
@@ -16,6 +18,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Guid Id identyfikator, klucz główny
         /// </summary>
         [Key]
+        [JsonProperty(nameof(Id))]
         [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
         public Guid Id { get; set; }
         #endregion
@@ -26,6 +29,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Unique identifier of the logged in user
         /// </summary>
         [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [JsonProperty(nameof(UniqueIdentifierOfTheLoggedInUser))]
         [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
         [StringLength(512)]
         [Required]
@@ -36,6 +40,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// <summary>
         /// Odniesienie (klucz obcy) do tabeli Entity jako Guid?
         /// </summary>
+        [JsonProperty(nameof(EntityId))]
         public Guid? EntityId { get; set; }
         #endregion
 
@@ -45,14 +50,17 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [ForeignKey(nameof(EntityId))]
         [InverseProperty("EntityAccountNumber")]
+        [JsonProperty(nameof(Entity))]
         public virtual Entity Entity { get; set; }
         #endregion
 
         #region public string AccountNumber { get; set; }
         /// <summary>
-        /// Numer konta bankowego w formacie NRB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </summary>
         [Column("AccountNumber", TypeName = "varchar(32)")]
+        [JsonProperty(nameof(AccountNumber))]
         [Display(Name = "Numer konta bankowego w formacie NRB", Prompt = "Wpisz numer konta bankowego w formacie NRB", Description = "Numer konta bankowego w formacie NRB")]
         [Required]
         [StringLength(32)]
@@ -67,6 +75,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data utworzenia
         /// </summary>
         [Column("DateOfCreate", TypeName = "datetime")]
+        [JsonProperty(nameof(DateOfCreate))]
         [Display(Name = "Data Utworzenia", Prompt = "Wpisz lub wybierz datę utworzenia", Description = "Data utworzenia")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateOfCreate { get; set; }
@@ -77,6 +86,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data modyfikacji
         /// </summary>
         [Column("DateOfModification", TypeName = "datetime")]
+        [JsonProperty(nameof(DateOfModification))]
         [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
         //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfModification { get; set; }

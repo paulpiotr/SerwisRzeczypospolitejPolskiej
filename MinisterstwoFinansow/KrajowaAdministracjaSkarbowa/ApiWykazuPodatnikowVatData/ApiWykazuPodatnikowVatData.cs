@@ -26,7 +26,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Paramentr url https://wl-test.mf.gov.pl or https://wl-api.mf.gov.pl
         /// The value of the RestClientUrl parameter from the ApiWykazuPodatnikowVatData.json file
         /// </summary>
-        private static readonly string _restClientUrl = NetAppCommon.DataConfiguration.GetValue<string>("ApiWykazuPodatnikowVatData.json", "RestClientUrl");
+        private static readonly string _restClientUrl = NetAppCommon.Configuration.GetValue<string>("ApiWykazuPodatnikowVatData.json", "RestClientUrl");
         #endregion
 
         #region private static readonly string _connectionStrings
@@ -34,7 +34,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji ApiWykazuPodatnikowVatData.json.
         /// Database connection taken from the ApiWykazuPodatnikowVatData.json application configuration file.
         /// </summary>
-        private static readonly string _connectionStrings = NetAppCommon.DataContext.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "ApiWykazuPodatnikowVatData.json");
+        private static readonly string _connectionStrings = NetAppCommon.DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "ApiWykazuPodatnikowVatData.json");
         #endregion
 
         #region private static readonly int _cacheLifeTime
@@ -42,7 +42,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Czas życia pamięci podręcznej dla zapytań do serwisu
         /// Cache lifetime for site queries
         /// </summary>
-        private static readonly int _cacheLifetimeForSiteQueries = NetAppCommon.DataConfiguration.GetValue<int>("ApiWykazuPodatnikowVatData.json", "CacheLifetimeForSiteQueries");
+        private static readonly int _cacheLifetimeForSiteQueries = NetAppCommon.Configuration.GetValue<int>("ApiWykazuPodatnikowVatData.json", "CacheLifetimeForSiteQueries");
         #endregion
 
         #region private static async Task<Entity> FindByNipAndModificationDateAsync(string nip)
@@ -64,7 +64,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -102,7 +102,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -143,7 +143,7 @@ namespace ApiWykazuPodatnikowVatData
                 return await Task.Run(async () =>
                 {
                     List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -188,7 +188,7 @@ namespace ApiWykazuPodatnikowVatData
                 return await Task.Run(async () =>
                 {
                     List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -234,7 +234,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -276,7 +276,7 @@ namespace ApiWykazuPodatnikowVatData
                 return await Task.Run(async () =>
                 {
                     List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -321,7 +321,7 @@ namespace ApiWykazuPodatnikowVatData
                 return await Task.Run(async () =>
                 {
                     List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -368,7 +368,7 @@ namespace ApiWykazuPodatnikowVatData
                 return await Task.Run(async () =>
                 {
                     List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -413,7 +413,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -451,7 +451,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -493,7 +493,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 return await Task.Run(async () =>
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                     {
                         bool canConnectAsync = await context.Database.CanConnectAsync();
                         if (canConnectAsync)
@@ -530,8 +530,8 @@ namespace ApiWykazuPodatnikowVatData
         /// Parameter List of bank accounts as List <string>
         /// </param>
         /// <param name="entity">
-        /// Parametr Entity
-        /// Entity parameter
+        /// Obiekt podmiotu jako Entity
+        /// The subject object as Entity
         /// </param>
         /// <returns>
         /// Lista numerów kont bankowwych dla podmiotu jako List <EntityAccountNumber>
@@ -545,54 +545,57 @@ namespace ApiWykazuPodatnikowVatData
                 {
                     if (null != accountNumbersList && accountNumbersList.Count > 0)
                     {
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                         {
-                            context.EntityAccountNumber.RemoveRange(
-                            context.EntityAccountNumber.Where(
-                                w => w.EntityId == entity.Id
-                                && !accountNumbersList.Contains(w.AccountNumber)
-                                )
-                            );
-                            int isEntityAccountNumberRemoveRange = await context.SaveChangesAsync();
-                            _log4net.Debug($"Remove EntityAccountNumber if is not found in list and Save Changes Async to database: { isEntityAccountNumberRemoveRange }");
-                            foreach (string accountNumber in accountNumbersList)
+                            if (await context.Database.CanConnectAsync())
                             {
-                                try
+                                context.EntityAccountNumber.RemoveRange(
+                                context.EntityAccountNumber.Where(
+                                    w => w.EntityId == entity.Id
+                                    && !accountNumbersList.Contains(w.AccountNumber)
+                                    )
+                                );
+                                int isEntityAccountNumberRemoveRange = await context.SaveChangesAsync();
+                                _log4net.Debug($"Remove EntityAccountNumber if is not found in list and Save Changes Async to database: { isEntityAccountNumberRemoveRange }");
+                                foreach (string accountNumber in accountNumbersList)
                                 {
-                                    await Task.Run(async () =>
+                                    try
                                     {
-                                        EntityAccountNumber entityAccountNumber = null;
-                                        if (null != accountNumber && !string.IsNullOrWhiteSpace(accountNumber))
+                                        await Task.Run(async () =>
                                         {
-                                            entityAccountNumber = await context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && w.AccountNumber.Contains(accountNumber)).FirstOrDefaultAsync();
-                                            if (null != entityAccountNumber)
+                                            EntityAccountNumber entityAccountNumber = null;
+                                            if (null != accountNumber && !string.IsNullOrWhiteSpace(accountNumber))
                                             {
-                                                entityAccountNumber.DateOfModification = DateTime.Now;
-                                                context.Entry(entityAccountNumber).State = EntityState.Modified;
-                                                int isEntityAccountNumberModified = await context.SaveChangesAsync();
-                                                _log4net.Debug($"Modify EntityAccountNumber if is found in list and Save Changes Async to database: { isEntityAccountNumberModified }");
-                                            }
-                                            else
-                                            {
-                                                entityAccountNumber = new EntityAccountNumber()
+                                                entityAccountNumber = await context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && w.AccountNumber.Contains(accountNumber)).FirstOrDefaultAsync();
+                                                if (null != entityAccountNumber)
                                                 {
-                                                    UniqueIdentifierOfTheLoggedInUser = "test",
-                                                    Entity = entity,
-                                                    AccountNumber = accountNumber,
-                                                };
-                                                context.Entry(entityAccountNumber).State = EntityState.Added;
-                                                int isEntityAccountNumberAdded = await context.SaveChangesAsync();
-                                                _log4net.Debug($"Add EntityAccountNumber and Save Changes Async to database: { isEntityAccountNumberAdded } id { entityAccountNumber.Id }");
+                                                    entityAccountNumber.DateOfModification = DateTime.Now;
+                                                    context.Entry(entityAccountNumber).State = EntityState.Modified;
+                                                    int isEntityAccountNumberModified = await context.SaveChangesAsync();
+                                                    _log4net.Debug($"Modify EntityAccountNumber if is found in list and Save Changes Async to database: { isEntityAccountNumberModified }");
+                                                }
+                                                else
+                                                {
+                                                    entityAccountNumber = new EntityAccountNumber()
+                                                    {
+                                                        UniqueIdentifierOfTheLoggedInUser = "test",
+                                                        Entity = entity,
+                                                        AccountNumber = accountNumber,
+                                                    };
+                                                    context.Entry(entityAccountNumber).State = EntityState.Added;
+                                                    int isEntityAccountNumberAdded = await context.SaveChangesAsync();
+                                                    _log4net.Debug($"Add EntityAccountNumber and Save Changes Async to database: { isEntityAccountNumberAdded } id { entityAccountNumber.Id }");
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    }
                                 }
-                                catch (Exception e)
-                                {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
+                                return context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && accountNumbersList.Contains(w.AccountNumber)).ToList();
                             }
-                            return context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && accountNumbersList.Contains(w.AccountNumber)).ToList();
                         }
                     }
                     return null;
@@ -612,16 +615,18 @@ namespace ApiWykazuPodatnikowVatData
         /// Add or modify the bank account number for the entity
         /// </summary>
         /// <param name="accountNumbersList">
-        /// Parametr Lista rachunków bankowych jako List <string>
-        /// Parameter List of bank accounts as List <string>
+        /// Lista maksymalnie 30 numerow rachunkow bankowych rozdzielonych przecinkami jako string
+        /// A list of up to 30 bank account numbers separated by commas as a string
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <param name="entity">
-        /// Parametr Entity
-        /// Entity parameter
+        /// Obiekt podmiotu jako Entity
+        /// The subject object as Entity
         /// </param>
         /// <returns>
-        /// Lista numerów kont bankowwych dla podmiotu jako List <EntityAccountNumber>
-        /// List of bank account numbers for the entity as List <EntityAccountNumber>
+        /// Lista numerów kont bankowych dla podmiotu jako Lista obiektów encji EntityAccountNumber
+        /// List of bank account numbers for the entity as EntityAccountNumber Entity Object List
         /// </returns>
         private static async Task<List<EntityPerson>> AddOrModifyEntityPersonAsync(List<EntityPerson> entityPerson, Entity entity, string property)
         {
@@ -632,56 +637,59 @@ namespace ApiWykazuPodatnikowVatData
                     if (null != entityPerson && entityPerson.Count > 0 && new List<string>() { "EntityRepresentativeId", "EntityAuthorizedClerkId", "EntityPartnerId" }.Contains(property))
                     {
                         PropertyInfo propertyInfo = entityPerson.FirstOrDefault().GetType().GetProperty(property);
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                         {
-                            try
+                            if (await context.Database.CanConnectAsync())
                             {
-                                context.EntityPerson.RemoveRange(
-                                    context.EntityPerson.Where(
-                                        w => EF.Property<Guid>(w, property) == entity.Id
-                                        //&& (
-                                        //    !(from f in entityPerson select f.Nip).ToList().Contains(w.Nip) ||
-                                        //    !(from f in entityPerson select f.CompanyName).ToList().Contains(w.CompanyName) ||
-                                        //    !(
-                                        //        (from f in entityPerson select f.FirstName).ToList().Contains(w.FirstName) &&
-                                        //        (from f in entityPerson select f.LastName).ToList().Contains(w.LastName)
-                                        //    )
-                                        //)
-                                    )
-                                );
-                                int isEntityPersonRemoveRange = await context.SaveChangesAsync();
-                                _log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
-                            }
-                            catch (Exception e)
-                            {
-                                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                            }
-                            try
-                            {
-                                entityPerson.ForEach(x =>
+                                try
                                 {
-                                    switch (property)
+                                    context.EntityPerson.RemoveRange(
+                                        context.EntityPerson.Where(
+                                            w => EF.Property<Guid>(w, property) == entity.Id
+                                            //&& (
+                                            //    !(from f in entityPerson select f.Nip).ToList().Contains(w.Nip) ||
+                                            //    !(from f in entityPerson select f.CompanyName).ToList().Contains(w.CompanyName) ||
+                                            //    !(
+                                            //        (from f in entityPerson select f.FirstName).ToList().Contains(w.FirstName) &&
+                                            //        (from f in entityPerson select f.LastName).ToList().Contains(w.LastName)
+                                            //    )
+                                            //)
+                                        )
+                                    );
+                                    int isEntityPersonRemoveRange = await context.SaveChangesAsync();
+                                    _log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
+                                }
+                                catch (Exception e)
+                                {
+                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                }
+                                try
+                                {
+                                    entityPerson.ForEach(x =>
                                     {
-                                        case "EntityRepresentativeId":
-                                            x.EntityRepresentativeId = entity.Id;
-                                            break;
-                                        case "EntityAuthorizedClerkId":
-                                            x.EntityAuthorizedClerkId = entity.Id;
-                                            break;
-                                        case "EntityPartnerId":
-                                            x.EntityPartnerId = entity.Id;
-                                            break;
-                                    }
-                                    x.UniqueIdentifierOfTheLoggedInUser = "test";
-                                    x.DateOfModification = DateTime.Now;
-                                });
-                                context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
-                                int isEntityPersonAddRange = await context.SaveChangesAsync();
-                                _log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
-                            }
-                            catch (Exception e)
-                            {
-                                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        switch (property)
+                                        {
+                                            case "EntityRepresentativeId":
+                                                x.EntityRepresentativeId = entity.Id;
+                                                break;
+                                            case "EntityAuthorizedClerkId":
+                                                x.EntityAuthorizedClerkId = entity.Id;
+                                                break;
+                                            case "EntityPartnerId":
+                                                x.EntityPartnerId = entity.Id;
+                                                break;
+                                        }
+                                        x.UniqueIdentifierOfTheLoggedInUser = "test";
+                                        x.DateOfModification = DateTime.Now;
+                                    });
+                                    context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
+                                    int isEntityPersonAddRange = await context.SaveChangesAsync();
+                                    _log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
+                                }
+                                catch (Exception e)
+                                {
+                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                }
                             }
                         }
                     }
@@ -702,8 +710,8 @@ namespace ApiWykazuPodatnikowVatData
         /// Add or update a record in the database
         /// </summary>
         /// <param name="entity">
-        /// Parametr Entity
-        /// Entity parameter
+        /// Obiekt podmiotu jako Entity
+        /// The subject object as Entity
         /// </param>
         /// <returns></returns>
         private static async Task<Entity> AddOrModifyEntity(Entity entity)
@@ -714,58 +722,69 @@ namespace ApiWykazuPodatnikowVatData
                 {
                     if (null != entity && null != entity.Nip && (!string.IsNullOrWhiteSpace(entity.Nip) || !string.IsNullOrWhiteSpace(entity.Pesel) || !string.IsNullOrWhiteSpace(entity.Regon)))
                     {
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                         {
-                            Entity entityWhere = context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip)).FirstOrDefault();
-                            if (null != entityWhere)
+                            if (await context.Database.CanConnectAsync())
                             {
-                                entity.Id = entityWhere.Id;
-                                context.Entry(entityWhere).State = EntityState.Detached;
-                            }
-                            entity.DateOfModification = DateTime.Now;
-                            entity.UniqueIdentifierOfTheLoggedInUser = "test";
-                            context.Entry(entity).State = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
-                            int isEntitySaveChangesAsync = await context.SaveChangesAsync();
-                            _log4net.Debug($"Save Entity Changes Async to database: { isEntitySaveChangesAsync } id: { entity.Id }");
-                            if (isEntitySaveChangesAsync == 1)
-                            {
+                                int isEntitySaveChangesAsync = 0;
                                 try
                                 {
-                                    List<string> accountNumbersList = (List<string>)entity.AccountNumbers;
-                                    List<EntityAccountNumber> entityAccountNumbersList = await AddOrModifyEntityAccountNumberAsync(accountNumbersList, entity);
+                                    Entity entityWhere = context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip)).FirstOrDefault();
+                                    if (null != entityWhere)
+                                    {
+                                        entity.Id = entityWhere.Id;
+                                        context.Entry(entityWhere).State = EntityState.Detached;
+                                    }
+                                    entity.DateOfModification = DateTime.Now;
+                                    entity.UniqueIdentifierOfTheLoggedInUser = "test";
+                                    context.Entry(entity).State = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
+                                    isEntitySaveChangesAsync = await context.SaveChangesAsync();
+                                    _log4net.Debug($"Save Entity Changes Async to database: { isEntitySaveChangesAsync } id: { entity.Id }");
                                 }
                                 catch (Exception e)
                                 {
                                     _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                 }
-                                try
+                                if (isEntitySaveChangesAsync == 1)
                                 {
-                                    List<EntityPerson> entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
-                                    List<EntityPerson> entityPersonListRepresentative = await AddOrModifyEntityPersonAsync(entityPersonListRepresentatives, entity, "EntityRepresentativeId");
+                                    try
+                                    {
+                                        List<string> accountNumbersList = (List<string>)entity.AccountNumbers;
+                                        List<EntityAccountNumber> entityAccountNumbersList = await AddOrModifyEntityAccountNumberAsync(accountNumbersList, entity);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    }
+                                    try
+                                    {
+                                        List<EntityPerson> entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
+                                        List<EntityPerson> entityPersonListRepresentative = await AddOrModifyEntityPersonAsync(entityPersonListRepresentatives, entity, "EntityRepresentativeId");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    }
+                                    try
+                                    {
+                                        List<EntityPerson> entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
+                                        List<EntityPerson> entityPersonListAuthorizedClerk = await AddOrModifyEntityPersonAsync(entityPersonListAuthorizedClerks, entity, "EntityAuthorizedClerkId");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    }
+                                    try
+                                    {
+                                        List<EntityPerson> entityPersonListPartners = (List<EntityPerson>)entity.Partners;
+                                        List<EntityPerson> entityPersonListPartner = await AddOrModifyEntityPersonAsync(entityPersonListPartners, entity, "EntityPartnerId");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    }
+                                    return context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip) || (!string.IsNullOrWhiteSpace(w.Regon) && !string.IsNullOrWhiteSpace(entity.Regon) && w.Regon == entity.Regon) || (!string.IsNullOrWhiteSpace(w.Pesel) && !string.IsNullOrWhiteSpace(entity.Pesel) && w.Pesel == entity.Pesel)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault() ?? entity;
                                 }
-                                catch (Exception e)
-                                {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                                try
-                                {
-                                    List<EntityPerson> entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
-                                    List<EntityPerson> entityPersonListAuthorizedClerk = await AddOrModifyEntityPersonAsync(entityPersonListAuthorizedClerks, entity, "EntityAuthorizedClerkId");
-                                }
-                                catch (Exception e)
-                                {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                                try
-                                {
-                                    List<EntityPerson> entityPersonListPartners = (List<EntityPerson>)entity.Partners;
-                                    List<EntityPerson> entityPersonListPartner = await AddOrModifyEntityPersonAsync(entityPersonListPartners, entity, "EntityPartnerId");
-                                }
-                                catch (Exception e)
-                                {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                                return context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip) || (!string.IsNullOrWhiteSpace(w.Regon) && !string.IsNullOrWhiteSpace(entity.Regon) && w.Regon == entity.Regon) || (!string.IsNullOrWhiteSpace(w.Pesel) && !string.IsNullOrWhiteSpace(entity.Pesel) && w.Pesel == entity.Pesel)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault() ?? entity;
                             }
                         }
                     }
@@ -817,7 +836,7 @@ namespace ApiWykazuPodatnikowVatData
                             Entity entity = response.Data.Result.Subject;
                             if (null != entity)
                             {
-                                await AddOrModifyEntity(entity);
+                                return await AddOrModifyEntity(entity);
                             }
                         }
                     }
@@ -1200,7 +1219,7 @@ namespace ApiWykazuPodatnikowVatData
                             entityCheck.DateOfModification = DateTime.Now;
                             try
                             {
-                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                                 {
                                     context.Entry(entityCheck).State = EntityState.Added;
                                     await context.SaveChangesAsync();
@@ -1266,7 +1285,7 @@ namespace ApiWykazuPodatnikowVatData
                             entityCheck.DateOfModification = DateTime.Now;
                             try
                             {
-                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DataContext.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                                 {
                                     context.Entry(entityCheck).State = EntityState.Added;
                                     await context.SaveChangesAsync();
