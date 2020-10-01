@@ -713,7 +713,10 @@ namespace ApiWykazuPodatnikowVatData
         /// Obiekt podmiotu jako Entity
         /// The subject object as Entity
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Zaktualizowany lub wstawiony obiekt Entity lub przekazany obiekt Entity lub null
+        /// An updated or inserted Entity or a passed Entity, or null
+        /// </returns>
         private static async Task<Entity> AddOrModifyEntity(Entity entity)
         {
             try
