@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Guid Id identyfikator, klucz główny
         /// </summary>
         [Key]
+        [JsonProperty(nameof(Id))]
         [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
         public Guid Id { get; set; }
         #endregion
@@ -26,6 +28,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Unique identifier of the logged in user
         /// </summary>
         [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
+        [JsonProperty(nameof(UniqueIdentifierOfTheLoggedInUser))]
         [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
         [StringLength(512)]
         [Required]
@@ -38,6 +41,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// NIP tax identification number as string [^\d{10}$]
         /// </summary>
         [Column("Nip", TypeName = "varchar(10)")]
+        [JsonProperty(nameof(Nip))]
         [Display(Name = "Numer NIP", Prompt = "Wpisz nip", Description = "Numer NIP")]
         [StringLength(10)]
         [MinLength(10)]
@@ -52,6 +56,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </summary>
         [Column("Regon", TypeName = "varchar(14)")]
+        [JsonProperty(nameof(Regon))]
         [Display(Name = "Regon", Prompt = "Wpisz regon", Description = "Numer regon")]
         [StringLength(14)]
         [MinLength(9)]
@@ -65,6 +70,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Numer konta bankowego w formacie NRB
         /// </summary>
         [Column("AccountNumber", TypeName = "varchar(32)")]
+        [JsonProperty(nameof(AccountNumber))]
         [Display(Name = "Numer konta bankowego w formacie NRB", Prompt = "Wpisz numer konta bankowego w formacie NRB", Description = "Numer konta bankowego w formacie NRB")]
         [StringLength(32)]
         [MinLength(26)]
@@ -78,6 +84,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Czy rachunek przypisany do podmiotu czynnego
         /// </summary>
         [Column("AccountAssigned", TypeName = "varchar(3)")]
+        [JsonProperty(nameof(AccountAssigned))]
         [Display(Name = "Czy rachunek przypisany do podmiotu czynnego", Prompt = "Wybierz, czy rachunek jest przypisany do podmiotu czynnego", Description = "Czy rachunek przypisany do podmiotu czynnego")]
         [Required]
         [StringLength(3)]
@@ -91,6 +98,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data wysłania żądania w formacie string
         /// </summary>
         [Column("RequestDateTime", TypeName = "varchar(19)")]
+        [JsonProperty(nameof(RequestDateTime))]
         [Display(Name = "Data wysłania żądania", Prompt = "Wpisz lub wybierz datę wysłania żądania", Description = "Data wysłania żądania")]
         [Required]
         [StringLength(19)]
@@ -104,6 +112,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data wysłania żądania w formacie datetime
         /// </summary>
         [Column("RequestDateTimeAsDate", TypeName = "datetime")]
+        [JsonProperty(nameof(RequestDateTimeAsDate))]
         [Display(Name = "Data wysłania żądania", Prompt = "Wpisz lub wybierz datę wysłania żądania", Description = "Data wysłania żądania")]
         public DateTime? RequestDateTimeAsDate { get; set; }
         #endregion
@@ -113,6 +122,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Numer (id) odpowiedzi jako string
         /// </summary>
         [Column("RequestId", TypeName = "varchar(18)")]
+        [JsonProperty(nameof(RequestId))]
         [Display(Name = "Numer (id) odpowiedzi", Prompt = "Wpisz numer (id) odpowiedzi", Description = "Numer (id) odpowiedzi")]
         [Required]
         [StringLength(18)]
@@ -126,6 +136,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data utworzenia
         /// </summary>
         [Column("DateOfCreate", TypeName = "datetime")]
+        [JsonProperty(nameof(DateOfCreate))]
         [Display(Name = "Data Utworzenia", Prompt = "Wpisz lub wybierz datę utworzenia", Description = "Data utworzenia")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateOfCreate { get; set; }
@@ -136,6 +147,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Data modyfikacji
         /// </summary>
         [Column("DateOfModification", TypeName = "datetime")]
+        [JsonProperty(nameof(DateOfModification))]
         [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
         //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfModification { get; set; }

@@ -354,8 +354,8 @@ namespace ApiWykazuPodatnikowVatData
         /// Find entities by NRB bank account number if the modification date is greater than or equal to the date calculated for the CacheLifetimeForSiteQueries parameter
         /// </summary>
         /// <param name="bankAccount">
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
@@ -400,8 +400,8 @@ namespace ApiWykazuPodatnikowVatData
         /// Find entities by NRB bank account number
         /// </summary>
         /// <param name="bankAccount">
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
@@ -438,7 +438,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Find entities by the list of NRB account numbers
         /// </summary>
         /// <param name="bankAccounts">
-        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
@@ -480,7 +480,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Find entities by the list of NRB account numbers
         /// </summary>
         /// <param name="bankAccounts">
-        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
@@ -617,8 +617,8 @@ namespace ApiWykazuPodatnikowVatData
         /// <param name="accountNumbersList">
         /// Lista maksymalnie 30 numerow rachunkow bankowych rozdzielonych przecinkami jako string
         /// A list of up to 30 bank account numbers separated by commas as a string
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <param name="entity">
         /// Obiekt podmiotu jako Entity
@@ -914,8 +914,8 @@ namespace ApiWykazuPodatnikowVatData
         /// GET https://wl-api.mf.gov.pl/api/search/bank-account/{bankAccount}?date={date format yyyy-MM-dd}
         /// </summary>
         /// <param name="bankAccount">
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
@@ -1116,7 +1116,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Find entities by the list of NRB account numbers
         /// </summary>
         /// <param name="bankAccounts">
-        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
         /// <returns>
@@ -1192,8 +1192,8 @@ namespace ApiWykazuPodatnikowVatData
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
         /// <param name="bankAccount">
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <returns>
         /// Odpowiedź, czy dany rachunek jest przypisany do podmiotu jako EntityCheck
@@ -1258,8 +1258,8 @@ namespace ApiWykazuPodatnikowVatData
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
         /// <param name="bankAccount">
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
         /// <returns>
         /// Odpowiedź, czy dany rachunek jest przypisany do podmiotu jako EntityCheck

@@ -56,8 +56,8 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public string AccountNumber { get; set; }
         /// <summary>
-        /// Numer rachunku bankowego (26 znaków) w formacie NRB (Numer Rachunku Bankowego) kkAAAAAAAABBBBBBBBBBBBBBBB
-        /// Bank account number (26 characters) in the format NRB (Bank Account Number) kkAAAAAAAABBBBBBBBBBBBBBBB
+        /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
+        /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </summary>
         [Column("AccountNumber", TypeName = "varchar(32)")]
         [JsonProperty(nameof(AccountNumber))]
