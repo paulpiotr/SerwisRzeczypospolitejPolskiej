@@ -1,0 +1,7 @@
+{
+  "RestClientUrl": "https://wl-api.mf.gov.pl",
+  "CacheLifeTimeForApiServiceQueries": 86400,
+  "ConnectionStrings": {
+    "ApiWykazuPodatnikowVatDataDbContext": "Server=.\\SQLExpress; Database=IUIntegrationSystemData; MultipleActiveResultSets=true; User Id=IUIntegrationSystemDataApi; Password=pTdp/6P:Z-ZP86dS%Q:U!ZK34`2UvB=v;"
+  }
+}

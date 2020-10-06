@@ -23,7 +23,7 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// <summary>
         /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji.
         /// </summary>
-        private static readonly string _connectionStrings = DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "ApiWykazuPodatnikowVatData.json");
+        private static readonly string _connectionStrings = DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "api.wykazu.podatnikow.vat.data.appsettings.debug.json");
         #endregion
 
         #region public virtual DbSet<Entity> Entity { get; set; }

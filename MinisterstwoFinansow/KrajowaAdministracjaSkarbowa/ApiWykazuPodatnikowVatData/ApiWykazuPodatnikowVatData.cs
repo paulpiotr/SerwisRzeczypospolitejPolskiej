@@ -22,19 +22,19 @@ namespace ApiWykazuPodatnikowVatData
         #region private static readonly string _restClientUrl
         /// <summary>
         /// Paramentr url https://wl-test.mf.gov.pl lub https://wl-api.mf.gov.pl
-        /// Wartość parametru RestClientUrl z pliku ApiWykazuPodatnikowVatData.json
+        /// Wartość parametru RestClientUrl z pliku api.wykazu.podatnikow.vat.data.appsettings.debug.json
         /// Paramentr url https://wl-test.mf.gov.pl or https://wl-api.mf.gov.pl
-        /// The value of the RestClientUrl parameter from the ApiWykazuPodatnikowVatData.json file
+        /// The value of the RestClientUrl parameter from the api.wykazu.podatnikow.vat.data.appsettings.debug.json file
         /// </summary>
-        private static readonly string _restClientUrl = NetAppCommon.Configuration.GetValue<string>("ApiWykazuPodatnikowVatData.json", "RestClientUrl");
+        private static readonly string _restClientUrl = NetAppCommon.Configuration.GetValue<string>("api.wykazu.podatnikow.vat.data.appsettings.debug.json", "RestClientUrl");
         #endregion
 
         #region private static readonly string _connectionStrings
         /// <summary>
-        /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji ApiWykazuPodatnikowVatData.json.
-        /// Database connection taken from the ApiWykazuPodatnikowVatData.json application configuration file.
+        /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji api.wykazu.podatnikow.vat.data.appsettings.debug.json.
+        /// Database connection taken from the api.wykazu.podatnikow.vat.data.appsettings.debug.json application configuration file.
         /// </summary>
-        private static readonly string _connectionStrings = NetAppCommon.DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "ApiWykazuPodatnikowVatData.json");
+        private static readonly string _connectionStrings = NetAppCommon.DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "api.wykazu.podatnikow.vat.data.appsettings.debug.json");
         #endregion
 
         #region private static readonly int _cacheLifeTime
@@ -42,7 +42,7 @@ namespace ApiWykazuPodatnikowVatData
         /// Czas życia pamięci podręcznej dla zapytań do serwisu
         /// Cache lifetime for site queries
         /// </summary>
-        private static readonly int _cacheLifetimeForSiteQueries = NetAppCommon.Configuration.GetValue<int>("ApiWykazuPodatnikowVatData.json", "CacheLifetimeForSiteQueries");
+        private static readonly int _cacheLifetimeForSiteQueries = NetAppCommon.Configuration.GetValue<int>("api.wykazu.podatnikow.vat.data.appsettings.debug.json", "CacheLifeTimeForApiServiceQueries");
         #endregion
 
         #region private static async Task<Entity> FindByNipAndModificationDateAsync(string nip)
@@ -168,8 +168,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region private static async Task<List<Entity>> FindByNipsAndModificationDateAsync(string nips)
         /// <summary>
-        /// Znajdź podmioty według listy numerów NIP jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifetimeForSiteQueries
-        /// Find entities by NIP number list if the modification date is greater than or equal to the date calculated for the CacheLifetimeForSiteQueries parameter
+        /// Znajdź podmioty według listy numerów NIP jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifeTimeForApiServiceQueries
+        /// Find entities by NIP number list if the modification date is greater than or equal to the date calculated for the CacheLifeTimeForApiServiceQueries parameter
         /// </summary>
         /// <param name="nips">
         /// Lista maksymalnie 30 numerów NIP rozdzielonych przecinkami
@@ -217,8 +217,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region private static async Task<Entity> FindByRegonAndModificationDateAsync(string regon)
         /// <summary>
-        /// Znajdź podmiot według numeru REGON jeśli data modyfikacji jest większa lub równa od daty obliczonej dla parametru CacheLifetimeForSiteQueries
-        /// Find the entity by REGON number if the modification date is greater than or equal to the date calculated for the CacheLifetimeForSiteQueries parameter
+        /// Znajdź podmiot według numeru REGON jeśli data modyfikacji jest większa lub równa od daty obliczonej dla parametru CacheLifeTimeForApiServiceQueries
+        /// Find the entity by REGON number if the modification date is greater than or equal to the date calculated for the CacheLifeTimeForApiServiceQueries parameter
         /// </summary>
         /// <param name="regon">
         /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
@@ -301,8 +301,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region private static async Task<List<Entity>> FindByRegonsAndModificationDateAsync(string regons)
         /// <summary>
-        /// Znajdź podmioty według listy numerów REGON jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifetimeForSiteQueries
-        /// Find entities by REGON number list if the modification date is greater than or equal to the date calculated for the CacheLifetimeForSiteQueries parameter
+        /// Znajdź podmioty według listy numerów REGON jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifeTimeForApiServiceQueries
+        /// Find entities by REGON number list if the modification date is greater than or equal to the date calculated for the CacheLifeTimeForApiServiceQueries parameter
         /// </summary>
         /// <param name="regons">
         /// Lista maksymalnie 30 numerów REGON rozdzielonych przecinkami
@@ -350,8 +350,8 @@ namespace ApiWykazuPodatnikowVatData
 
         #region private static async Task<Entity> FindByBankAccountAndModificationDateAsync(string bankAccount)
         /// <summary>
-        /// Znajdź podmioty według numeru rachunku bankowego NRB jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifetimeForSiteQueries
-        /// Find entities by NRB bank account number if the modification date is greater than or equal to the date calculated for the CacheLifetimeForSiteQueries parameter
+        /// Znajdź podmioty według numeru rachunku bankowego NRB jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru CacheLifeTimeForApiServiceQueries
+        /// Find entities by NRB bank account number if the modification date is greater than or equal to the date calculated for the CacheLifeTimeForApiServiceQueries parameter
         /// </summary>
         /// <param name="bankAccount">
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
