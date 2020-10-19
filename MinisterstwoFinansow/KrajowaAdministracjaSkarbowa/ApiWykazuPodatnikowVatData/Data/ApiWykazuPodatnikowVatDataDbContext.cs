@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace ApiWykazuPodatnikowVatData.Data
 {
+    #region public partial class ApiWykazuPodatnikowVatDataDbContext : DbContext
     /// <summary>
     /// Klasa kontekstu bazy danych api wykazu podatników VAT
     /// Database context class api list of VAT taxpayers
@@ -19,11 +20,79 @@ namespace ApiWykazuPodatnikowVatData.Data
         private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
-        #region private static readonly string _connectionStrings
+        #region private static readonly AppSettings appSettings...
         /// <summary>
-        /// Połączenie do bazy danych pobrane z pliku konfigracyjnego aplikacji.
+        /// Instancja do klasy modelu ustawień jako AppSettings
+        /// Instance to the settings model class as AppSettings
         /// </summary>
-        private static readonly string _connectionStrings = DatabaseMssql.GetConnectionString("ApiWykazuPodatnikowVatDataDbContext", "api.wykazu.podatnikow.vat.data.appsettings.debug.json");
+        private static readonly AppSettings appSettings = AppSettings.GetInstance();
+        #endregion
+
+        #region public ApiWykazuPodatnikowVatDataDbContext()
+        /// <summary>
+        /// Konstruktor Klasy kontekstu bazy danych
+        /// Constructor Database Context Classes
+        /// </summary>
+        public ApiWykazuPodatnikowVatDataDbContext()
+        {
+            //CheckForUpdateAndMigrate();
+        }
+        #endregion
+
+        #region public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
+        /// <summary>
+        /// Konstruktor klasy kontekstu bazy danych api wykazu podatników VAT
+        /// Constructor database context classes api list of VAT taxpayers
+        /// </summary>
+        /// <param name="options">
+        /// Opcje połączenia da bazy danych options AS DbContextOptions<ApiWykazuPodatnikowVatDataDbContext>
+        /// Connection options will give the options AS DbContextOptions<ApiWykazuPodatnikowVatDataDbContext>
+        /// </param>
+        public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
+            : base(options)
+        {
+            //CheckForUpdateAndMigrate();
+        }
+        #endregion
+
+        # region public async System.Threading.Tasks.Task CheckForUpdateAndMigrateAsync()
+        /// <summary>
+        /// Sprawdź warunek daty ostatniej migracji i przeprowadź migrację jeśli warunek jest spełniony
+        /// Check the condition of the last migration date and perform the migration if the condition is met
+        /// </summary>
+        /// <returns>
+        /// Metoda asynchroniczna
+        /// Asynchronous method
+        /// </returns>
+        public async System.Threading.Tasks.Task CheckForUpdateAndMigrateAsync()
+        {
+            try
+            {
+                int result = (DateTime.Now - appSettings.LastMigrateDateTime).Days;
+                _log4net.Debug($"Check for update and migrate, compare { DateTime.Now } and { appSettings.LastMigrateDateTime } is { result } CheckForUpdateEveryDays is { appSettings.CheckForUpdateEveryDays }");
+                if (/*CheckForUpdateEveryDays > 0 && */result >= appSettings.CheckForUpdateEveryDays)
+                {
+                    try
+                    {
+                        DatabaseMssqlMdf.GetInstance(Database.GetDbConnection().ConnectionString).Create();
+                        await Database.MigrateAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                    }
+                    finally
+                    {
+                        appSettings.LastMigrateDateTime = DateTime.Now;
+                        await appSettings.SaveAsync();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+            }
+        }
         #endregion
 
         #region public virtual DbSet<Entity> Entity { get; set; }
@@ -61,32 +130,6 @@ namespace ApiWykazuPodatnikowVatData.Data
         public virtual DbSet<EntityCheck> EntityCheck { get; set; }
         #endregion
 
-        #region public ApiWykazuPodatnikowVatDataDbContext()
-        /// <summary>
-        /// Konstruktor Klasy kontekstu bazy danych
-        /// Constructor Database Context Classes
-        /// </summary>
-        public ApiWykazuPodatnikowVatDataDbContext()
-        {
-            //this.Configuration.LazyLoadingEnabled = false;
-        }
-        #endregion
-
-        #region public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
-        /// <summary>
-        /// Konstruktor klasy kontekstu bazy danych api wykazu podatników VAT
-        /// Constructor database context classes api list of VAT taxpayers
-        /// </summary>
-        /// <param name="options">
-        /// Opcje połączenia da bazy danych options AS DbContextOptions<ApiWykazuPodatnikowVatDataDbContext>
-        /// Connection options will give the options AS DbContextOptions<ApiWykazuPodatnikowVatDataDbContext>
-        /// </param>
-        public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
-            : base(options)
-        {
-        }
-        #endregion
-
         #region protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         /// <summary>
         /// Zdarzenie wyzwalające konfigurację bazy danych
@@ -102,8 +145,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             {
                 if (!optionsBuilder.IsConfigured)
                 {
-                    //_log4net.Info(_connectionStrings);
-                    optionsBuilder.UseSqlServer(_connectionStrings);
+                    optionsBuilder.UseSqlServer(appSettings.GetConnectionString());
                 }
             }
             catch (Exception e)
@@ -132,6 +174,17 @@ namespace ApiWykazuPodatnikowVatData.Data
         }
         #endregion
 
+        #region partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        /// <summary>
+        /// partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        /// partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        /// </summary>
+        /// <param name="modelBuilder">
+        /// ModelBuilder modelBuilder
+        /// ModelBuilder modelBuilder
+        /// </param>
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        #endregion
     }
+    #endregion
 }

@@ -9,7 +9,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// Model danych EntityPesel, oryginalnie Pesel
     /// </summary>
     [NotMapped]
-    [Table("EntityPesel", Schema = "ApiWykazuPodatnikowVat")]
+    [Table("EntityPesel", Schema = "awpv")]
     public partial class EntityPesel
     {
         #region public EntityPesel()

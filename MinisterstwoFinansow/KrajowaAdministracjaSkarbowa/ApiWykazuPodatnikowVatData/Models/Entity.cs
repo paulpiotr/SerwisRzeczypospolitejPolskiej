@@ -11,7 +11,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// Model danych podmiot gospodarczy jako Entity
     /// Entity data model
     /// </summary>
-    [Table("Entity", Schema = "ApiWykazuPodatnikowVat")]
+    [Table("Entity", Schema = "awpv")]
     public partial class Entity
     {
         #region public Entity()

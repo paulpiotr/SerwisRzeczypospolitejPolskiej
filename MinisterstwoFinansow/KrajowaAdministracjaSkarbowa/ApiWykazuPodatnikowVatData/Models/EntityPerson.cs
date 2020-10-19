@@ -8,7 +8,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych EntityPerson, oryginalnie EntityPerson
     /// </summary>
-    [Table("EntityPerson", Schema = "ApiWykazuPodatnikowVat")]
+    [Table("EntityPerson", Schema = "awpv")]
     public partial class EntityPerson
     {
         #region public Guid Id { get; set; }, identyfikator, klucz główny

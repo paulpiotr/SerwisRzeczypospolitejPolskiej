@@ -144,7 +144,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("Entity","ApiWykazuPodatnikowVat");
+                    b.ToTable("Entity","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
@@ -194,7 +194,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityAccountNumber","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityCheck", b =>
@@ -278,7 +278,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityCheck","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityCheck","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>
@@ -366,7 +366,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityPerson","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>

@@ -9,7 +9,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// <summary>
     /// Model danych EntityCheck
     /// </summary>
-    [Table("EntityCheck", Schema = "ApiWykazuPodatnikowVat")]
+    [Table("EntityCheck", Schema = "awpv")]
     public partial class EntityCheck
     {
         #region public Guid Id { get; set; }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20200924172625_8")]
-    partial class _8
+    [Migration("20201019002407_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,7 +146,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("Entity","ApiWykazuPodatnikowVat");
+                    b.ToTable("Entity","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
@@ -196,7 +196,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityAccountNumber","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityCheck", b =>
@@ -243,6 +243,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(19)")
                         .HasMaxLength(19);
 
+                    b.Property<DateTime?>("RequestDateTimeAsDate")
+                        .HasColumnName("RequestDateTimeAsDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("RequestId")
                         .IsRequired()
                         .HasColumnName("RequestId")
@@ -276,7 +280,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityCheck","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityCheck","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>
@@ -364,7 +368,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityPerson","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>

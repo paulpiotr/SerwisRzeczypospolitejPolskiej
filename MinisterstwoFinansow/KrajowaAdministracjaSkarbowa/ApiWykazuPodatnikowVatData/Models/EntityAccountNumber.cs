@@ -10,7 +10,7 @@ namespace ApiWykazuPodatnikowVatData.Models
     /// Model danych numery rachunków bankowych podmiotu jako EntityAccountNumber
     /// Data model Entity's bank account numbers as EntityAccountNumber
     /// </summary>
-    [Table("EntityAccountNumber", Schema = "ApiWykazuPodatnikowVat")]
+    [Table("EntityAccountNumber", Schema = "awpv")]
     public partial class EntityAccountNumber
     {
         #region public Guid Id { get; set; }

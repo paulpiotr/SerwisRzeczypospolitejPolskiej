@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20200924170325_7")]
-    partial class _7
+    [Migration("20201019002450_2")]
+    partial class _2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,7 +146,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("Entity","ApiWykazuPodatnikowVat");
+                    b.ToTable("Entity","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
@@ -196,7 +196,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityAccountNumber","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityAccountNumber","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityCheck", b =>
@@ -207,6 +207,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasDefaultValueSql("(newsequentialid())");
 
                     b.Property<string>("AccountAssigned")
+                        .IsRequired()
                         .HasColumnName("AccountAssigned")
                         .HasColumnType("varchar(3)")
                         .HasMaxLength(3);
@@ -223,7 +224,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime?>("DateOfModification")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("DateOfModification")
                         .HasColumnType("datetime");
 
@@ -237,11 +237,18 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(14)")
                         .HasMaxLength(14);
 
-                    b.Property<DateTime>("RequestDateTime")
+                    b.Property<string>("RequestDateTime")
+                        .IsRequired()
                         .HasColumnName("RequestDateTime")
+                        .HasColumnType("varchar(19)")
+                        .HasMaxLength(19);
+
+                    b.Property<DateTime?>("RequestDateTimeAsDate")
+                        .HasColumnName("RequestDateTimeAsDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("RequestId")
+                        .IsRequired()
                         .HasColumnName("RequestId")
                         .HasColumnType("varchar(18)")
                         .HasMaxLength(18);
@@ -273,7 +280,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityCheck","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityCheck","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>
@@ -361,7 +368,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
-                    b.ToTable("EntityPerson","ApiWykazuPodatnikowVat");
+                    b.ToTable("EntityPerson","awpv");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>

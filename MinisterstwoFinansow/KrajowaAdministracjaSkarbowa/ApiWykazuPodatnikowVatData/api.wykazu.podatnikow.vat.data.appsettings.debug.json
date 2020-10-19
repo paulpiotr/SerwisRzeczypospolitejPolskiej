@@ -1,7 +1,11 @@
 {
   "RestClientUrl": "https://wl-api.mf.gov.pl",
-  "CacheLifeTimeForApiServiceQueries": 86400,
+  "CacheLifeTime": 86400,
+  "CheckForUpdateEveryDays": 1,
+  "LastMigrateDateTime": null,
   "ConnectionStrings": {
-    "ApiWykazuPodatnikowVatDataDbContext": "Server=.\\SQLExpress; Database=IUIntegrationSystemData; MultipleActiveResultSets=true; User Id=IUIntegrationSystemDataApi; Password=pTdp/6P:Z-ZP86dS%Q:U!ZK34`2UvB=v;"
+    //Uwaga! Dla IIS to¿samoœæ Puli Apikacji musi byæ ustawiona na LocalSystem !!!
+    //"ApiWykazuPodatnikowVatDataDbContext": "Data Source=(LocalDB)\\MSSQLLocalDB; AttachDbFilename=%Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)%\\MSSQLLocalDB\\MSSQLLocalDB.mdf; Database=MSSQLLocalDB; MultipleActiveResultSets=true; Integrated Security=True; Trusted_Connection=Yes",
+    "ApiWykazuPodatnikowVatDataDbContext": "Data Source=(LocalDB)\\MSSQLLocalDB; AttachDbFilename=%Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)%\\MSSQLLocalDB\\MSSQLLocalDB.mdf; Database=%AttachDbFilename%; MultipleActiveResultSets=true; Integrated Security=True; Trusted_Connection=Yes"
   }
 }

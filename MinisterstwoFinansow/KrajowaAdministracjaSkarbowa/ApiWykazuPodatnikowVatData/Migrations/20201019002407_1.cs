@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
@@ -8,11 +8,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "ApiWykazuPodatnikowVat");
+                name: "awpv");
 
             migrationBuilder.CreateTable(
                 name: "Entity",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
@@ -43,14 +43,18 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
             migrationBuilder.CreateTable(
                 name: "EntityCheck",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
                     UniqueIdentifierOfTheLoggedInUser = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false),
-                    AccountAssigned = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true),
-                    RequestDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    RequestId = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: true),
+                    Nip = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true),
+                    Regon = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true),
+                    AccountNumber = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
+                    AccountAssigned = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false),
+                    RequestDateTime = table.Column<string>(type: "varchar(19)", maxLength: 19, nullable: false),
+                    RequestDateTimeAsDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    RequestId = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false),
                     DateOfCreate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
                     DateOfModification = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
@@ -61,7 +65,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
             migrationBuilder.CreateTable(
                 name: "EntityAccountNumber",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
@@ -77,7 +81,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     table.ForeignKey(
                         name: "FK_EntityAccountNumber_Entity_EntityId",
                         column: x => x.EntityId,
-                        principalSchema: "ApiWykazuPodatnikowVat",
+                        principalSchema: "awpv",
                         principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -85,7 +89,7 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
             migrationBuilder.CreateTable(
                 name: "EntityPerson",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false, defaultValueSql: "(newsequentialid())"),
@@ -107,21 +111,21 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     table.ForeignKey(
                         name: "FK_EntityPerson_Entity_EntityAuthorizedClerkId",
                         column: x => x.EntityAuthorizedClerkId,
-                        principalSchema: "ApiWykazuPodatnikowVat",
+                        principalSchema: "awpv",
                         principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EntityPerson_Entity_EntityPartnerId",
                         column: x => x.EntityPartnerId,
-                        principalSchema: "ApiWykazuPodatnikowVat",
+                        principalSchema: "awpv",
                         principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EntityPerson_Entity_EntityRepresentativeId",
                         column: x => x.EntityRepresentativeId,
-                        principalSchema: "ApiWykazuPodatnikowVat",
+                        principalSchema: "awpv",
                         principalTable: "Entity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -129,32 +133,32 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityKrs",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Krs");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityName",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityNip",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Nip");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPesel",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Pesel",
                 unique: true,
@@ -162,108 +166,125 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityRegon",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "Regon");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityUniqueIdentifierOfTheLoggedInUser",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "Entity",
                 column: "UniqueIdentifierOfTheLoggedInUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityAccountNumberAccountNumber",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityAccountNumber",
                 column: "AccountNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityAccountNumber_EntityId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityAccountNumber",
                 column: "EntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityAccountNumberId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityAccountNumber",
                 column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityAccountNumber",
-                column: "UniqueIdentifierOfTheLoggedInUser",
-                unique: true);
+                column: "UniqueIdentifierOfTheLoggedInUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityCheckAccountNumber",
+                schema: "awpv",
+                table: "EntityCheck",
+                column: "AccountNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityCheckId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityCheck",
                 column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_EntityCheckNip",
+                schema: "awpv",
+                table: "EntityCheck",
+                column: "Nip");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityCheckRegon",
+                schema: "awpv",
+                table: "EntityCheck",
+                column: "Regon");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EntityCheckRequestId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityCheck",
                 column: "RequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityCheckUniqueIdentifierOfTheLoggedInUser",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityCheck",
                 column: "UniqueIdentifierOfTheLoggedInUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonCompanyName",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "CompanyName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonEntityAuthorizedClerkId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "EntityAuthorizedClerkId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonEntityPartnerId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "EntityPartnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonEntityRepresentativeId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "EntityRepresentativeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonId",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityNip",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "Nip");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonPesel",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "Pesel");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntityPersonUniqueIdentifierOfTheLoggedInUser",
-                schema: "ApiWykazuPodatnikowVat",
+                schema: "awpv",
                 table: "EntityPerson",
                 column: "UniqueIdentifierOfTheLoggedInUser");
         }
@@ -272,19 +293,19 @@ namespace ApiWykazuPodatnikowVatData.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EntityAccountNumber",
-                schema: "ApiWykazuPodatnikowVat");
+                schema: "awpv");
 
             migrationBuilder.DropTable(
                 name: "EntityCheck",
-                schema: "ApiWykazuPodatnikowVat");
+                schema: "awpv");
 
             migrationBuilder.DropTable(
                 name: "EntityPerson",
-                schema: "ApiWykazuPodatnikowVat");
+                schema: "awpv");
 
             migrationBuilder.DropTable(
                 name: "Entity",
-                schema: "ApiWykazuPodatnikowVat");
+                schema: "awpv");
         }
     }
 }
