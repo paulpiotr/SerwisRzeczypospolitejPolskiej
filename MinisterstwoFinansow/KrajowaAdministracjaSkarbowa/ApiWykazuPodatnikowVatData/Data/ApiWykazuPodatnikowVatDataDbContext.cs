@@ -74,8 +74,22 @@ namespace ApiWykazuPodatnikowVatData.Data
                 {
                     try
                     {
-                        DatabaseMssqlMdf.GetInstance(Database.GetDbConnection().ConnectionString).Create();
-                        await Database.MigrateAsync();
+                        try
+                        {
+                            DatabaseMssqlMdf.GetInstance(Database.GetDbConnection().ConnectionString).Create();
+                        }
+                        catch (Exception e)
+                        {
+                            _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                        }
+                        try
+                        {
+                            await Database.MigrateAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                        }
                     }
                     catch (Exception e)
                     {
