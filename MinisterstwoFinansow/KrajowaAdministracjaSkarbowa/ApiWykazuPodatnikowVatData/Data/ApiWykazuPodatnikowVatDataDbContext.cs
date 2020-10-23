@@ -17,7 +17,7 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// <summary>
         /// Log4 Net Logger
         /// </summary>
-        private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
         #region private static readonly AppSettings appSettings...
@@ -69,7 +69,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             try
             {
                 int result = (DateTime.Now - appSettings.LastMigrateDateTime).Days;
-                _log4net.Debug($"Check for update and migrate, compare { DateTime.Now } and { appSettings.LastMigrateDateTime } is { result } CheckForUpdateEveryDays is { appSettings.CheckForUpdateEveryDays }");
+                log4net.Debug($"Check for update and migrate, compare { DateTime.Now } and { appSettings.LastMigrateDateTime } is { result } CheckForUpdateEveryDays is { appSettings.CheckForUpdateEveryDays }");
                 if (/*CheckForUpdateEveryDays > 0 && */result >= appSettings.CheckForUpdateEveryDays)
                 {
                     try
@@ -80,7 +80,7 @@ namespace ApiWykazuPodatnikowVatData.Data
                         }
                         catch (Exception e)
                         {
-                            _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                            log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                         }
                         try
                         {
@@ -88,12 +88,12 @@ namespace ApiWykazuPodatnikowVatData.Data
                         }
                         catch (Exception e)
                         {
-                            _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                            log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                         }
                     }
                     catch (Exception e)
                     {
-                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                     }
                     finally
                     {
@@ -104,7 +104,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
         }
         #endregion
@@ -164,7 +164,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
         }
         #endregion

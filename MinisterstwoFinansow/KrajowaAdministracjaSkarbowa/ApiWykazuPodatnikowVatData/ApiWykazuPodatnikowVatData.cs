@@ -17,11 +17,11 @@ namespace ApiWykazuPodatnikowVatData
     /// </summary>
     public class ApiWykazuPodatnikowVatData
     {
-        # region private static readonly log4net.ILog _log4net
+        # region private static readonly log4net.ILog log4net
         /// <summary>
         /// Log4 Net Logger
         /// </summary>
-        private static readonly log4net.ILog _log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
         #region private static readonly AppSettings appSettings
@@ -64,7 +64,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -102,7 +102,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -147,7 +147,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -196,7 +196,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -235,7 +235,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -280,7 +280,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -329,7 +329,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -375,7 +375,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -413,7 +413,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -455,7 +455,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -501,7 +501,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -543,7 +543,7 @@ namespace ApiWykazuPodatnikowVatData
                                     )
                                 );
                                 int isEntityAccountNumberRemoveRange = await context.SaveChangesAsync();
-                                _log4net.Debug($"Remove EntityAccountNumber if is not found in list and Save Changes Async to database: { isEntityAccountNumberRemoveRange }");
+                                log4net.Debug($"Remove EntityAccountNumber if is not found in list and Save Changes Async to database: { isEntityAccountNumberRemoveRange }");
                                 foreach (string accountNumber in accountNumbersList)
                                 {
                                     try
@@ -559,7 +559,7 @@ namespace ApiWykazuPodatnikowVatData
                                                     entityAccountNumber.DateOfModification = DateTime.Now;
                                                     context.Entry(entityAccountNumber).State = EntityState.Modified;
                                                     int isEntityAccountNumberModified = await context.SaveChangesAsync();
-                                                    _log4net.Debug($"Modify EntityAccountNumber if is found in list and Save Changes Async to database: { isEntityAccountNumberModified }");
+                                                    log4net.Debug($"Modify EntityAccountNumber if is found in list and Save Changes Async to database: { isEntityAccountNumberModified }");
                                                 }
                                                 else
                                                 {
@@ -571,14 +571,14 @@ namespace ApiWykazuPodatnikowVatData
                                                     };
                                                     context.Entry(entityAccountNumber).State = EntityState.Added;
                                                     int isEntityAccountNumberAdded = await context.SaveChangesAsync();
-                                                    _log4net.Debug($"Add EntityAccountNumber and Save Changes Async to database: { isEntityAccountNumberAdded } id { entityAccountNumber.Id }");
+                                                    log4net.Debug($"Add EntityAccountNumber and Save Changes Async to database: { isEntityAccountNumberAdded } id { entityAccountNumber.Id }");
                                                 }
                                             }
                                         });
                                     }
                                     catch (Exception e)
                                     {
-                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                     }
                                 }
                                 return context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && accountNumbersList.Contains(w.AccountNumber)).ToList();
@@ -590,7 +590,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -644,11 +644,11 @@ namespace ApiWykazuPodatnikowVatData
                                         )
                                     );
                                     int isEntityPersonRemoveRange = await context.SaveChangesAsync();
-                                    _log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
+                                    log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
                                 }
                                 catch (Exception e)
                                 {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                 }
                                 try
                                 {
@@ -671,11 +671,11 @@ namespace ApiWykazuPodatnikowVatData
                                     });
                                     context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
                                     int isEntityPersonAddRange = await context.SaveChangesAsync();
-                                    _log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
+                                    log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
                                 }
                                 catch (Exception e)
                                 {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                 }
                             }
                         }
@@ -685,7 +685,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -715,7 +715,7 @@ namespace ApiWykazuPodatnikowVatData
                         using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
                         {
                             //string s = context.Database.GetDbConnection().ConnectionString;
-                            //_log4net.Debug(s);
+                            //log4net.Debug(s);
                             if (await context.Database.CanConnectAsync())
                             {
                                 int isEntitySaveChangesAsync = 0;
@@ -731,11 +731,11 @@ namespace ApiWykazuPodatnikowVatData
                                     entity.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
                                     context.Entry(entity).State = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
                                     isEntitySaveChangesAsync = await context.SaveChangesAsync();
-                                    _log4net.Debug($"Save Entity Changes Async to database: { isEntitySaveChangesAsync } id: { entity.Id }");
+                                    log4net.Debug($"Save Entity Changes Async to database: { isEntitySaveChangesAsync } id: { entity.Id }");
                                 }
                                 catch (Exception e)
                                 {
-                                    _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                 }
                                 if (isEntitySaveChangesAsync == 1)
                                 {
@@ -746,7 +746,7 @@ namespace ApiWykazuPodatnikowVatData
                                     }
                                     catch (Exception e)
                                     {
-                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                     }
                                     try
                                     {
@@ -755,7 +755,7 @@ namespace ApiWykazuPodatnikowVatData
                                     }
                                     catch (Exception e)
                                     {
-                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                     }
                                     try
                                     {
@@ -764,7 +764,7 @@ namespace ApiWykazuPodatnikowVatData
                                     }
                                     catch (Exception e)
                                     {
-                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                     }
                                     try
                                     {
@@ -773,7 +773,7 @@ namespace ApiWykazuPodatnikowVatData
                                     }
                                     catch (Exception e)
                                     {
-                                        _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                                     }
                                     return context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip) || (!string.IsNullOrWhiteSpace(w.Regon) && !string.IsNullOrWhiteSpace(entity.Regon) && w.Regon == entity.Regon) || (!string.IsNullOrWhiteSpace(w.Pesel) && !string.IsNullOrWhiteSpace(entity.Pesel) && w.Pesel == entity.Pesel)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault() ?? entity;
                                 }
@@ -785,7 +785,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return entity;
         }
@@ -837,7 +837,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -889,7 +889,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -927,7 +927,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-account/{bankAccount}").AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
@@ -961,7 +961,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -999,7 +999,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/nips/{nips}").AddUrlSegment("nips", nips).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
@@ -1025,7 +1025,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -1065,7 +1065,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/regons/{regons}").AddUrlSegment("regons", regons).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
@@ -1091,7 +1091,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -1129,7 +1129,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-accounts/{bankAccounts}").AddUrlSegment("bankAccounts", bankAccounts).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
@@ -1163,7 +1163,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -1199,7 +1199,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/check/nip/{nip}/bank-account/{bankAccount}").AddUrlSegment("nip", nip).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result)
                         {
                             EntityCheck entityCheck = response.Data.Result;
@@ -1219,7 +1219,7 @@ namespace ApiWykazuPodatnikowVatData
                             }
                             catch (Exception e)
                             {
-                                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                             }
                             return entityCheck;
                         }
@@ -1229,7 +1229,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -1265,7 +1265,7 @@ namespace ApiWykazuPodatnikowVatData
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/check/regon/{regon}/bank-account/{bankAccount}").AddUrlSegment("regon", regon).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
-                        //_log4net.Debug($"{ response.StatusCode } { response.Content }");
+                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result)
                         {
                             EntityCheck entityCheck = response.Data.Result;
@@ -1285,7 +1285,7 @@ namespace ApiWykazuPodatnikowVatData
                             }
                             catch (Exception e)
                             {
-                                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
                             }
                             return entityCheck;
                         }
@@ -1295,7 +1295,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                _log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }
             return null;
         }
