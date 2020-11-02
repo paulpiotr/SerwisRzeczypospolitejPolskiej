@@ -1,4 +1,5 @@
-﻿using ApiWykazuPodatnikowVatData.Models;
+﻿using ApiWykazuPodatnikowVatData.Data;
+using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using RestSharp;
 using System;
@@ -7,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Z.EntityFramework.Plus;
 
 namespace ApiWykazuPodatnikowVatData
 {
@@ -32,45 +34,75 @@ namespace ApiWykazuPodatnikowVatData
         private static readonly AppSettings appSettings = AppSettings.GetInstance();
         #endregion
 
-        #region private static async Task<Entity> FindByNipAndModificationDateAsync(string nip)
+        #region private ApiWykazuPodatnikowVatDataDbContext context;
         /// <summary>
-        /// Znajdź podmiot według numeru NIP i ostatniej daty modyfikacji,
-        /// Find entity by tax identification NIP number and last modified date
+        /// Kontekst bazy danych jako ApiWykazuPodatnikowVatDataDbContext
+        /// Database context as ApiWykazuPodatnikowVatDataDbContext
         /// </summary>
-        /// <param name="nip">
-        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$],
-        /// NIP tax identification number as string [^\d{10}$]
-        /// </param>
-        /// <returns>
-        /// Podmiot jako obiekt Entity lub null,
-        /// Entity as an Entity or null object
-        /// </returns>
-        private static async Task<Entity> FindByNipAndModificationDateAsync(string nip)
+        private readonly ApiWykazuPodatnikowVatDataDbContext context;
+        #endregion
+
+        #region public ApiWykazuPodatnikowVatData()
+        /// <summary>
+        /// Konstruktor
+        /// Constructor
+        /// </summary>
+        public ApiWykazuPodatnikowVatData()
         {
-            try
-            {
-                return await Task.Run(async () =>
-                {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                    {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).Include(W => W.EntityAccountNumber).FirstOrDefault();
-                        }
-                    }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+            context = new ApiWykazuPodatnikowVatDataDbContext();
         }
         #endregion
 
-        #region private static async Task<Entity> FindByNipAsync(string nip)
+        #region public ApiWykazuPodatnikowVatData...
+        /// <summary>
+        /// Konstruktor
+        /// Constructor
+        /// </summary>
+        /// <param name="context">
+        /// Kontekst bazy danych jako ApiWykazuPodatnikowVatDataDbContext
+        /// Database context as ApiWykazuPodatnikowVatDataDbContext
+        /// </param>
+        public ApiWykazuPodatnikowVatData(ApiWykazuPodatnikowVatDataDbContext context)
+        {
+            this.context = context;
+        }
+        #endregion
+
+        #region public static ApiWykazuPodatnikowVatData GetInstance()
+        /// <summary>
+        /// Utwórz i pobierz statyczną instancję do klasy ApiWykazuPodatnikowVatData
+        /// Create and get a static instance to the ApiWykazuPodatnikowVatData class
+        /// </summary>
+        /// <returns>
+        /// Statyczna instancja do klasy ApiWykazuPodatnikowVatData
+        /// A static instance to the ApiWykazuPodatnikowVatData class
+        /// </returns>
+        public static ApiWykazuPodatnikowVatData GetInstance()
+        {
+            return new ApiWykazuPodatnikowVatData();
+        }
+        #endregion
+
+        #region public static ApiWykazuPodatnikowVatData GetInstance...
+        /// <summary>
+        /// Utwórz i pobierz statyczną instancję do klasy ApiWykazuPodatnikowVatData
+        /// Create and get a static instance to the ApiWykazuPodatnikowVatData class
+        /// </summary>
+        /// <param name="context">
+        /// Kontekst bazy danych jako ApiWykazuPodatnikowVatDataDbContext
+        /// Database context as ApiWykazuPodatnikowVatDataDbContext
+        /// </param>
+        /// <returns>
+        /// Statyczna instancja do klasy ApiWykazuPodatnikowVatData
+        /// A static instance to the ApiWykazuPodatnikowVatData class
+        /// </returns>
+        public static ApiWykazuPodatnikowVatData GetInstance(ApiWykazuPodatnikowVatDataDbContext context)
+        {
+            return new ApiWykazuPodatnikowVatData(context);
+        }
+        #endregion
+
+        #region private async Task<Entity> FindByNipAsync...
         /// <summary>
         /// Znajdź podmiot według numeru NIP
         /// Find entity by tax identification NIP number
@@ -79,36 +111,67 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$],
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Podmiot jako obiekt Entity lub null,
         /// Entity as an Entity or null object
         /// </returns>
-        private static async Task<Entity> FindByNipAsync(string nip)
+        private async Task<Entity> FindByNipAsync(string nip, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                    {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault();
-                        }
-                    }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByNipsAsync(string nips)
+        #region private async Task<Entity> FindByNipAndModificationDateAsync...
+        /// <summary>
+        /// Znajdź podmiot według numeru NIP i ostatniej daty modyfikacji,
+        /// Find entity by tax identification NIP number and last modified date
+        /// </summary>
+        /// <param name="nip">
+        /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$],
+        /// NIP tax identification number as string [^\d{10}$]
+        /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
+        /// <returns>
+        /// Podmiot jako obiekt Entity lub null,
+        /// Entity as an Entity or null object
+        /// </returns>
+        private async Task<Entity> FindByNipAndModificationDateAsync(string nip, DateTime dateOfChecking)
+        {
+            return await Task.Run(async () =>
+            {
+                try
+                {
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FirstOrDefaultAsync();
+                    //return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FromCache(context.GetMemoryCacheEntryOptions(), nip, dateOfChecking.ToShortDateString()).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
+        }
+        #endregion
+
+        #region private async Task<List<Entity>> FindByNipsAsync...
         /// <summary>
         /// Znajdź podmioty wedłóg listy numerów NIP
         /// Find entities according to the list of NIP numbers
@@ -119,41 +182,37 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByNipsAsync(string nips)
+        private async Task<List<Entity>> FindByNipsAsync(string nips, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> nipList = new List<string>(nips.Split(',')).ToList();
+                    if (null != nipList && nipList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            List<string> nipList = new List<string>(nips.Split(',')).ToList();
-                            if (null != nipList && nipList.Count > 0)
-                            {
-                                return context.Entity.Where(w => nipList.Contains(w.Nip)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
-                        }
+                        return await context.Entity.Where(w => nipList.Contains(w.Nip) && null != dateOfChecking && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
-                    return entityList;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
+
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByNipsAndModificationDateAsync(string nips)
+        #region private async Task<List<Entity>> FindByNipsAndModificationDateAsync...
         /// <summary>
         /// Znajdź podmioty według listy numerów NIP jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru appSettings.CacheLifeTime
         /// Find entities by NIP number list if the modification date is greater than or equal to the date calculated for the appSettings.CacheLifeTime parameter
@@ -164,45 +223,40 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByNipsAndModificationDateAsync(string nips)
+        private async Task<List<Entity>> FindByNipsAndModificationDateAsync(string nips, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> nipList = new List<string>(nips.Split(',')).ToList();
+                    if (null != nipList && nipList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
+                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Nip) && nipList.Contains(w.Nip) select f.Id).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
-                            List<string> nipList = new List<string>(nips.Split(',')).ToList();
-                            if (null != nipList && nipList.Count > 0)
-                            {
-                                if (context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Nip) && nipList.Contains(w.Nip) select f.Id).Contains(w.Id) && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).Any())
-                                {
-                                    return entityList;
-                                }
-                                return context.Entity.Where(w => nipList.Contains(w.Nip)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
+                            return null;
                         }
+                        return await context.Entity.Where(w => nipList.Contains(w.Nip) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
-                    return entityList;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<Entity> FindByRegonAndModificationDateAsync(string regon)
+        #region private async Task<Entity> FindByRegonAndModificationDateAsync...
         /// <summary>
         /// Znajdź podmiot według numeru REGON jeśli data modyfikacji jest większa lub równa od daty obliczonej dla parametru appSettings.CacheLifeTime
         /// Find the entity by REGON number if the modification date is greater than or equal to the date calculated for the appSettings.CacheLifeTime parameter
@@ -215,33 +269,24 @@ namespace ApiWykazuPodatnikowVatData
         /// Podmiot jako obiekt Entity lub null,
         /// Entity as an Entity or null object
         /// </returns>
-        private static async Task<Entity> FindByRegonAndModificationDateAsync(string regon)
+        private async Task<Entity> FindByRegonAndModificationDateAsync(string regon, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                    {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            return context.Entity.Where(w => !string.IsNullOrWhiteSpace(regon) && !string.IsNullOrWhiteSpace(w.Regon) && w.Regon == regon && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FirstOrDefault();
-
-                        }
-                    }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(regon) && !string.IsNullOrWhiteSpace(w.Regon) && w.Regon == regon && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FirstOrDefaultAsync();
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByRegonsAsync(string regons)
+        #region private async Task<List<Entity>> FindByRegonsAsync...
         /// <summary>
         /// Znajdź podmioty wedłóg listy numerów REGON
         /// Find entities according to the list of REGON numbers
@@ -252,41 +297,36 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByRegonsAsync(string regons)
+        private async Task<List<Entity>> FindByRegonsAsync(string regons, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> regonList = new List<string>(regons.Split(',')).ToList();
+                    if (null != regonList && regonList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            List<string> regonList = new List<string>(regons.Split(',')).ToList();
-                            if (null != regonList && regonList.Count > 0)
-                            {
-                                return context.Entity.Where(w => regonList.Contains(w.Regon)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
-                        }
+                        return await context.Entity.Where(w => regonList.Contains(w.Regon) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
-                    return entityList;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByRegonsAndModificationDateAsync(string regons)
+        #region private async Task<List<Entity>> FindByRegonsAndModificationDateAsync...
         /// <summary>
         /// Znajdź podmioty według listy numerów REGON jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru appSettings.CacheLifeTime
         /// Find entities by REGON number list if the modification date is greater than or equal to the date calculated for the appSettings.CacheLifeTime parameter
@@ -297,45 +337,40 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByRegonsAndModificationDateAsync(string regons)
+        private async Task<List<Entity>> FindByRegonsAndModificationDateAsync(string regons, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> regonList = new List<string>(regons.Split(',')).ToList();
+                    if (null != regonList && regonList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
+                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Regon) && regonList.Contains(w.Regon) select f.Id).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
-                            List<string> regonList = new List<string>(regons.Split(',')).ToList();
-                            if (null != regonList && regonList.Count > 0)
-                            {
-                                if (context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Regon) && regonList.Contains(w.Regon) select f.Id).Contains(w.Id) && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).Any())
-                                {
-                                    return entityList;
-                                }
-                                return context.Entity.Where(w => regonList.Contains(w.Regon)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
+                            return null;
                         }
+                        return await context.Entity.Where(w => regonList.Contains(w.Regon) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
-                    return entityList;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<Entity> FindByBankAccountAndModificationDateAsync(string bankAccount)
+        #region private async Task<Entity> FindByBankAccountAndModificationDateAsync...
         /// <summary>
         /// Znajdź podmioty według numeru rachunku bankowego NRB jeśli data modyfikacji jest więkasza lub równa od daty obliczonej dla parametru appSettings.CacheLifeTime
         /// Find entities by NRB bank account number if the modification date is greater than or equal to the date calculated for the appSettings.CacheLifeTime parameter
@@ -344,44 +379,39 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
         /// Entity List as a list of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByBankAccountAndModificationDateAsync(string bankAccount)
+        private async Task<List<Entity>> FindByBankAccountAndModificationDateAsync(string bankAccount, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    List<Entity> entityList = null;
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            if (context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).Any())
-                            {
-                                return entityList;
-                            }
-                            else
-                            {
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
-                        }
+                        return null;
                     }
-                    return entityList;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                    else
+                    {
+                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                    }
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByBankAccountAsync(string bankAccount)
+        #region private async Task<List<Entity>> FindByBankAccountAsync...
         /// <summary>
         /// Znajdź podmioty według numeru rachunku bankowego NRB
         /// Find entities by NRB bank account number
@@ -390,36 +420,32 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
         /// Entity List as a list of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByBankAccountAsync(string bankAccount)
+        private async Task<List<Entity>> FindByBankAccountAsync(string bankAccount, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                    {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                        }
-                    }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                    return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByBankAccountsAsync(string bankAccounts)
+        #region private async Task<List<Entity>> FindByBankAccountsAsync...
         /// <summary>
         /// Znajdź podmioty wedłóg listy numerów rachunków NRB
         /// Find entities by the list of NRB account numbers
@@ -428,40 +454,36 @@ namespace ApiWykazuPodatnikowVatData
         /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByBankAccountsAsync(string bankAccounts)
+        private async Task<List<Entity>> FindByBankAccountsAsync(string bankAccounts, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
+                    if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
-                        {
-                            List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
-                            if (null != bankAccountsList && bankAccountsList.Count > 0)
-                            {
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
-                        }
+                        return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<Entity>> FindByBankAccountsAndModificationDateAsync(string bankAccounts)
+        #region private async Task<List<Entity>> FindByBankAccountsAndModificationDateAsync...
         /// <summary>
         /// Znajdź podmioty wedłóg listy numerów rachunków NRB
         /// Find entities by the list of NRB account numbers
@@ -470,44 +492,40 @@ namespace ApiWykazuPodatnikowVatData
         /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        private static async Task<List<Entity>> FindByBankAccountsAndModificationDateAsync(string bankAccounts)
+        private async Task<List<Entity>> FindByBankAccountsAndModificationDateAsync(string bankAccounts, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                    List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
+                    if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
-                        bool canConnectAsync = await context.Database.CanConnectAsync();
-                        if (canConnectAsync)
+                        if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
-                            List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
-                            if (null != bankAccountsList && bankAccountsList.Count > 0)
-                            {
-                                if (context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).Any())
-                                {
-                                    return null;
-                                }
-                                return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).ToList();
-                            }
+                            return null;
                         }
+                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day select f.EntityId).Contains(w.Id)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<EntityAccountNumber>> AddOrModifyEntityAccountNumberAsync(List<string> accountNumbersList, Entity entity)
+        #region private async Task<List<EntityAccountNumber>> AddOrModifyEntityAccountNumberAsync...
         /// <summary>
         /// Dodaj lub zmodyfikuj numer konta bankowego dla podmiotu
         /// Add or modify the bank account number for the entity
@@ -524,79 +542,56 @@ namespace ApiWykazuPodatnikowVatData
         /// Lista numerów kont bankowwych dla podmiotu jako List <EntityAccountNumber>
         /// List of bank account numbers for the entity as List <EntityAccountNumber>
         /// </returns>
-        private static async Task<List<EntityAccountNumber>> AddOrModifyEntityAccountNumberAsync(List<string> accountNumbersList, Entity entity)
+        private async Task<List<EntityAccountNumber>> AddOrModifyEntityAccountNumberAsync(List<string> accountNumbersList, Entity entity)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
                     if (null != accountNumbersList && accountNumbersList.Count > 0)
                     {
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        await context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && !accountNumbersList.Contains(w.AccountNumber)).DeleteFromQueryAsync();
+                        async Task AddOrUpdateEntityAccountNumber(string accountNumber)
                         {
-                            if (await context.Database.CanConnectAsync())
+                            try
                             {
-                                context.EntityAccountNumber.RemoveRange(
-                                context.EntityAccountNumber.Where(
-                                    w => w.EntityId == entity.Id
-                                    && !accountNumbersList.Contains(w.AccountNumber)
-                                    )
-                                );
-                                int isEntityAccountNumberRemoveRange = await context.SaveChangesAsync();
-                                log4net.Debug($"Remove EntityAccountNumber if is not found in list and Save Changes Async to database: { isEntityAccountNumberRemoveRange }");
-                                foreach (string accountNumber in accountNumbersList)
+                                if (null != accountNumber && !string.IsNullOrWhiteSpace(accountNumber) && !context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && w.AccountNumber.Contains(accountNumber)).Any())
                                 {
-                                    try
+                                    EntityAccountNumber entityAccountNumber = new EntityAccountNumber()
                                     {
-                                        await Task.Run(async () =>
-                                        {
-                                            EntityAccountNumber entityAccountNumber = null;
-                                            if (null != accountNumber && !string.IsNullOrWhiteSpace(accountNumber))
-                                            {
-                                                entityAccountNumber = await context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && w.AccountNumber.Contains(accountNumber)).FirstOrDefaultAsync();
-                                                if (null != entityAccountNumber)
-                                                {
-                                                    entityAccountNumber.DateOfModification = DateTime.Now;
-                                                    context.Entry(entityAccountNumber).State = EntityState.Modified;
-                                                    int isEntityAccountNumberModified = await context.SaveChangesAsync();
-                                                    log4net.Debug($"Modify EntityAccountNumber if is found in list and Save Changes Async to database: { isEntityAccountNumberModified }");
-                                                }
-                                                else
-                                                {
-                                                    entityAccountNumber = new EntityAccountNumber()
-                                                    {
-                                                        UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName(),
-                                                        Entity = entity,
-                                                        AccountNumber = accountNumber,
-                                                    };
-                                                    context.Entry(entityAccountNumber).State = EntityState.Added;
-                                                    int isEntityAccountNumberAdded = await context.SaveChangesAsync();
-                                                    log4net.Debug($"Add EntityAccountNumber and Save Changes Async to database: { isEntityAccountNumberAdded } id { entityAccountNumber.Id }");
-                                                }
-                                            }
-                                        });
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                    }
+                                        Entity = entity,
+                                        AccountNumber = accountNumber,
+                                    };
+                                    EntityState entityState = EntityState.Added;
+                                    context.Entry(entityAccountNumber).State = entityState;
+                                    int isEntityAccountNumberAdded = await context.SaveChangesAsync();
+#if DEBUG
+                                    log4net.Debug($"Save EntityAccountNumber Changes Async [{ entityState }] to database: [{ isEntityAccountNumberAdded }] id: [{ entityAccountNumber.Id }]");
+#endif
                                 }
-                                return context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && accountNumbersList.Contains(w.AccountNumber)).ToList();
+                            }
+                            catch (Exception e)
+                            {
+                                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
                             }
                         }
+                        foreach (string accountNumber in accountNumbersList)
+                        {
+                            await AddOrUpdateEntityAccountNumber(accountNumber);
+                        }
+                        return context.EntityAccountNumber.Where(w => w.EntityId == entity.Id && accountNumbersList.Contains(w.AccountNumber)).ToList();
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<List<EntityPerson>> AddOrModifyEntityPersonAsync(List<EntityPerson> entityPerson, Entity entity, string property)
+        #region private async Task<List<EntityPerson>> AddOrModifyEntityPersonAsync...
         /// <summary>
         /// Dodaj lub zmodyfikuj numer konta bankowego dla podmiotu
         /// Add or modify the bank account number for the entity
@@ -615,88 +610,115 @@ namespace ApiWykazuPodatnikowVatData
         /// Lista numerów kont bankowych dla podmiotu jako Lista obiektów encji EntityAccountNumber
         /// List of bank account numbers for the entity as EntityAccountNumber Entity Object List
         /// </returns>
-        private static async Task<List<EntityPerson>> AddOrModifyEntityPersonAsync(List<EntityPerson> entityPerson, Entity entity, string property)
+        private async Task<List<EntityPerson>> AddOrModifyEntityPersonAsync(List<EntityPerson> entityPerson, Entity entity, string property)
         {
-            try
+            return await Task.Run<List<EntityPerson>>(async () =>
             {
-                return await Task.Run<List<EntityPerson>>(async () =>
+                try
                 {
                     if (null != entityPerson && entityPerson.Count > 0 && new List<string>() { "EntityRepresentativeId", "EntityAuthorizedClerkId", "EntityPartnerId" }.Contains(property))
                     {
                         PropertyInfo propertyInfo = entityPerson.FirstOrDefault().GetType().GetProperty(property);
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        try
                         {
-                            if (await context.Database.CanConnectAsync())
+                            context.EntityPerson.RemoveRange(
+                                context.EntityPerson.Where(
+                                    w => EF.Property<Guid>(w, property) == entity.Id
+                                )
+                            );
+                            int isEntityPersonRemoveRange = await context.SaveChangesAsync();
+#if DEBUG
+                            log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
+#endif
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                        }
+                        try
+                        {
+                            entityPerson.ForEach(x =>
                             {
-                                try
+                                switch (property)
                                 {
-                                    context.EntityPerson.RemoveRange(
-                                        context.EntityPerson.Where(
-                                            w => EF.Property<Guid>(w, property) == entity.Id
-                                            //&& (
-                                            //    !(from f in entityPerson select f.Nip).ToList().Contains(w.Nip) ||
-                                            //    !(from f in entityPerson select f.CompanyName).ToList().Contains(w.CompanyName) ||
-                                            //    !(
-                                            //        (from f in entityPerson select f.FirstName).ToList().Contains(w.FirstName) &&
-                                            //        (from f in entityPerson select f.LastName).ToList().Contains(w.LastName)
-                                            //    )
-                                            //)
-                                        )
-                                    );
-                                    int isEntityPersonRemoveRange = await context.SaveChangesAsync();
-                                    log4net.Debug($"Remove EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonRemoveRange }");
+                                    case "EntityRepresentativeId":
+                                        x.EntityRepresentativeId = entity.Id;
+                                        break;
+                                    case "EntityAuthorizedClerkId":
+                                        x.EntityAuthorizedClerkId = entity.Id;
+                                        break;
+                                    case "EntityPartnerId":
+                                        x.EntityPartnerId = entity.Id;
+                                        break;
                                 }
-                                catch (Exception e)
-                                {
-                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                                try
-                                {
-                                    entityPerson.ForEach(x =>
-                                    {
-                                        switch (property)
-                                        {
-                                            case "EntityRepresentativeId":
-                                                x.EntityRepresentativeId = entity.Id;
-                                                break;
-                                            case "EntityAuthorizedClerkId":
-                                                x.EntityAuthorizedClerkId = entity.Id;
-                                                break;
-                                            case "EntityPartnerId":
-                                                x.EntityPartnerId = entity.Id;
-                                                break;
-                                        }
-                                        x.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
-                                        x.DateOfModification = DateTime.Now;
-                                    });
-                                    context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
-                                    int isEntityPersonAddRange = await context.SaveChangesAsync();
-                                    log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
-                                }
-                                catch (Exception e)
-                                {
-                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                            }
+                                x.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+                                x.DateOfModification = DateTime.Now;
+                            });
+                            context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
+                            int isEntityPersonAddRange = await context.SaveChangesAsync();
+#if DEBUG
+                            log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
+#endif
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
                         }
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region private static async Task<Entity> AddOrModifyEntity(Entity entity)
+        #region private async Task<RequestAndResponseHistory> FindOrAddRequestAndResponseHistory...
+        /// <summary>
+        /// Znajdź lub dodaj historię żądań i odpowiedzi (obiekt modelu RequestAndResponseHistory)
+        /// Find or add request and response history (RequestAndResponseHistory model object)
+        /// </summary>
+        /// <param name="requestAndResponseHistory">
+        /// obiekt modelu RequestAndResponseHistory
+        /// RequestAndResponseHistory model object
+        /// </param>
+        /// <returns>
+        /// obiekt modelu RequestAndResponseHistory
+        /// RequestAndResponseHistory model object
+        /// </returns>
+        private async Task<RequestAndResponseHistory> FindOrAddRequestAndResponseHistory(RequestAndResponseHistory requestAndResponseHistory)
+        {
+            return await Task.Run(async () =>
+            {
+                try
+                {
+                    if (context.RequestAndResponseHistory.Where(w => w.ObjectMD5Hash == requestAndResponseHistory.ObjectMD5Hash).Any())
+                    {
+                        return await context.RequestAndResponseHistory.Where(w => w.ObjectMD5Hash == requestAndResponseHistory.ObjectMD5Hash).FirstOrDefaultAsync();
+                    }
+                    else
+                    {
+                        context.Entry(requestAndResponseHistory).State = EntityState.Added;
+                        await context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return requestAndResponseHistory;
+            });
+        }
+        #endregion
+
+        #region private async Task<Entity> AddOrModifyEntity...
         /// <summary>
         /// Dodaj lub zaktualizuj rekord w bazie danych
         /// Add or update a record in the database
         /// </summary>
-        /// <param name="entity">
+        /// <param name="entityResponse.Result.Subject">
         /// Obiekt podmiotu jako Entity
         /// The subject object as Entity
         /// </param>
@@ -704,97 +726,89 @@ namespace ApiWykazuPodatnikowVatData
         /// Zaktualizowany lub wstawiony obiekt Entity lub przekazany obiekt Entity lub null
         /// An updated or inserted Entity or a passed Entity, or null
         /// </returns>
-        private static async Task<Entity> AddOrModifyEntity(Entity entity)
+        private async Task<Entity> AddOrModifyEntity(RequestAndResponseHistory requestAndResponseHistory, Entity entity, DateTime dateOfChecking)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    if (null != entity && null != entity.Nip && (!string.IsNullOrWhiteSpace(entity.Nip) || !string.IsNullOrWhiteSpace(entity.Pesel) || !string.IsNullOrWhiteSpace(entity.Regon)))
+                    EntityState entityState = EntityState.Detached;
+                    int isEntitySaveChangesAsync = 0;
+                    try
                     {
-                        using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
+                        Entity entityWhere = await FindByNipAsync(entity.Nip, dateOfChecking);
+                        if (null != entityWhere)
                         {
-                            //string s = context.Database.GetDbConnection().ConnectionString;
-                            //log4net.Debug(s);
-                            if (await context.Database.CanConnectAsync())
-                            {
-                                int isEntitySaveChangesAsync = 0;
-                                try
-                                {
-                                    Entity entityWhere = context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip)).FirstOrDefault();
-                                    if (null != entityWhere)
-                                    {
-                                        entity.Id = entityWhere.Id;
-                                        context.Entry(entityWhere).State = EntityState.Detached;
-                                    }
-                                    entity.DateOfModification = DateTime.Now;
-                                    entity.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
-                                    context.Entry(entity).State = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
-                                    isEntitySaveChangesAsync = await context.SaveChangesAsync();
-                                    log4net.Debug($"Save Entity Changes Async to database: { isEntitySaveChangesAsync } id: { entity.Id }");
-                                }
-                                catch (Exception e)
-                                {
-                                    log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                }
-                                if (isEntitySaveChangesAsync == 1)
-                                {
-                                    try
-                                    {
-                                        List<string> accountNumbersList = (List<string>)entity.AccountNumbers;
-                                        List<EntityAccountNumber> entityAccountNumbersList = await AddOrModifyEntityAccountNumberAsync(accountNumbersList, entity);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                    }
-                                    try
-                                    {
-                                        List<EntityPerson> entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
-                                        List<EntityPerson> entityPersonListRepresentative = await AddOrModifyEntityPersonAsync(entityPersonListRepresentatives, entity, "EntityRepresentativeId");
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                    }
-                                    try
-                                    {
-                                        List<EntityPerson> entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
-                                        List<EntityPerson> entityPersonListAuthorizedClerk = await AddOrModifyEntityPersonAsync(entityPersonListAuthorizedClerks, entity, "EntityAuthorizedClerkId");
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                    }
-                                    try
-                                    {
-                                        List<EntityPerson> entityPersonListPartners = (List<EntityPerson>)entity.Partners;
-                                        List<EntityPerson> entityPersonListPartner = await AddOrModifyEntityPersonAsync(entityPersonListPartners, entity, "EntityPartnerId");
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-                                    }
-                                    return context.Entity.Where(w => (!string.IsNullOrWhiteSpace(w.Nip) && !string.IsNullOrWhiteSpace(entity.Nip) && w.Nip == entity.Nip) || (!string.IsNullOrWhiteSpace(w.Regon) && !string.IsNullOrWhiteSpace(entity.Regon) && w.Regon == entity.Regon) || (!string.IsNullOrWhiteSpace(w.Pesel) && !string.IsNullOrWhiteSpace(entity.Pesel) && w.Pesel == entity.Pesel)).Include(w => w.EntityAccountNumber).Include(w => w.AuthorizedClerk).Include(w => w.Partner).Include(w => w.Representative).FirstOrDefault() ?? entity;
-                                }
-                            }
+                            entity.Id = entityWhere.Id;
+                            context.Entry(entityWhere).State = EntityState.Detached;
+                        }
+                        entity.RequestAndResponseHistoryId = requestAndResponseHistory.Id;
+                        entity.RequestAndResponseHistory = requestAndResponseHistory;
+                        entity.DateOfChecking = dateOfChecking;
+                        entity.DateOfModification = DateTime.Now;
+                        entityState = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
+                        context.Entry(entity).State = entityState;
+                        isEntitySaveChangesAsync = await context.SaveChangesAsync();
+#if DEBUG
+                        log4net.Debug($"Save Entity Changes Async [{ entityState }] to database: [{ isEntitySaveChangesAsync }] id: [{ entity.Id }]");
+#endif
+                    }
+                    catch (Exception e)
+                    {
+                        await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    }
+                    if (isEntitySaveChangesAsync == 1)
+                    {
+                        try
+                        {
+                            List<string> accountNumbersList = (List<string>)entity.AccountNumbers;
+                            List<EntityAccountNumber> entityAccountNumbersList = AddOrModifyEntityAccountNumberAsync(accountNumbersList, entity).Result;
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                        }
+                        try
+                        {
+                            List<EntityPerson> entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
+                            List<EntityPerson> entityPersonListRepresentative = AddOrModifyEntityPersonAsync(entityPersonListRepresentatives, entity, "EntityRepresentativeId").Result;
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                        }
+                        try
+                        {
+                            List<EntityPerson> entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
+                            List<EntityPerson> entityPersonListAuthorizedClerk = AddOrModifyEntityPersonAsync(entityPersonListAuthorizedClerks, entity, "EntityAuthorizedClerkId").Result;
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                        }
+                        try
+                        {
+                            List<EntityPerson> entityPersonListPartners = (List<EntityPerson>)entity.Partners;
+                            List<EntityPerson> entityPersonListPartner = AddOrModifyEntityPersonAsync(entityPersonListPartners, entity, "EntityPartnerId").Result;
+                        }
+                        catch (Exception e)
+                        {
+                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
                         }
                     }
-                    return entity;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return entity;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return await FindByNipAsync(entity.Nip, (DateTime)entity.DateOfChecking) ?? entity;
+            });
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByNipAsync(string nip)
-        /// <summary>
-        /// Wyszukaj i pobierz podmiot w serwisie mf.gov.pl według numeru NIP
-        /// Search and get an entity on the mf.gov.pl website by tax identification number NIP
+        #region public async Task<Entity> ApiFindByNipAsync...
+        /// Wyszukaj podmiot w serwisie mf.gov.pl według numeru NIP
+        /// Search for an entity on the mf.gov.pl website by tax identification number NIP
         /// GET https://wl-test.mf.gov.pl/api/search/nip/{nip}?date={date format yyyy-MM-dd}
         /// GET https://wl-api.mf.gov.pl/api/search/nip/{nip}?date={date format yyyy-MM-dd}
         /// </summary>
@@ -802,51 +816,51 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Podmiot jako obiekt Entity lub null
         /// Entity as an Entity or null object
         /// </returns>
-        public static async Task<Entity> ApiFindByNipAsync(string nip)
+        public async Task<Entity> ApiFindByNipAsync(string nip, DateTime? dateOfChecking = null)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
-                    if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nip && !string.IsNullOrWhiteSpace(nip))
+                    dateOfChecking = dateOfChecking ?? DateTime.Now;
+                    if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nip && !string.IsNullOrWhiteSpace(nip) && null != dateOfChecking)
                     {
-                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(nip);
+                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(nip, (DateTime)dateOfChecking);
                         if (null != entityFindByNipAndModificationDateAsync)
                         {
                             return entityFindByNipAndModificationDateAsync;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/nip/{nip}").AddUrlSegment("nip", nip).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/nip/{nip}").AddUrlSegment("nip", nip).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityResponse> response = await client.ExecuteAsync<EntityResponse>(request);
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subject)
+                        if (null != response && response?.StatusCode == System.Net.HttpStatusCode.OK && null != response?.Data?.Result?.Subject)
                         {
-                            Entity entity = response.Data.Result.Subject;
-                            if (null != entity)
-                            {
-                                return await AddOrModifyEntity(entity);
-                            }
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            return await AddOrModifyEntity(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
                         }
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByRegonAsync(string regon)
+        #region public async Task<Entity> ApiFindByRegonAsync...
         /// <summary>
-        /// Wyszukaj i pobierz podmiot w serwisie mf.gov.pl według numeru REGON
-        /// Search and get an entity on the mf.gov.pl website by REGON number
+        /// Wyszukaj podmiot w serwisie mf.gov.pl według numeru REGON
+        /// Search for an entity on the mf.gov.pl website by REGON number
         /// GET https://wl-test.mf.gov.pl/api/search/regon/{regon}?date={date format yyyy-MM-dd}
         /// GET https://wl-api.mf.gov.pl/api/search/regon/{regon}?date={date format yyyy-MM-dd}
         /// </summary>
@@ -854,50 +868,50 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Podmiot jako obiekt Entity lub null
         /// Entity as an Entity or null object
         /// </returns>
-        public static async Task<Entity> ApiFindByRegonAsync(string regon)
+        public async Task<Entity> ApiFindByRegonAsync(string regon, DateTime? dateOfChecking = null)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
+                    dateOfChecking = dateOfChecking ?? DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != regon && !string.IsNullOrWhiteSpace(regon))
                     {
-                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(regon);
+                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(regon, (DateTime)dateOfChecking);
                         if (null != entityFindByRegonAndModificationDateAsync)
                         {
                             return entityFindByRegonAndModificationDateAsync;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/regon/{regon}").AddUrlSegment("regon", regon).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/regon/{regon}").AddUrlSegment("regon", regon).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityResponse> response = await client.ExecuteAsync<EntityResponse>(request);
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subject)
+                        if (null != response && response?.StatusCode == System.Net.HttpStatusCode.OK && null != response?.Data?.Result?.Subject)
                         {
-                            Entity entity = response.Data.Result.Subject;
-                            if (null != entity)
-                            {
-                                return await AddOrModifyEntity(entity);
-                            }
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            return await AddOrModifyEntity(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
                         }
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByBankAccountAsync(string bankAccount)
+        #region public async Task<Entity> ApiFindByBankAccountAsync...
         /// <summary>
-        /// Wyszukaj i pobierz podmioty w serwisie mf.gov.pl według numeru rachunku bankowego NRB
+        /// Wyszukaj podmioty w serwisie mf.gov.pl według numeru rachunku bankowego NRB
         /// Search and get entities on the mf.gov.pl website according to the NRB bank account number
         /// GET https://wl-test.mf.gov.pl/api/search/bank-account/{bankAccount}?date={date format yyyy-MM-dd}
         /// GET https://wl-api.mf.gov.pl/api/search/bank-account/{bankAccount}?date={date format yyyy-MM-dd}
@@ -906,30 +920,34 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista Podmiotów jako lista obiektów Entity lub null
         /// Entity List as a list of Entity objects or null
         /// </returns>
-        public static async Task<List<Entity>> ApiFindByBankAccountAsync(string bankAccount)
+        public async Task<List<Entity>> ApiFindByBankAccountAsync(string bankAccount, DateTime? dateOfChecking = null)
         {
-            try
+            return await Task.Run(async () =>
             {
-                return await Task.Run(async () =>
+                try
                 {
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != bankAccount && !string.IsNullOrWhiteSpace(bankAccount))
                     {
-                        List<Entity> findByBankAccountAndModificationDateList = await FindByBankAccountAndModificationDateAsync(bankAccount);
-                        if (null != findByBankAccountAndModificationDateList)
+                        dateOfChecking = dateOfChecking ?? DateTime.Now;
+                        List<Entity> findByBankAccountAndModificationDateList = await FindByBankAccountAndModificationDateAsync(bankAccount, (DateTime)dateOfChecking);
+                        if (null != findByBankAccountAndModificationDateList && findByBankAccountAndModificationDateList.Count > 0)
                         {
                             return findByBankAccountAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-account/{bankAccount}").AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-account/{bankAccount}").AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
@@ -937,37 +955,36 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     if (null != entity && null != entity.Nip && !string.IsNullOrWhiteSpace(entity.Nip))
                                     {
-                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip);
+                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                     else if (null != entity && null != entity.Regon && !string.IsNullOrWhiteSpace(entity.Regon))
                                     {
-                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon);
+                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
-                                return await FindByBankAccountAsync(bankAccount) ?? entityList;
+                                return await FindByBankAccountAsync(bankAccount, (DateTime)dateOfChecking) ?? entityList;
                             }
                         }
                     }
-                    return null;
-                });
-            }
-            catch (Exception e)
-            {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
-            }
-            return null;
+                }
+                catch (Exception e)
+                {
+                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                }
+                return null;
+            });
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByNipsAsync(string nips)
+        #region public async Task<Entity> ApiFindByNipsAsync...
         /// <summary>
         /// Znajdź podmioty wedłóg listy numerów NIP
         /// Find entities according to the list of NIP numbers
@@ -978,30 +995,34 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacji podatkowej NIP jako string [^\d{10}$]
         /// NIP tax identification number as string [^\d{10}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        public static async Task<List<Entity>> ApiFindByNipsAsync(string nips)
+        public async Task<List<Entity>> ApiFindByNipsAsync(string nips, DateTime? dateOfChecking = null)
         {
             try
             {
                 return await Task.Run<List<Entity>>(async () =>
                 {
+                    dateOfChecking = dateOfChecking ?? DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nips && !string.IsNullOrWhiteSpace(nips))
                     {
-                        List<Entity> findByNipsAndModificationDateList = await FindByNipsAndModificationDateAsync(nips);
+                        List<Entity> findByNipsAndModificationDateList = await FindByNipsAndModificationDateAsync(nips, (DateTime)dateOfChecking);
                         if (null != findByNipsAndModificationDateList)
                         {
                             return findByNipsAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/nips/{nips}").AddUrlSegment("nips", nips).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/nips/{nips}").AddUrlSegment("nips", nips).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
@@ -1009,14 +1030,14 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     if (null != entity && null != entity.Nip && !string.IsNullOrWhiteSpace(entity.Nip))
                                     {
-                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip);
+                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
-                                return await FindByNipsAsync(nips) ?? entityList;
+                                return await FindByNipsAsync(nips, (DateTime)dateOfChecking) ?? entityList;
                             }
                         }
                     }
@@ -1025,13 +1046,13 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
             }
             return null;
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByRegonsAsync(string regons)
+        #region public async Task<Entity> ApiFindByRegonsAsync...
         /// <summary>
         /// https://wl-test.mf.gov.pl/api/search/regons/{regons}?date={date format yyyy-MM-dd}
         /// https://wl-api.mf.gov.pl/api/search/regons/{regons}?date={date format yyyy-MM-dd}
@@ -1044,30 +1065,34 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer identyfikacyjny REGON przypisany przez Krajowy Rejestr Urzędowy Podmiotów Gospodarki Narodowej jako string [^\d{9}$|^\d{14}$]
         /// REGON identification number assigned by the National Register of Entities of National Economy as string [^\d{9}$|^\d{14}$]
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        public static async Task<List<Entity>> ApiFindByRegonsAsync(string regons)
+        public async Task<List<Entity>> ApiFindByRegonsAsync(string regons, DateTime? dateOfChecking = null)
         {
             try
             {
-                return await Task.Run<List<Entity>>(async () =>
+                return await Task.Run(async () =>
                 {
+                    dateOfChecking = dateOfChecking ?? DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != regons && !string.IsNullOrWhiteSpace(regons))
                     {
-                        List<Entity> findByRegonsAndModificationDateList = await FindByRegonsAndModificationDateAsync(regons);
+                        List<Entity> findByRegonsAndModificationDateList = await FindByRegonsAndModificationDateAsync(regons, (DateTime)dateOfChecking);
                         if (null != findByRegonsAndModificationDateList)
                         {
                             return findByRegonsAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/regons/{regons}").AddUrlSegment("regons", regons).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/regons/{regons}").AddUrlSegment("regons", regons).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
@@ -1075,14 +1100,14 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     if (null != entity && null != entity.Regon && !string.IsNullOrWhiteSpace(entity.Regon))
                                     {
-                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon);
+                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
-                                return await FindByRegonsAsync(regons) ?? entityList;
+                                return await FindByRegonsAsync(regons, (DateTime)dateOfChecking) ?? entityList;
                             }
                         }
                     }
@@ -1091,13 +1116,13 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
             }
             return null;
         }
         #endregion
 
-        #region public static async Task<Entity> ApiFindByBankAccountsAsync(string bankAccounts)
+        #region public async Task<Entity> ApiFindByBankAccountsAsync...
         /// <summary>
         /// GET https://wl-test.mf.gov.pl/api/search/bank-accounts/{bankAccounts}?date={date format yyyy-MM-dd}
         /// GET https://wl-api.mf.gov.pl/api/search/bank-accounts/{bankAccounts}?date={date format yyyy-MM-dd}
@@ -1108,11 +1133,15 @@ namespace ApiWykazuPodatnikowVatData
         /// Lista maksymalnie 30 numerów rachunkow bankowych rozdzielonych przecinkami, rachunek bankowy (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// A list of up to 30 bank account numbers separated by commas, a bank account (26 characters) in the NRB (Bank Account Number) format kkAAAAAAAABBBBBBBBBBBBBBBB
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Lista podmiotów jako List obiektów Entity lub null
         /// List of entities as List of Entity objects or null
         /// </returns>
-        public static async Task<List<Entity>> ApiFindByBankAccountsAsync(string bankAccounts)
+        public async Task<List<Entity>> ApiFindByBankAccountsAsync(string bankAccounts, DateTime? dateOfChecking = null)
         {
             try
             {
@@ -1120,18 +1149,18 @@ namespace ApiWykazuPodatnikowVatData
                 {
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != bankAccounts && !string.IsNullOrWhiteSpace(bankAccounts))
                     {
-                        List<Entity> findByBankAccountsAndModificationDateList = await FindByBankAccountsAndModificationDateAsync(bankAccounts);
+                        dateOfChecking = dateOfChecking ?? DateTime.Now;
+                        List<Entity> findByBankAccountsAndModificationDateList = await FindByBankAccountsAndModificationDateAsync(bankAccounts, (DateTime)dateOfChecking);
                         if (null != findByBankAccountsAndModificationDateList)
                         {
                             return findByBankAccountsAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-accounts/{bankAccounts}").AddUrlSegment("bankAccounts", bankAccounts).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
-                        //RestRequest request = new RestRequest(@"https://localhost:5001/api/APIRejestWLExampleDataEntityResponse");
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-accounts/{bankAccounts}").AddUrlSegment("bankAccounts", bankAccounts).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result.Subjects)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             List<Entity> entityList = (List<Entity>)response.Data.Result.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
@@ -1139,22 +1168,22 @@ namespace ApiWykazuPodatnikowVatData
                                 {
                                     if (null != entity && null != entity.Nip && !string.IsNullOrWhiteSpace(entity.Nip))
                                     {
-                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip);
+                                        Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                     else if (null != entity && null != entity.Regon && !string.IsNullOrWhiteSpace(entity.Regon))
                                     {
-                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon);
+                                        Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(entity);
+                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
-                                return await FindByBankAccountsAsync(bankAccounts) ?? entityList;
+                                return await FindByBankAccountsAsync(bankAccounts, (DateTime)dateOfChecking) ?? entityList;
                             }
                         }
                     }
@@ -1163,13 +1192,13 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
             }
             return null;
         }
         #endregion
 
-        #region public static async Task<EntityCheck> ApiCheckBankAccountByNipAsync (string nip, string bankAccount)
+        #region public async Task<EntityCheck> ApiCheckBankAccountByNipAsync...
         /// <summary>
         /// Sprawdź, czy dany rachunek jest przypisany do podmiotu według numeru NIP i numeru rachunku bankowego NRB
         /// Check if a given account is assigned to the entity according to the NIP number and NRB bank account number
@@ -1184,11 +1213,15 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Odpowiedź, czy dany rachunek jest przypisany do podmiotu jako EntityCheck
         /// Reply whether the account is assigned to the subject as EntityCheck
         /// </returns>
-        public static async Task<EntityCheck> ApiCheckBankAccountByNipAsync(string nip, string bankAccount)
+        public async Task<EntityCheck> ApiCheckBankAccountByNipAsync(string nip, string bankAccount, DateTime? dateOfChecking = null)
         {
             try
             {
@@ -1197,13 +1230,14 @@ namespace ApiWykazuPodatnikowVatData
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nip && !string.IsNullOrWhiteSpace(nip) && null != bankAccount && !string.IsNullOrWhiteSpace(bankAccount))
                     {
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/check/nip/{nip}/bank-account/{bankAccount}").AddUrlSegment("nip", nip).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/check/nip/{nip}/bank-account/{bankAccount}").AddUrlSegment("nip", nip).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             EntityCheck entityCheck = response.Data.Result;
-                            entityCheck.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+                            entityCheck.RequestAndResponseHistory = requestAndResponseHistory;
+                            entityCheck.RequestAndResponseHistoryId = requestAndResponseHistory.Id;
                             entityCheck.Nip = nip;
                             entityCheck.AccountNumber = bankAccount;
                             IFormatProvider culture = new CultureInfo("pl-PL", true);
@@ -1211,15 +1245,12 @@ namespace ApiWykazuPodatnikowVatData
                             entityCheck.DateOfModification = DateTime.Now;
                             try
                             {
-                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                                {
-                                    context.Entry(entityCheck).State = EntityState.Added;
-                                    await context.SaveChangesAsync();
-                                }
+                                context.Entry(entityCheck).State = EntityState.Added;
+                                await context.SaveChangesAsync();
                             }
                             catch (Exception e)
                             {
-                                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
                             }
                             return entityCheck;
                         }
@@ -1229,13 +1260,13 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
             }
             return null;
         }
         #endregion
 
-        #region public static async Task<EntityCheck> ApiCheckBankAccountByRegonAsync(string regon, string bankAccount)
+        #region public async Task<EntityCheck> ApiCheckBankAccountByRegonAsync...
         /// <summary>
         /// Sprawdź, czy dany rachunek jest przypisany do podmiotu według numeru rachunku bankowego NRB i numeru REGON
         /// Check if a given account is assigned to the entity according to the NRB bank account number and REGON number
@@ -1250,11 +1281,15 @@ namespace ApiWykazuPodatnikowVatData
         /// Numer rachunku bankowego (26 znaków) w formacie NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// Bank account number (26 characters) in the format NRB (kkAAAAAAAABBBBBBBBBBBBBBBB)
         /// </param>
+        /// <param name="dateOfChecking">
+        /// Określ datę sprawdzenia danych w dniu jako DateTime lub brak (null - domyśnie data bieżąca)
+        /// Specify the date of checking the data on the date as DateTime or none (null - current date by default)
+        /// </param>
         /// <returns>
         /// Odpowiedź, czy dany rachunek jest przypisany do podmiotu jako EntityCheck
         /// Reply whether the account is assigned to the subject as EntityCheck
         /// </returns>
-        public static async Task<EntityCheck> ApiCheckBankAccountByRegonAsync(string regon, string bankAccount)
+        public async Task<EntityCheck> ApiCheckBankAccountByRegonAsync(string regon, string bankAccount, DateTime? dateOfChecking = null)
         {
             try
             {
@@ -1263,13 +1298,14 @@ namespace ApiWykazuPodatnikowVatData
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != regon && !string.IsNullOrWhiteSpace(regon) && null != bankAccount && !string.IsNullOrWhiteSpace(bankAccount))
                     {
                         RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/check/regon/{regon}/bank-account/{bankAccount}").AddUrlSegment("regon", regon).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
+                        RestRequest request = (RestRequest)new RestRequest(@"/api/check/regon/{regon}/bank-account/{bankAccount}").AddUrlSegment("regon", regon).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
-                        //log4net.Debug($"{ response.StatusCode } { response.Content }");
                         if (response.StatusCode == System.Net.HttpStatusCode.OK && null != response.Data.Result)
                         {
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             EntityCheck entityCheck = response.Data.Result;
-                            entityCheck.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+                            entityCheck.RequestAndResponseHistory = requestAndResponseHistory;
+                            entityCheck.RequestAndResponseHistoryId = requestAndResponseHistory.Id;
                             entityCheck.Regon = regon;
                             entityCheck.AccountNumber = bankAccount;
                             IFormatProvider culture = new CultureInfo("pl-PL", true);
@@ -1277,15 +1313,12 @@ namespace ApiWykazuPodatnikowVatData
                             entityCheck.DateOfModification = DateTime.Now;
                             try
                             {
-                                using (Data.ApiWykazuPodatnikowVatDataDbContext context = await NetAppCommon.DatabaseMssql.CreateInstancesForDatabaseContextClassAsync<Data.ApiWykazuPodatnikowVatDataDbContext>())
-                                {
-                                    context.Entry(entityCheck).State = EntityState.Added;
-                                    await context.SaveChangesAsync();
-                                }
+                                context.Entry(entityCheck).State = EntityState.Added;
+                                await context.SaveChangesAsync();
                             }
                             catch (Exception e)
                             {
-                                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
                             }
                             return entityCheck;
                         }
@@ -1295,7 +1328,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
             }
             return null;
         }

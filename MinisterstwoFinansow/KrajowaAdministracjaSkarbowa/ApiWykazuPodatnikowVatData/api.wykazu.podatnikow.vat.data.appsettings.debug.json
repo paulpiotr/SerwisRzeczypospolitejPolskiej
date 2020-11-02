@@ -6,5 +6,6 @@
   "ConnectionStrings": {
     //Uwaga! Dla IIS to¿samoœæ Puli Apikacji musi byæ ustawiona na LocalSystem !!!
     "ApiWykazuPodatnikowVatDataDbContext": "Data Source=(LocalDB)\\MSSQLLocalDB; AttachDbFilename=%Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)%\\MSSQLLocalDB\\MSSQLLocalDB.mdf; Database=%AttachDbFilename%; MultipleActiveResultSets=true; Integrated Security=True; Trusted_Connection=Yes"
+    //"ApiWykazuPodatnikowVatDataDbContext": "Server=.\\SQLExpress; Database=IUIntegrationSystemData; User Id=sa; Password="
   }
 }

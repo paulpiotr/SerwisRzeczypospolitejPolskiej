@@ -4,14 +4,16 @@ using ApiWykazuPodatnikowVatData.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    partial class ApiWykazuPodatnikowVatDataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201030114901_3")]
+    partial class _3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,10 +203,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
+                        .IsUnique()
                         .HasName("IX_EntityAccountNumberAccountNumber");
 
-                    b.HasIndex("EntityId")
-                        .HasName("IX_EntityAccountEntityId");
+                    b.HasIndex("EntityId");
 
                     b.HasIndex("Id")
                         .IsUnique()
@@ -212,11 +214,6 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
-
-                    b.HasIndex("EntityId", "AccountNumber")
-                        .IsUnique()
-                        .HasName("IX_EntityAccountNumberUniqueKey")
-                        .HasFilter("[EntityId] IS NOT NULL");
 
                     b.ToTable("EntityAccountNumber","awpv");
                 });

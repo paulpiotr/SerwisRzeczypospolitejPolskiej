@@ -12,6 +12,11 @@ namespace ApiWykazuPodatnikowVatData.Models
     [Table("EntityCheck", Schema = "awpv")]
     public partial class EntityCheck
     {
+        public EntityCheck()
+        {
+            SetUniqueIdentifierOfTheLoggedInUser();
+        }
+
         #region public Guid Id { get; set; }
         /// <summary>
         /// Guid Id identyfikator, klucz główny
@@ -22,7 +27,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; private set; }
         /// <summary>
         /// Jednoznaczny identyfikator zalogowanego użytkownika
         /// Unique identifier of the logged in user
@@ -32,7 +37,45 @@ namespace ApiWykazuPodatnikowVatData.Models
         [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
         [StringLength(512)]
         [Required]
-        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        public string UniqueIdentifierOfTheLoggedInUser { get; private set; }
+        #endregion
+
+        #region public void SetUniqueIdentifierOfTheLoggedInUser()
+        /// <summary>
+        /// Ustaw jednoznaczny identyfikator zalogowanego użytkownika
+        /// Set a unique identifier for the logged in user
+        /// </summary>
+        public void SetUniqueIdentifierOfTheLoggedInUser()
+        {
+            try
+            {
+                UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+            }
+            catch (Exception)
+            {
+                UniqueIdentifierOfTheLoggedInUser = null;
+            }
+        }
+        #endregion
+
+        #region public Guid? RequestAndResponseHistoryId { get; set; }
+        /// <summary>
+        /// Identyfikator odpowiedzi żądania dotyczącego wyszukiwania podmiotu Entity (klucz obcy) jako Guid
+        /// Identifier of the response in the subject search (foreign key) as Guid
+        /// </summary>
+        [JsonProperty(nameof(RequestAndResponseHistoryId))]
+        [Display(Name = "Numer RequestAndResponseHistory", Prompt = "Wybierz powiązanie numeru pesel", Description = "Numer pesel")]
+        public Guid? RequestAndResponseHistoryId { get; set; }
+        #endregion
+
+        #region public virtual RequestAndResponseHistory RequestAndResponseHistory { get; set; }
+        /// <summary>
+        /// Odpowiedź żądania dotyczącego wyszukiwania podmiotu Entity jako obiekt RequestAndResponseHistory
+        /// The response of the Entity lookup request as an RequestAndResponseHistory
+        /// </summary>
+        [ForeignKey(nameof(RequestAndResponseHistoryId))]
+        [InverseProperty(nameof(Models.RequestAndResponseHistory.EntityCheck))]
+        public virtual RequestAndResponseHistory RequestAndResponseHistory { get; set; }
         #endregion
 
         #region public string Nip { get; set; }

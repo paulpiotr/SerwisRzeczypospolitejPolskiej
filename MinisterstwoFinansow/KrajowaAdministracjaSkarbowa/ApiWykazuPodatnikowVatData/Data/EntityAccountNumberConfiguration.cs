@@ -29,8 +29,16 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
+            entity.HasIndex(e => e.EntityId)
+                .HasName("IX_EntityAccountEntityId")
+                .IsUnique(false);
+
             entity.HasIndex(e => e.AccountNumber)
                 .HasName("IX_EntityAccountNumberAccountNumber")
+                .IsUnique(false);
+
+            entity.HasIndex(e => new { e.EntityId, e.AccountNumber })
+                .HasName("IX_EntityAccountNumberUniqueKey")
                 .IsUnique(true);
 
             entity.Property(e => e.DateOfCreate)

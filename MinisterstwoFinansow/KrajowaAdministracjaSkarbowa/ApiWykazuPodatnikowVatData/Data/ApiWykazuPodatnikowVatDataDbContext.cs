@@ -1,7 +1,9 @@
 ﻿using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NetAppCommon;
 using System;
+//using System.Data.Entity;
 using System.Reflection;
 
 namespace ApiWykazuPodatnikowVatData.Data
@@ -11,6 +13,7 @@ namespace ApiWykazuPodatnikowVatData.Data
     /// Klasa kontekstu bazy danych api wykazu podatników VAT
     /// Database context class api list of VAT taxpayers
     /// </summary>
+    //[DbConfigurationType(typeof(ApiWykazuPodatnikowVatDataDbConfiguration))
     public partial class ApiWykazuPodatnikowVatDataDbContext : DbContext
     {
         #region Log4 Net Logger
@@ -26,6 +29,14 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// Instance to the settings model class as AppSettings
         /// </summary>
         private static readonly AppSettings appSettings = AppSettings.GetInstance();
+        #endregion
+
+        #region private static readonly MemoryCacheEntryOptions memoryCacheEntryOptions
+        /// <summary>
+        /// Opcje wpisu pamięci podręcznej
+        /// Memory Cache Entry Options
+        /// </summary>
+        private static readonly MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(appSettings.CacheLifeTime > 0 ? appSettings.CacheLifeTime : 86400));
         #endregion
 
         #region public ApiWykazuPodatnikowVatDataDbContext()
@@ -144,6 +155,13 @@ namespace ApiWykazuPodatnikowVatData.Data
         public virtual DbSet<EntityCheck> EntityCheck { get; set; }
         #endregion
 
+        #region virtual DbSet<RequestAndResponseHistory> RequestAndResponseHistory { get; set; }
+        /// <summary>
+        /// Model danych RequestAndResponseHistory
+        /// </summary>
+        public virtual DbSet<RequestAndResponseHistory> RequestAndResponseHistory { get; set; }
+        #endregion
+
         #region protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         /// <summary>
         /// Zdarzenie wyzwalające konfigurację bazy danych
@@ -157,6 +175,13 @@ namespace ApiWykazuPodatnikowVatData.Data
         {
             try
             {
+                //#if DEBUG
+                //                ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+                //                {
+                //                    builder.AddFilter(level => level == LogLevel.Debug).AddConsole();
+                //                });
+                //                optionsBuilder.UseLoggerFactory(loggerFactory);
+                //#endif
                 if (!optionsBuilder.IsConfigured)
                 {
                     optionsBuilder.UseSqlServer(appSettings.GetConnectionString());
@@ -184,7 +209,7 @@ namespace ApiWykazuPodatnikowVatData.Data
             modelBuilder.ApplyConfiguration(new EntityCheckConfiguration());
             modelBuilder.ApplyConfiguration(new EntityConfiguration());
             modelBuilder.ApplyConfiguration(new EntityPersonConfiguration());
-            //modelBuilder.ApplyConfiguration(new EntityPeselConfiguration());
+            modelBuilder.ApplyConfiguration(new RequestAndResponseHistoryConfiguration());
         }
         #endregion
 
@@ -198,6 +223,21 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// ModelBuilder modelBuilder
         /// </param>
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        #endregion
+
+        #region public MemoryCacheEntryOptions GetMemoryCacheEntryOptions()
+        /// <summary>
+        /// Uzyskaj opcje wpisu pamięci podręcznej
+        /// Get Memory Cache Entry Options
+        /// </summary>
+        /// <returns>
+        /// Opcje wpisu pamięci podręcznej
+        /// Memory Cache Entry Options
+        /// </returns>
+        public MemoryCacheEntryOptions GetMemoryCacheEntryOptions()
+        {
+            return memoryCacheEntryOptions;
+        }
         #endregion
     }
     #endregion

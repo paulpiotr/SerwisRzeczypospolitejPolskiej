@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -31,7 +30,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Instanacja klasy AppSettings
         /// Instance of the AppSettings class
         /// </summary>
-        private static AppSettings Instance = null;
+        private static readonly AppSettings Instance = null;
         #endregion
 
         #region private static readonly string FileName
@@ -261,7 +260,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             {
                 return DatabaseMssql.ParseConnectionString(ConnectionString);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
             }

@@ -13,6 +13,17 @@ namespace ApiWykazuPodatnikowVatData.Models
     [Table("EntityAccountNumber", Schema = "awpv")]
     public partial class EntityAccountNumber
     {
+        #region public EntityAccountNumber()
+        /// <summary>
+        /// Konstruktor
+        /// Construktor
+        /// </summary>
+        public EntityAccountNumber()
+        {
+            SetUniqueIdentifierOfTheLoggedInUser();
+        }
+        #endregion
+
         #region public Guid Id { get; set; }
         /// <summary>
         /// Guid Id identyfikator, klucz główny
@@ -23,7 +34,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; private set; }
         /// <summary>
         /// Jednoznaczny identyfikator zalogowanego użytkownika
         /// Unique identifier of the logged in user
@@ -33,7 +44,25 @@ namespace ApiWykazuPodatnikowVatData.Models
         [Display(Name = "Identyfikator zalogowanego użytkownika", Prompt = "Wybierz identyfikator zalogowanego użytkownika", Description = "Identyfikator zalogowanego użytkownika")]
         [StringLength(512)]
         [Required]
-        public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        public string UniqueIdentifierOfTheLoggedInUser { get; private set; }
+        #endregion
+
+        #region public void SetUniqueIdentifierOfTheLoggedInUser()
+        /// <summary>
+        /// Ustaw jednoznaczny identyfikator zalogowanego użytkownika
+        /// Set a unique identifier for the logged in user
+        /// </summary>
+        public void SetUniqueIdentifierOfTheLoggedInUser()
+        {
+            try
+            {
+                UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+            }
+            catch (Exception)
+            {
+                UniqueIdentifierOfTheLoggedInUser = null;
+            }
+        }
         #endregion
 
         #region public Guid? EntityId { get; set; }

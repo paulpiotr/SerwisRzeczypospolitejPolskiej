@@ -29,6 +29,10 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
+            entity.HasIndex(e => e.RequestAndResponseHistoryId)
+                .HasName("IX_EntityCheckRequestAndResponseHistoryId")
+                .IsUnique(false);
+
             entity.HasIndex(e => e.Nip)
                 .HasName("IX_EntityCheckNip")
                 .IsUnique(false);
@@ -43,6 +47,14 @@ namespace ApiWykazuPodatnikowVatData.Data
 
             entity.HasIndex(e => e.RequestId)
                 .HasName("IX_EntityCheckRequestId")
+                .IsUnique(false);
+
+            entity.HasIndex(e => e.DateOfCreate)
+                .HasName("IX_EntityCheckDateOfCreate")
+                .IsUnique(false);
+
+            entity.HasIndex(e => e.DateOfModification)
+                .HasName("IX_EntityCheckDateOfModification")
                 .IsUnique(false);
 
             entity.Property(e => e.DateOfCreate)
