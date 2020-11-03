@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20201030114901_3")]
-    partial class _3
+    [Migration("20201103123607_2")]
+    partial class _2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -203,10 +203,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
-                        .IsUnique()
                         .HasName("IX_EntityAccountNumberAccountNumber");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EntityId")
+                        .HasName("IX_EntityAccountEntityId");
 
                     b.HasIndex("Id")
                         .IsUnique()
@@ -214,6 +214,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
+
+                    b.HasIndex("EntityId", "AccountNumber")
+                        .IsUnique()
+                        .HasName("IX_EntityAccountNumberUniqueKey")
+                        .HasFilter("[EntityId] IS NOT NULL");
 
                     b.ToTable("EntityAccountNumber","awpv");
                 });

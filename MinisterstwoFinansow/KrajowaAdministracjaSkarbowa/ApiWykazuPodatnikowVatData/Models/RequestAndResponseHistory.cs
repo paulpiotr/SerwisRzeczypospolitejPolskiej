@@ -414,7 +414,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             try
             {
                 DateTime.TryParse(RequestDateTime, out DateTime outRequestDateTimeAsDateTime);
-                if (null != outRequestDateTimeAsDateTime)
+                if (null != outRequestDateTimeAsDateTime && outRequestDateTimeAsDateTime.ToString() != @"01.01.0001 00:00:00")
                 {
                     RequestDateTimeAsDateTime = outRequestDateTimeAsDateTime;
                 }

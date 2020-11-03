@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWykazuPodatnikowVatData.Migrations
 {
     [DbContext(typeof(ApiWykazuPodatnikowVatDataDbContext))]
-    [Migration("20201019002450_2")]
-    partial class _2
+    [Migration("20201103123449_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,6 +27,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newsequentialid())");
+
+                    b.Property<DateTime?>("DateOfChecking")
+                        .HasColumnName("DateOfChecking")
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("DateOfCreate")
                         .ValueGeneratedOnAddOrUpdate()
@@ -90,6 +94,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnName("RemovalDate")
                         .HasColumnType("date");
 
+                    b.Property<Guid?>("RequestAndResponseHistoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ResidenceAddress")
                         .HasColumnName("ResidenceAddress")
                         .HasColumnType("varchar(200)")
@@ -122,6 +129,15 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DateOfChecking")
+                        .HasName("IX_EntityDateOfChecking");
+
+                    b.HasIndex("DateOfCreate")
+                        .HasName("IX_EntityDateOfCreate");
+
+                    b.HasIndex("DateOfModification")
+                        .HasName("IX_EntityDateOfModification");
+
                     b.HasIndex("Id")
                         .IsUnique()
                         .HasName("IX_EntityId");
@@ -142,6 +158,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("Regon")
                         .HasName("IX_EntityRegon");
+
+                    b.HasIndex("RequestAndResponseHistoryId")
+                        .HasName("IX_EntityRequestAndResponseHistoryId");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
@@ -184,10 +203,10 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
-                        .IsUnique()
                         .HasName("IX_EntityAccountNumberAccountNumber");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EntityId")
+                        .HasName("IX_EntityAccountEntityId");
 
                     b.HasIndex("Id")
                         .IsUnique()
@@ -195,6 +214,11 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
                         .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
+
+                    b.HasIndex("EntityId", "AccountNumber")
+                        .IsUnique()
+                        .HasName("IX_EntityAccountNumberUniqueKey")
+                        .HasFilter("[EntityId] IS NOT NULL");
 
                     b.ToTable("EntityAccountNumber","awpv");
                 });
@@ -237,6 +261,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                         .HasColumnType("varchar(14)")
                         .HasMaxLength(14);
 
+                    b.Property<Guid?>("RequestAndResponseHistoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RequestDateTime")
                         .IsRequired()
                         .HasColumnName("RequestDateTime")
@@ -264,6 +291,12 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasIndex("AccountNumber")
                         .HasName("IX_EntityCheckAccountNumber");
 
+                    b.HasIndex("DateOfCreate")
+                        .HasName("IX_EntityCheckDateOfCreate");
+
+                    b.HasIndex("DateOfModification")
+                        .HasName("IX_EntityCheckDateOfModification");
+
                     b.HasIndex("Id")
                         .IsUnique()
                         .HasName("IX_EntityCheckId");
@@ -273,6 +306,9 @@ namespace ApiWykazuPodatnikowVatData.Migrations
 
                     b.HasIndex("Regon")
                         .HasName("IX_EntityCheckRegon");
+
+                    b.HasIndex("RequestAndResponseHistoryId")
+                        .HasName("IX_EntityCheckRequestAndResponseHistoryId");
 
                     b.HasIndex("RequestId")
                         .HasName("IX_EntityCheckRequestId");
@@ -371,11 +407,139 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.ToTable("EntityPerson","awpv");
                 });
 
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.RequestAndResponseHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
+
+                    b.Property<DateTime>("DateOfCreate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("DateOfCreate")
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateTime?>("DateOfModification")
+                        .HasColumnName("DateOfModification")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ObjectMD5Hash")
+                        .IsRequired()
+                        .HasColumnName("ObjectMD5Hash")
+                        .HasColumnType("varchar(24)")
+                        .HasMaxLength(24);
+
+                    b.Property<string>("RequestBody")
+                        .IsRequired()
+                        .HasColumnName("RequestBody")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("RequestDateTime")
+                        .IsRequired()
+                        .HasColumnName("RequestDateTime")
+                        .HasColumnType("varchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTime?>("RequestDateTimeAsDateTime")
+                        .HasColumnName("RequestDateTimeAsDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RequestId")
+                        .IsRequired()
+                        .HasColumnName("RequestId")
+                        .HasColumnType("varchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("RequestParameters")
+                        .IsRequired()
+                        .HasColumnName("RequestParameters")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("RequestUrl")
+                        .IsRequired()
+                        .HasColumnName("RequestUrl")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("ResponseContent")
+                        .IsRequired()
+                        .HasColumnName("ResponseContent")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("ResponseHeaders")
+                        .IsRequired()
+                        .HasColumnName("ResponseHeaders")
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("ResponseStatusCode")
+                        .IsRequired()
+                        .HasColumnName("ResponseStatusCode")
+                        .HasColumnType("varchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("UniqueIdentifierOfTheLoggedInUser")
+                        .IsRequired()
+                        .HasColumnName("UniqueIdentifierOfTheLoggedInUser")
+                        .HasColumnType("varchar(512)")
+                        .HasMaxLength(512);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DateOfCreate")
+                        .HasName("IX_RequestAndResponseHistoryDateOfCreate");
+
+                    b.HasIndex("DateOfModification")
+                        .HasName("IX_RequestAndResponseHistoryDateOfModification");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasName("IX_RequestAndResponseHistoryId");
+
+                    b.HasIndex("ObjectMD5Hash")
+                        .IsUnique()
+                        .HasName("IX_RequestAndResponseHistoryRequestObjectMD5Hash");
+
+                    b.HasIndex("RequestDateTime")
+                        .HasName("IX_RequestAndResponseHistoryRequestDateTime");
+
+                    b.HasIndex("RequestDateTimeAsDateTime")
+                        .HasName("IX_RequestAndResponseHistoryRequestDateTimeAsDateTime");
+
+                    b.HasIndex("RequestId")
+                        .HasName("IX_RequestAndResponseHistoryRequestId");
+
+                    b.HasIndex("RequestUrl")
+                        .HasName("IX_RequestAndResponseHistoryRequestUrl");
+
+                    b.HasIndex("ResponseStatusCode")
+                        .HasName("IX_RequestAndResponseHistoryResponseStatusCode");
+
+                    b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
+                        .HasName("IX_RequestAndResponseHistoryUniqueIdentifierOfTheLoggedInUser");
+
+                    b.ToTable("RequestAndResponseHistory","awpv");
+                });
+
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.Entity", b =>
+                {
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.RequestAndResponseHistory", "RequestAndResponseHistory")
+                        .WithOne("Entity")
+                        .HasForeignKey("ApiWykazuPodatnikowVatData.Models.Entity", "RequestAndResponseHistoryId");
+                });
+
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityAccountNumber", b =>
                 {
                     b.HasOne("ApiWykazuPodatnikowVatData.Models.Entity", "Entity")
                         .WithMany("EntityAccountNumber")
                         .HasForeignKey("EntityId");
+                });
+
+            modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityCheck", b =>
+                {
+                    b.HasOne("ApiWykazuPodatnikowVatData.Models.RequestAndResponseHistory", "RequestAndResponseHistory")
+                        .WithOne("EntityCheck")
+                        .HasForeignKey("ApiWykazuPodatnikowVatData.Models.EntityCheck", "RequestAndResponseHistoryId");
                 });
 
             modelBuilder.Entity("ApiWykazuPodatnikowVatData.Models.EntityPerson", b =>

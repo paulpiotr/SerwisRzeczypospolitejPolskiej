@@ -392,6 +392,66 @@ namespace ApiWykazuPodatnikowVatData.Models
         //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfChecking { get; set; }
         #endregion
+
+        //#region public string ObjectMD5Hash { get; set; }
+        ///// <summary>
+        ///// Skrót MD5
+        ///// MD5 hash of the file content
+        ///// </summary>
+        //[JsonProperty(nameof(ObjectMD5Hash))]
+        //[Column("ObjectMD5Hash", TypeName = "varchar(24)")]
+        //[Display(Name = "Skrót MD5", Prompt = "Wpisz skrót MD5", Description = "Skrót MD5")]
+        //[Required]
+        //[StringLength(24)]
+        //[MinLength(24)]
+        //[MaxLength(24)]
+        //public string ObjectMD5Hash { get; set; }
+        //#endregion
+
+        //#region public void SetObjectMD5Hash(string separator = null)
+        ///// <summary>
+        ///// Ustaw skrót MD5
+        ///// Set the MD5 hash of the file content
+        ///// </summary>
+        ///// <param name="separator">
+        ///// Separator rozdzielający wartości właściwości obiektu jako string
+        ///// Separator separating object property values as a string
+        ///// </param>
+        ///// <returns>
+        ///// Bieżący obiekt jako InvoiceFromIcasaXML
+        ///// The current object as InvoiceFromIcasaXML
+        ///// </returns>
+        //public void SetObjectMD5Hash(string separator = null)
+        //{
+        //    try
+        //    {
+        //        ObjectMD5Hash = NetAppCommon.Helpers.Object.ObjectHelper.ConvertObjectValuesToMD5Hash(this, separator);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        ObjectMD5Hash = null;
+        //    }
+        //}
+        //#endregion
+
+        #region public string GetValuesToString(string separator = null)
+        /// <summary>
+        /// Pobierz wartości właściwości obiektu i zbuduj ciąg tekstowy rozdzielonych wartości właściwości separatorem
+        /// Get the object property values and build a text string separated by a property value with a separator
+        /// </summary>
+        /// <param name="separator">
+        /// Separator rozdzielający wartości właściwości obiektu jako string
+        /// Separator separating object property values as a string
+        /// </param>
+        /// <returns>
+        /// Wartości właściwości obiektu rozdzielone separatorem jako string
+        /// Object property values separated by a separator as a string
+        /// </returns>
+        public string GetValuesToString(string separator = null)
+        {
+            return NetAppCommon.Helpers.Object.ObjectHelper.GetValuesToString(this, separator);
+        }
+        #endregion
     }
     #endregion
 }
