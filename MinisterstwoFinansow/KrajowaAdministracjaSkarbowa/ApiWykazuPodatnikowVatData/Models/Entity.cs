@@ -65,7 +65,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception)
             {
-                UniqueIdentifierOfTheLoggedInUser = null;
+                UniqueIdentifierOfTheLoggedInUser = string.Empty;
             }
         }
         #endregion
@@ -410,8 +410,8 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         //#region public void SetObjectMD5Hash(string separator = null)
         ///// <summary>
-        ///// Ustaw skrót MD5
-        ///// Set the MD5 hash of the file content
+        ///// Ustaw skrót MD5 dla właściwości obiektu
+        ///// Ustaw skrót MD5 dla właściwości obiektu
         ///// </summary>
         ///// <param name="separator">
         ///// Separator rozdzielający wartości właściwości obiektu jako string

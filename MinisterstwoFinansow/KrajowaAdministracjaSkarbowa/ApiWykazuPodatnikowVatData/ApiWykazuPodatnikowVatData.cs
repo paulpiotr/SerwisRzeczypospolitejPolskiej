@@ -651,7 +651,7 @@ namespace ApiWykazuPodatnikowVatData
                                         x.EntityPartnerId = entity.Id;
                                         break;
                                 }
-                                x.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+                                //x.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
                                 x.DateOfModification = DateTime.Now;
                             });
                             context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));

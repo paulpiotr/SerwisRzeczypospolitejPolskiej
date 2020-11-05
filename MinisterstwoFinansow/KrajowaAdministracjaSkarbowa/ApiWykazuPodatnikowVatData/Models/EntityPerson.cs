@@ -11,6 +11,11 @@ namespace ApiWykazuPodatnikowVatData.Models
     [Table("EntityPerson", Schema = "awpv")]
     public partial class EntityPerson
     {
+        public EntityPerson()
+        {
+            SetUniqueIdentifierOfTheLoggedInUser();
+        }
+
         #region public Guid Id { get; set; }, identyfikator, klucz główny
         /// <summary>
         /// Guid Id identyfikator, klucz główny
@@ -20,7 +25,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         public Guid Id { get; set; }
         #endregion
 
-        #region public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #region public string UniqueIdentifierOfTheLoggedInUser { get; private set; }
         /// <summary>
         /// Jednoznaczny identyfikator zalogowanego użytkownika
         /// Unique identifier of the logged in user
@@ -30,6 +35,24 @@ namespace ApiWykazuPodatnikowVatData.Models
         [StringLength(512)]
         [Required]
         public string UniqueIdentifierOfTheLoggedInUser { get; set; }
+        #endregion
+
+        #region public void SetUniqueIdentifierOfTheLoggedInUser()
+        /// <summary>
+        /// Ustaw jednoznaczny identyfikator zalogowanego użytkownika
+        /// Set a unique identifier for the logged in user
+        /// </summary>
+        public void SetUniqueIdentifierOfTheLoggedInUser()
+        {
+            try
+            {
+                UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
+            }
+            catch (Exception)
+            {
+                UniqueIdentifierOfTheLoggedInUser = string.Empty;
+            }
+        }
         #endregion
 
         #region public Guid? EntityRepresentativeId { get; set; }

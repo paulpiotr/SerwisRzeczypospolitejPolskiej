@@ -53,7 +53,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception)
             {
-                UniqueIdentifierOfTheLoggedInUser = null;
+                UniqueIdentifierOfTheLoggedInUser = string.Empty;
             }
         }
         #endregion
