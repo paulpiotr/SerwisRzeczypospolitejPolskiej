@@ -30,7 +30,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Key]
         [JsonProperty(nameof(Id))]
-        [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
+        [Display(Name = "Identyfikator numeru rachunku bankowowego", Prompt = "Wpisz identyfikator numeru rachunku bankowowego", Description = "Identyfikator numeru rachunku bankowowego klucz główny")]
         public Guid Id { get; set; }
         #endregion
 

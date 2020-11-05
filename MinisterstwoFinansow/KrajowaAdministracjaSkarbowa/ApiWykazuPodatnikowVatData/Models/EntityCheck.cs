@@ -7,7 +7,8 @@ namespace ApiWykazuPodatnikowVatData.Models
 {
     #region public partial class EntityCheck
     /// <summary>
-    /// Model danych EntityCheck
+    /// Model danych EntityCheck Kontrola danych podmiotu gospodarczego
+    /// EntityCheck data model Business entity data check
     /// </summary>
     [Table("EntityCheck", Schema = "awpv")]
     public partial class EntityCheck
@@ -23,7 +24,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Key]
         [JsonProperty(nameof(Id))]
-        [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
+        [Display(Name = "Identyfikator kontroli danych podmiotu gospodarczego", Prompt = "Wpisz identyfikator kontroli danych podmiotu gospodarczego", Description = "Identyfikator kontroli danych podmiotu gospodarczego, klucz główny")]
         public Guid Id { get; set; }
         #endregion
 
@@ -73,6 +74,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Odpowiedź żądania dotyczącego wyszukiwania podmiotu Entity jako obiekt RequestAndResponseHistory
         /// The response of the Entity lookup request as an RequestAndResponseHistory
         /// </summary>
+        [JsonProperty(nameof(RequestAndResponseHistory))]
         [ForeignKey(nameof(RequestAndResponseHistoryId))]
         [InverseProperty(nameof(Models.RequestAndResponseHistory.EntityCheck))]
         public virtual RequestAndResponseHistory RequestAndResponseHistory { get; set; }

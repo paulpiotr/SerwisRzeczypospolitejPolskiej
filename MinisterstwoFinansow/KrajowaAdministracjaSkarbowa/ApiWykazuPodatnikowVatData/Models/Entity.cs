@@ -9,22 +9,23 @@ namespace ApiWykazuPodatnikowVatData.Models
     #region public partial class Entity
     /// <summary>
     /// Model danych podmiot gospodarczy jako Entity
-    /// Entity data model
+    /// Data model economic entity as Entity
     /// </summary>
     [Table("Entity", Schema = "awpv")]
     public partial class Entity
     {
         #region public Entity()
         /// <summary>
-        /// Konstruktor Entity()
+        /// Konstruktor
+        /// Constructor
         /// </summary>
         public Entity()
         {
-            Representative = new HashSet<EntityPerson>();
-            AuthorizedClerk = new HashSet<EntityPerson>();
-            Partner = new HashSet<EntityPerson>();
-            EntityAccountNumber = new HashSet<EntityAccountNumber>();
-            RequestAndResponseHistory = new RequestAndResponseHistory();
+            //Representative = new HashSet<EntityPerson>();
+            //AuthorizedClerk = new HashSet<EntityPerson>();
+            //Partner = new HashSet<EntityPerson>();
+            //EntityAccountNumber = new HashSet<EntityAccountNumber>();
+            //RequestAndResponseHistory = new RequestAndResponseHistory();
             SetUniqueIdentifierOfTheLoggedInUser();
         }
         #endregion
@@ -35,7 +36,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Key]
         [JsonProperty(nameof(Id))]
-        [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
+        [Display(Name = "Identyfikator podmiotu gospodarczego", Prompt = "Wpisz identyfikator podmiotu gospodarczego", Description = "Identyfikator podmiotu gospodarczego, klucz główny")]
         public Guid Id { get; set; }
         #endregion
 
@@ -85,6 +86,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Odpowiedź żądania dotyczącego wyszukiwania podmiotu Entity jako obiekt RequestAndResponseHistory
         /// The response of the Entity lookup request as an RequestAndResponseHistory
         /// </summary>
+        [JsonProperty(nameof(RequestAndResponseHistory))]
         [ForeignKey(nameof(RequestAndResponseHistoryId))]
         [InverseProperty(nameof(Models.RequestAndResponseHistory.Entity))]
         public virtual RequestAndResponseHistory RequestAndResponseHistory { get; set; }
@@ -336,6 +338,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// Numery kont bankowych w formacie NRB
         /// </summary>
         [NotMapped]
+        [JsonProperty(nameof(AccountNumbers))]
         [Display(Name = "Numery kont bankowych w formacie NRB", Prompt = "Dodaj numery kont bankowych w formacie NRB", Description = "Numery kont bankowych w formacie NRB")]
         public IEnumerable<string> AccountNumbers { get; set; }
         #endregion
@@ -388,7 +391,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [Column("DateOfChecking", TypeName = "datetime")]
         [JsonProperty(nameof(DateOfChecking))]
-        [Display(Name = "Data Modyfikacji", Prompt = "Wpisz lub wybierz datę modyfikacji", Description = "Data modyfikacji")]
+        [Display(Name = "Data sprawdzenia (wysłania żądania)", Prompt = "Wpisz lub wybierz datę sprawdzenia (wysłania żądania)", Description = "Data sprawdzenia (wysłania żądania)")]
         //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? DateOfChecking { get; set; }
         #endregion

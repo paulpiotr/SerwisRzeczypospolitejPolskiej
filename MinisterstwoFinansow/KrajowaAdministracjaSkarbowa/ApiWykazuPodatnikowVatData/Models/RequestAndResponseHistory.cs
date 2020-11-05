@@ -97,11 +97,12 @@ namespace ApiWykazuPodatnikowVatData.Models
 
         #region public Guid Id { get; set; }
         /// <summary>
-        /// Guid Id identyfikator, klucz główny
+        /// Guid Id identyfikator historii wyszukiwania, klucz główny
+        /// Guid Id Search history ID, primary key
         /// </summary>
         [Key]
         [JsonProperty(nameof(Id))]
-        [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator klucz główny")]
+        [Display(Name = "Identyfikator historii wyszukiwania", Prompt = "Wpisz identyfikator historii wyszukiwania", Description = "Identyfikator historii wyszukiwania, klucz główny")]
         public Guid Id { get; set; }
         #endregion
 
@@ -513,6 +514,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// <summary>
         /// public virtual ICollection<Entity> Entity { get; set; }
         /// </summary>
+        [JsonProperty(nameof(Entity))]
         [InverseProperty(nameof(Models.Entity.RequestAndResponseHistory))]
         public virtual Entity Entity { get; set; }
         #endregion
@@ -521,6 +523,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// <summary>
         /// public virtual ICollection<EntityCheck> EntityCheck { get; set; }
         /// </summary>
+        [JsonProperty(nameof(EntityCheck))]
         [InverseProperty(nameof(Models.EntityCheck.RequestAndResponseHistory))]
         public virtual EntityCheck EntityCheck { get; set; }
         #endregion

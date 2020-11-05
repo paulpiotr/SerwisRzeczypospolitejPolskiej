@@ -6,22 +6,29 @@ namespace ApiWykazuPodatnikowVatData.Models
 {
     #region public partial class EntityPerson
     /// <summary>
-    /// Model danych EntityPerson, oryginalnie EntityPerson
+    /// Model danych EntityPerson osoby powiązane z podmiotem gospodarczym
+    /// EntityPerson data model persons associated with the business entity
     /// </summary>
     [Table("EntityPerson", Schema = "awpv")]
     public partial class EntityPerson
     {
+        #region public EntityPerson()
+        /// <summary>
+        /// Konstruktor
+        /// Constructor
+        /// </summary>
         public EntityPerson()
         {
             SetUniqueIdentifierOfTheLoggedInUser();
         }
+        #endregion
 
         #region public Guid Id { get; set; }, identyfikator, klucz główny
         /// <summary>
         /// Guid Id identyfikator, klucz główny
         /// </summary>
         [Key]
-        [Display(Name = "Identyfikator", Prompt = "Wpisz identyfikator", Description = "Identyfikator, klucz główny")]
+        [Display(Name = "Identyfikator osoby powiązanj z podmiotem gospodarczym", Prompt = "Wpisz identyfikator osoby powiązanj z podmiotem gospodarczym", Description = "Identyfikator osoby powiązanj z podmiotem gospodarczym, klucz główny")]
         public Guid Id { get; set; }
         #endregion
 
@@ -102,22 +109,6 @@ namespace ApiWykazuPodatnikowVatData.Models
         [InverseProperty(nameof(Entity.Partner))]
         public virtual Entity Partner { get; set; }
         #endregion
-
-        //#region public Guid? EntityPeselId { get; set; }
-        ///// <summary>
-        ///// Odniesienie (klucz obcy) do tabeli EntityPesel jako Guid?
-        ///// </summary>
-        //public Guid? EntityPeselId { get; set; }
-        //#endregion
-
-        //#region public virtual EntityPesel Pesel { get; set; }
-        ///// <summary>
-        ///// Kolekcja objektów tabeli EntityPesel
-        ///// </summary>
-        //[ForeignKey(nameof(EntityPeselId))]
-        //[InverseProperty(nameof(EntityPesel.EntityPerson))]
-        //public virtual EntityPesel Pesel { get; set; }
-        //#endregion
 
         #region public string Pesel { get; set; }
         /// <summary>
