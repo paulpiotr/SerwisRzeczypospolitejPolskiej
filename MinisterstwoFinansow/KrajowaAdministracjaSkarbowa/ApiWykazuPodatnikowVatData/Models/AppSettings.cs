@@ -25,14 +25,6 @@ namespace ApiWykazuPodatnikowVatData.Models
         private static readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
-        #region private static AppSettings Instance = null;
-        /// <summary>
-        /// Instanacja klasy AppSettings
-        /// Instance of the AppSettings class
-        /// </summary>
-        private static readonly AppSettings Instance = null;
-        #endregion
-
         #region private static readonly string FileName
         /// <summary>
         /// Nazwa pliku z ustawieniami aplikacji ustawiona w zależności od wersji środowiska
@@ -89,7 +81,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
             try
             {
@@ -101,7 +93,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
             try
             {
@@ -109,7 +101,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
             try
             {
@@ -121,7 +113,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
             try
             {
@@ -129,7 +121,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
         }
         #endregion
@@ -262,7 +254,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
             return null;
         }
@@ -281,7 +273,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e);
+                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
             }
         }
         #endregion

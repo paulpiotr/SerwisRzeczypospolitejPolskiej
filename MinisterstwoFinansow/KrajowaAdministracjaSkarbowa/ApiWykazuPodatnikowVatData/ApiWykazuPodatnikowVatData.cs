@@ -125,11 +125,11 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -159,12 +159,12 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
-                    //return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FromCache(context.GetMemoryCacheEntryOptions(), nip, dateOfChecking.ToShortDateString()).FirstOrDefault();
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
+                    //return context.Entity.Where(w => !string.IsNullOrWhiteSpace(nip) && !string.IsNullOrWhiteSpace(w.Nip) && w.Nip == nip &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).FromCache(context.GetMemoryCacheEntryOptions(), nip, dateOfChecking.ToShortDateString()).FirstOrDefault();
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -199,12 +199,12 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> nipList = new List<string>(nips.Split(',')).ToList();
                     if (null != nipList && nipList.Count > 0)
                     {
-                        return await context.Entity.Where(w => nipList.Contains(w.Nip) && null != dateOfChecking && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => nipList.Contains(w.Nip) &&   w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -240,16 +240,16 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> nipList = new List<string>(nips.Split(',')).ToList();
                     if (null != nipList && nipList.Count > 0)
                     {
-                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Nip) && nipList.Contains(w.Nip) select f.Id).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
+                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Nip) && nipList.Contains(w.Nip) select f.Id).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
                             return null;
                         }
-                        return await context.Entity.Where(w => nipList.Contains(w.Nip) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => nipList.Contains(w.Nip) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -275,11 +275,11 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(regon) && !string.IsNullOrWhiteSpace(w.Regon) && w.Regon == regon && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
+                    return await context.Entity.Where(w => !string.IsNullOrWhiteSpace(regon) && !string.IsNullOrWhiteSpace(w.Regon) && w.Regon == regon &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification >= DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).IncludeOptimized(w => w.RequestAndResponseHistory).FirstOrDefaultAsync();
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -314,12 +314,12 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> regonList = new List<string>(regons.Split(',')).ToList();
                     if (null != regonList && regonList.Count > 0)
                     {
-                        return await context.Entity.Where(w => regonList.Contains(w.Regon) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => regonList.Contains(w.Regon) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -354,16 +354,16 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> regonList = new List<string>(regons.Split(',')).ToList();
                     if (null != regonList && regonList.Count > 0)
                     {
-                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Regon) && regonList.Contains(w.Regon) select f.Id).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
+                        if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Regon) && regonList.Contains(w.Regon) select f.Id).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
                             return null;
                         }
-                        return await context.Entity.Where(w => regonList.Contains(w.Regon) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => regonList.Contains(w.Regon) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -393,18 +393,18 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
+                    if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                     {
                         return null;
                     }
                     else
                     {
-                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -434,11 +434,11 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
+                    return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(bankAccount) && !string.IsNullOrWhiteSpace(f.AccountNumber) && f.AccountNumber.Contains(bankAccount) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -471,12 +471,12 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
                     if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
-                        return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
+                        return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -509,16 +509,16 @@ namespace ApiWykazuPodatnikowVatData
                     List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
                     if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
-                        if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
+                        if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
                         {
                             return null;
                         }
-                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) && null != dateOfChecking && w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day select f.EntityId).Contains(w.Id)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
+                        return await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day select f.EntityId).Contains(w.Id)).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -572,7 +572,7 @@ namespace ApiWykazuPodatnikowVatData
                             }
                             catch (Exception e)
                             {
-                                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                             }
                         }
                         foreach (string accountNumber in accountNumbersList)
@@ -584,7 +584,7 @@ namespace ApiWykazuPodatnikowVatData
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -633,7 +633,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                         try
                         {
@@ -654,7 +654,7 @@ namespace ApiWykazuPodatnikowVatData
                                 //x.UniqueIdentifierOfTheLoggedInUser = NetAppCommon.HttpContextAccessor.AppContext.GetCurrentUserIdentityName();
                                 x.DateOfModification = DateTime.Now;
                             });
-                            context.EntityPerson.AddRange(entityPerson.Where(w => null == w.Id || "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
+                            context.EntityPerson.AddRange(entityPerson.Where(w => "00000000-0000-0000-0000-000000000000" == w.Id.ToString()));
                             int isEntityPersonAddRange = await context.SaveChangesAsync();
 #if DEBUG
                             log4net.Debug($"Add EntityPerson if is not found in list and Save Changes Async to database: { isEntityPersonAddRange }");
@@ -662,13 +662,13 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -706,7 +706,7 @@ namespace ApiWykazuPodatnikowVatData
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return requestAndResponseHistory;
             });
@@ -746,7 +746,7 @@ namespace ApiWykazuPodatnikowVatData
                         entity.RequestAndResponseHistory = requestAndResponseHistory;
                         entity.DateOfChecking = dateOfChecking;
                         entity.DateOfModification = DateTime.Now;
-                        entityState = null != entity.Id && "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
+                        entityState = "00000000-0000-0000-0000-000000000000" != entity.Id.ToString() ? EntityState.Modified : EntityState.Added;
                         context.Entry(entity).State = entityState;
                         isEntitySaveChangesAsync = await context.SaveChangesAsync();
 #if DEBUG
@@ -755,7 +755,7 @@ namespace ApiWykazuPodatnikowVatData
                     }
                     catch (Exception e)
                     {
-                        await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                        await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                     }
                     if (isEntitySaveChangesAsync == 1)
                     {
@@ -766,7 +766,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                         try
                         {
@@ -775,7 +775,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                         try
                         {
@@ -784,7 +784,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                         try
                         {
@@ -793,13 +793,13 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         catch (Exception e)
                         {
-                            await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                            await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return await FindByNipAsync(entity.Nip, (DateTime)entity.DateOfChecking) ?? entity;
             });
@@ -854,7 +854,7 @@ namespace ApiWykazuPodatnikowVatData
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -911,7 +911,7 @@ namespace ApiWykazuPodatnikowVatData
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -990,7 +990,7 @@ namespace ApiWykazuPodatnikowVatData
                 }
                 catch (Exception e)
                 {
-                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                 }
                 return null;
             });
@@ -1064,7 +1064,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
             }
             return null;
         }
@@ -1138,7 +1138,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
             }
             return null;
         }
@@ -1218,7 +1218,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
             }
             return null;
         }
@@ -1278,7 +1278,7 @@ namespace ApiWykazuPodatnikowVatData
                                 }
                                 catch (Exception e)
                                 {
-                                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                                 }
                                 return entityCheck ?? new EntityCheck { RequestAndResponseHistory = requestAndResponseHistory };
                             }
@@ -1293,7 +1293,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
             }
             return null;
         }
@@ -1353,7 +1353,7 @@ namespace ApiWykazuPodatnikowVatData
                                 }
                                 catch (Exception e)
                                 {
-                                    await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                                    await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
                                 }
                                 return entityCheck ?? new EntityCheck { RequestAndResponseHistory = requestAndResponseHistory };
                             }
@@ -1368,7 +1368,7 @@ namespace ApiWykazuPodatnikowVatData
             }
             catch (Exception e)
             {
-                await Task.Run(() => { log4net.Error(string.Format("{0}, {1}.", e.Message, e.StackTrace), e); });
+                await Task.Run(() => { log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e); });
             }
             return null;
         }
