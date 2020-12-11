@@ -19,11 +19,11 @@ namespace ApiWykazuPodatnikowVatData
     /// </summary>
     public class ApiWykazuPodatnikowVatData
     {
-        # region private static readonly log4net.ILog log4net
+        # region private readonly log4net.ILog log4net
         /// <summary>
         /// Log4 Net Logger
         /// </summary>
-        private static readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
         #region private static readonly AppSettings appSettings
