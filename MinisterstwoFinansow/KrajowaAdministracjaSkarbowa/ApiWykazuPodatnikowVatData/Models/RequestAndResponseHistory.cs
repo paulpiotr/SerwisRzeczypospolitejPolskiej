@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
@@ -341,7 +341,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         {
             try
             {
-                JObject jObject = (JObject)JsonConvert.DeserializeObject(RestResponse.Content);
+                var jObject = (JObject)JsonConvert.DeserializeObject(RestResponse.Content);
                 if (null != jObject)
                 {
                     RequestDateTime = jObject["result"]["requestDateTime"].Value<string>();
@@ -415,10 +415,7 @@ namespace ApiWykazuPodatnikowVatData.Models
             try
             {
                 DateTime.TryParse(RequestDateTime, out DateTime outRequestDateTimeAsDateTime);
-                if (outRequestDateTimeAsDateTime.ToString() != @"01.01.0001 00:00:00")
-                {
-                    RequestDateTimeAsDateTime = outRequestDateTimeAsDateTime;
-                }
+                RequestDateTimeAsDateTime = outRequestDateTimeAsDateTime != DateTime.MinValue ? (DateTime?)outRequestDateTimeAsDateTime : (DateTime?)DateTime.Now;
             }
             catch (Exception)
             {

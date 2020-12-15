@@ -1,4 +1,4 @@
-﻿using ApiWykazuPodatnikowVatData.Data;
+using ApiWykazuPodatnikowVatData.Data;
 using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using RestSharp;
@@ -196,7 +196,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> nipList = new List<string>(nips.Split(',')).ToList();
+                    var nipList = new List<string>(nips.Split(',')).ToList();
                     if (null != nipList && nipList.Count > 0)
                     {
                         return await context.Entity.Where(w => nipList.Contains(w.Nip) &&   w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
@@ -237,7 +237,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> nipList = new List<string>(nips.Split(',')).ToList();
+                    var nipList = new List<string>(nips.Split(',')).ToList();
                     if (null != nipList && nipList.Count > 0)
                     {
                         if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Nip) && nipList.Contains(w.Nip) select f.Id).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
@@ -311,7 +311,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> regonList = new List<string>(regons.Split(',')).ToList();
+                    var regonList = new List<string>(regons.Split(',')).ToList();
                     if (null != regonList && regonList.Count > 0)
                     {
                         return await context.Entity.Where(w => regonList.Contains(w.Regon) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToListAsync();
@@ -351,7 +351,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> regonList = new List<string>(regons.Split(',')).ToList();
+                    var regonList = new List<string>(regons.Split(',')).ToList();
                     if (null != regonList && regonList.Count > 0)
                     {
                         if (await context.Entity.Where(w => (from f in context.Entity where !string.IsNullOrWhiteSpace(w.Regon) && regonList.Contains(w.Regon) select f.Id).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
@@ -468,7 +468,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
+                    var bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
                     if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
                         return context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day).IncludeOptimized(w => w.EntityAccountNumber).IncludeOptimized(w => w.AuthorizedClerk).IncludeOptimized(w => w.Partner).IncludeOptimized(w => w.Representative).IncludeOptimized(w => w.RequestAndResponseHistory).ToList();
@@ -506,7 +506,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    List<string> bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
+                    var bankAccountsList = new List<string>(bankAccounts.Split(',')).ToList();
                     if (null != bankAccountsList && bankAccountsList.Count > 0)
                     {
                         if (await context.Entity.Where(w => (from f in context.EntityAccountNumber where !string.IsNullOrWhiteSpace(f.AccountNumber) && bankAccountsList.Contains(f.AccountNumber) select f.EntityId).Contains(w.Id) &&  w.DateOfChecking.HasValue && w.DateOfChecking.Value.Year == dateOfChecking.Year && w.DateOfChecking.Value.Month == dateOfChecking.Month && w.DateOfChecking.Value.Day == dateOfChecking.Day && w.DateOfModification < DateTime.Now.AddSeconds((double)appSettings.CacheLifeTime * -1)).AnyAsync())
@@ -564,7 +564,7 @@ namespace ApiWykazuPodatnikowVatData
                                     };
                                     EntityState entityState = EntityState.Added;
                                     context.Entry(entityAccountNumber).State = entityState;
-                                    int isEntityAccountNumberAdded = await context.SaveChangesAsync();
+                                    var isEntityAccountNumberAdded = await context.SaveChangesAsync();
 #if DEBUG
                                     log4net.Debug($"Save EntityAccountNumber Changes Async [{ entityState }] to database: [{ isEntityAccountNumberAdded }] id: [{ entityAccountNumber.Id }]");
 #endif
@@ -688,7 +688,7 @@ namespace ApiWykazuPodatnikowVatData
         /// obiekt modelu RequestAndResponseHistory
         /// RequestAndResponseHistory model object
         /// </returns>
-        private async Task<RequestAndResponseHistory> FindOrAddRequestAndResponseHistory(RequestAndResponseHistory requestAndResponseHistory)
+        private async Task<RequestAndResponseHistory> FindOrAddRequestAndResponseHistoryAsync(RequestAndResponseHistory requestAndResponseHistory)
         {
             return await Task.Run(async () =>
             {
@@ -726,14 +726,14 @@ namespace ApiWykazuPodatnikowVatData
         /// Zaktualizowany lub wstawiony obiekt Entity lub przekazany obiekt Entity lub null
         /// An updated or inserted Entity or a passed Entity, or null
         /// </returns>
-        private async Task<Entity> AddOrModifyEntity(RequestAndResponseHistory requestAndResponseHistory, Entity entity, DateTime dateOfChecking)
+        private async Task<Entity> AddOrModifyEntityAsync(RequestAndResponseHistory requestAndResponseHistory, Entity entity, DateTime dateOfChecking)
         {
             return await Task.Run(async () =>
             {
                 try
                 {
                     EntityState entityState = EntityState.Detached;
-                    int isEntitySaveChangesAsync = 0;
+                    var isEntitySaveChangesAsync = 0;
                     try
                     {
                         Entity entityWhere = await FindByNipAsync(entity.Nip, dateOfChecking);
@@ -761,7 +761,7 @@ namespace ApiWykazuPodatnikowVatData
                     {
                         try
                         {
-                            List<string> accountNumbersList = (List<string>)entity.AccountNumbers;
+                            var accountNumbersList = (List<string>)entity.AccountNumbers;
                             List<EntityAccountNumber> entityAccountNumbersList = AddOrModifyEntityAccountNumberAsync(accountNumbersList, entity).Result;
                         }
                         catch (Exception e)
@@ -770,7 +770,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         try
                         {
-                            List<EntityPerson> entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
+                            var entityPersonListRepresentatives = (List<EntityPerson>)entity.Representatives;
                             List<EntityPerson> entityPersonListRepresentative = AddOrModifyEntityPersonAsync(entityPersonListRepresentatives, entity, "EntityRepresentativeId").Result;
                         }
                         catch (Exception e)
@@ -779,7 +779,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         try
                         {
-                            List<EntityPerson> entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
+                            var entityPersonListAuthorizedClerks = (List<EntityPerson>)entity.AuthorizedClerks;
                             List<EntityPerson> entityPersonListAuthorizedClerk = AddOrModifyEntityPersonAsync(entityPersonListAuthorizedClerks, entity, "EntityAuthorizedClerkId").Result;
                         }
                         catch (Exception e)
@@ -788,7 +788,7 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         try
                         {
-                            List<EntityPerson> entityPersonListPartners = (List<EntityPerson>)entity.Partners;
+                            var entityPersonListPartners = (List<EntityPerson>)entity.Partners;
                             List<EntityPerson> entityPersonListPartner = AddOrModifyEntityPersonAsync(entityPersonListPartners, entity, "EntityPartnerId").Result;
                         }
                         catch (Exception e)
@@ -830,7 +830,7 @@ namespace ApiWykazuPodatnikowVatData
             {
                 try
                 {
-                    dateOfChecking = dateOfChecking ?? DateTime.Now;
+                    dateOfChecking ??= DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nip && !string.IsNullOrWhiteSpace(nip) && null != dateOfChecking)
                     {
                         Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(nip, (DateTime)dateOfChecking);
@@ -838,17 +838,15 @@ namespace ApiWykazuPodatnikowVatData
                         {
                             return entityFindByNipAndModificationDateAsync;
                         }
-                        RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/nip/{nip}").AddUrlSegment("nip", nip).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
+                        var client = new RestClient(appSettings.RestClientUrl);
+                        var request = (RestRequest)new RestRequest(@"/api/search/nip/{nip}").AddUrlSegment("nip", nip).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
                         IRestResponse<EntityResponse> response = await client.ExecuteAsync<EntityResponse>(request);
                         if (null != response && (response?.StatusCode == System.Net.HttpStatusCode.OK || response?.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
-                            if (null != response?.Data?.Result?.Subject && response?.Data?.Result?.Subject?.Nip == nip)
-                            {
-                                return await AddOrModifyEntity(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
-                            }
-                            return new Entity { RequestAndResponseHistory = requestAndResponseHistory };
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            return null != response?.Data?.Result?.Subject && response?.Data?.Result?.Subject?.Nip == nip
+                                ? await AddOrModifyEntityAsync(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject
+                                : new Entity { RequestAndResponseHistory = requestAndResponseHistory };
                         }
                     }
                 }
@@ -896,14 +894,14 @@ namespace ApiWykazuPodatnikowVatData
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/regon/{regon}").AddUrlSegment("regon", regon).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityResponse> response = await client.ExecuteAsync<EntityResponse>(request);
+                        var response = await client.ExecuteAsync<EntityResponse>(request);
                         if (null != response && (response?.StatusCode == System.Net.HttpStatusCode.OK || response?.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             //return await AddOrModifyEntity(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
                             if (null != response?.Data?.Result?.Subject && response?.Data?.Result?.Subject?.Regon == regon)
                             {
-                                return await AddOrModifyEntity(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
+                                return await AddOrModifyEntityAsync(requestAndResponseHistory, response.Data.Result.Subject, (DateTime)dateOfChecking) ?? response.Data.Result.Subject;
                             }
                             return new Entity { RequestAndResponseHistory = requestAndResponseHistory };
                         }
@@ -946,18 +944,18 @@ namespace ApiWykazuPodatnikowVatData
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != bankAccount && !string.IsNullOrWhiteSpace(bankAccount))
                     {
                         dateOfChecking = dateOfChecking ?? DateTime.Now;
-                        List<Entity> findByBankAccountAndModificationDateList = await FindByBankAccountAndModificationDateAsync(bankAccount, (DateTime)dateOfChecking);
+                        var findByBankAccountAndModificationDateList = await FindByBankAccountAndModificationDateAsync(bankAccount, (DateTime)dateOfChecking);
                         if (null != findByBankAccountAndModificationDateList && findByBankAccountAndModificationDateList.Count > 0)
                         {
                             return findByBankAccountAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-account/{bankAccount}").AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
+                        var response = await client.ExecuteAsync<EntityListResponse>(request);
                         if (response?.StatusCode == System.Net.HttpStatusCode.OK || response?.StatusCode == System.Net.HttpStatusCode.BadRequest)
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
-                            List<Entity> entityList = (List<Entity>)response?.Data?.Result?.Subjects;
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            var entityList = (List<Entity>)response?.Data?.Result?.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
                                 foreach (Entity entity in entityList)
@@ -967,7 +965,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                     else if (null != entity && null != entity.Regon && !string.IsNullOrWhiteSpace(entity.Regon))
@@ -975,7 +973,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
@@ -1025,19 +1023,19 @@ namespace ApiWykazuPodatnikowVatData
                     dateOfChecking = dateOfChecking ?? DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nips && !string.IsNullOrWhiteSpace(nips))
                     {
-                        List<Entity> findByNipsAndModificationDateList = await FindByNipsAndModificationDateAsync(nips, (DateTime)dateOfChecking);
+                        var findByNipsAndModificationDateList = await FindByNipsAndModificationDateAsync(nips, (DateTime)dateOfChecking);
                         if (null != findByNipsAndModificationDateList && findByNipsAndModificationDateList.Count > 0)
                         {
                             return findByNipsAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/nips/{nips}").AddUrlSegment("nips", nips).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
+                        var response = await client.ExecuteAsync<EntityListResponse>(request);
                         log4net.Info($"{ response.StatusCode } { response.Content }");
                         if (null != response && (response?.StatusCode == System.Net.HttpStatusCode.OK || response?.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
-                            List<Entity> entityList = (List<Entity>)response?.Data?.Result?.Subjects;
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            var entityList = (List<Entity>)response?.Data?.Result?.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
                                 foreach (Entity entity in entityList)
@@ -1047,7 +1045,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
@@ -1100,18 +1098,18 @@ namespace ApiWykazuPodatnikowVatData
                     dateOfChecking = dateOfChecking ?? DateTime.Now;
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != regons && !string.IsNullOrWhiteSpace(regons))
                     {
-                        List<Entity> findByRegonsAndModificationDateList = await FindByRegonsAndModificationDateAsync(regons, (DateTime)dateOfChecking);
+                        var findByRegonsAndModificationDateList = await FindByRegonsAndModificationDateAsync(regons, (DateTime)dateOfChecking);
                         if (null != findByRegonsAndModificationDateList && findByRegonsAndModificationDateList.Count > 0)
                         {
                             return findByRegonsAndModificationDateList;
                         }
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/search/regons/{regons}").AddUrlSegment("regons", regons).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
+                        var response = await client.ExecuteAsync<EntityListResponse>(request);
                         if (null != response && (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
-                            List<Entity> entityList = (List<Entity>)response?.Data?.Result?.Subjects;
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            var entityList = (List<Entity>)response?.Data?.Result?.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
                                 foreach (Entity entity in entityList)
@@ -1121,7 +1119,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
@@ -1172,18 +1170,18 @@ namespace ApiWykazuPodatnikowVatData
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != bankAccounts && !string.IsNullOrWhiteSpace(bankAccounts))
                     {
                         dateOfChecking = dateOfChecking ?? DateTime.Now;
-                        List<Entity> findByBankAccountsAndModificationDateList = await FindByBankAccountsAndModificationDateAsync(bankAccounts, (DateTime)dateOfChecking);
+                        var findByBankAccountsAndModificationDateList = await FindByBankAccountsAndModificationDateAsync(bankAccounts, (DateTime)dateOfChecking);
                         if (null != findByBankAccountsAndModificationDateList && findByBankAccountsAndModificationDateList.Count > 0)
                         {
                             return findByBankAccountsAndModificationDateList;
                         }
-                        RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/search/bank-accounts/{bankAccounts}").AddUrlSegment("bankAccounts", bankAccounts).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityListResponse> response = await client.ExecuteAsync<EntityListResponse>(request);
+                        var client = new RestClient(appSettings.RestClientUrl);
+                        var request = (RestRequest)new RestRequest(@"/api/search/bank-accounts/{bankAccounts}").AddUrlSegment("bankAccounts", bankAccounts).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
+                        var response = await client.ExecuteAsync<EntityListResponse>(request);
                         if (null != response && (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
-                            List<Entity> entityList = (List<Entity>)response?.Data?.Result?.Subjects;
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            var entityList = (List<Entity>)response?.Data?.Result?.Subjects;
                             if (null != entityList && entityList.Count > 0)
                             {
                                 foreach (Entity entity in entityList)
@@ -1193,7 +1191,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByNipAndModificationDateAsync = await FindByNipAndModificationDateAsync(entity.Nip, (DateTime)dateOfChecking);
                                         if (null == entityFindByNipAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                     else if (null != entity && null != entity.Regon && !string.IsNullOrWhiteSpace(entity.Regon))
@@ -1201,7 +1199,7 @@ namespace ApiWykazuPodatnikowVatData
                                         Entity entityFindByRegonAndModificationDateAsync = await FindByRegonAndModificationDateAsync(entity.Regon, (DateTime)dateOfChecking);
                                         if (null == entityFindByRegonAndModificationDateAsync)
                                         {
-                                            await AddOrModifyEntity(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
+                                            await AddOrModifyEntityAsync(requestAndResponseHistory, entity, (DateTime)dateOfChecking);
                                         }
                                     }
                                 }
@@ -1255,12 +1253,12 @@ namespace ApiWykazuPodatnikowVatData
                 {
                     if (null != appSettings.RestClientUrl && !string.IsNullOrWhiteSpace(appSettings.RestClientUrl) && null != nip && !string.IsNullOrWhiteSpace(nip) && null != bankAccount && !string.IsNullOrWhiteSpace(bankAccount))
                     {
-                        RestClient client = new RestClient(appSettings.RestClientUrl);
-                        RestRequest request = (RestRequest)new RestRequest(@"/api/check/nip/{nip}/bank-account/{bankAccount}").AddUrlSegment("nip", nip).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
+                        var client = new RestClient(appSettings.RestClientUrl);
+                        var request = (RestRequest)new RestRequest(@"/api/check/nip/{nip}/bank-account/{bankAccount}").AddUrlSegment("nip", nip).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
+                        var response = await client.ExecuteAsync<EntityCheckResponse>(request);
                         if (null != response && (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             if (null != response?.Data?.Result)
                             {
                                 EntityCheck entityCheck = response.Data.Result;
@@ -1332,10 +1330,10 @@ namespace ApiWykazuPodatnikowVatData
                     {
                         RestClient client = new RestClient(appSettings.RestClientUrl);
                         RestRequest request = (RestRequest)new RestRequest(@"/api/check/regon/{regon}/bank-account/{bankAccount}").AddUrlSegment("regon", regon).AddUrlSegment("bankAccount", bankAccount).AddParameter("date", dateOfChecking.HasValue ? dateOfChecking.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"));
-                        IRestResponse<EntityCheckResponse> response = await client.ExecuteAsync<EntityCheckResponse>(request);
+                        var response = await client.ExecuteAsync<EntityCheckResponse>(request);
                         if (null != response && (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.BadRequest))
                         {
-                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistory(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
+                            RequestAndResponseHistory requestAndResponseHistory = await FindOrAddRequestAndResponseHistoryAsync(new RequestAndResponseHistory().SetRequestAndResponseHistory(client, request, response));
                             if (null != response?.Data?.Result)
                             {
                                 EntityCheck entityCheck = response.Data.Result;
