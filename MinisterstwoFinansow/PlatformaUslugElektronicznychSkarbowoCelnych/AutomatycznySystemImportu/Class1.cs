@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AutomatycznySystemImportu
+﻿namespace AutomatycznySystemImportu
 {
     public class Class1
     {

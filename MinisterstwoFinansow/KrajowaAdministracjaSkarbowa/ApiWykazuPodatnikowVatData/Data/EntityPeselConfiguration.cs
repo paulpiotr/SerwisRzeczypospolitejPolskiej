@@ -19,18 +19,18 @@ namespace ApiWykazuPodatnikowVatData.Data
         public void Configure(EntityTypeBuilder<EntityPesel> entity)
         {
             entity.HasIndex(e => e.Id)
-                .HasName("IX_EntityPeselId")
+                .HasDatabaseName("IX_EntityPeselId")
                 .IsUnique(true);
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
-                .HasName("IX_EntityPeselUniqueIdentifierOfTheLoggedInUser")
+                .HasDatabaseName("IX_EntityPeselUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Pesel)
-                .HasName("IX_EntityPeselPesel")
+                .HasDatabaseName("IX_EntityPeselPesel")
                 .IsUnique(true);
 
             entity.Property(e => e.DateOfCreate)

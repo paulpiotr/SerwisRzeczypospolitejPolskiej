@@ -19,38 +19,38 @@ namespace ApiWykazuPodatnikowVatData.Data
         public void Configure(EntityTypeBuilder<EntityPerson> entity)
         {
             entity.HasIndex(e => e.Id)
-                .HasName("IX_EntityPersonId")
+                .HasDatabaseName("IX_EntityPersonId")
                 .IsUnique(true);
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
-                .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser")
+                .HasDatabaseName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.EntityRepresentativeId)
-                .HasName("IX_EntityPersonEntityRepresentativeId")
+                .HasDatabaseName("IX_EntityPersonEntityRepresentativeId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.EntityAuthorizedClerkId)
-                .HasName("IX_EntityPersonEntityAuthorizedClerkId")
+                .HasDatabaseName("IX_EntityPersonEntityAuthorizedClerkId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.EntityPartnerId)
-                .HasName("IX_EntityPersonEntityPartnerId")
+                .HasDatabaseName("IX_EntityPersonEntityPartnerId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Pesel)
-                .HasName("IX_EntityPersonPesel")
+                .HasDatabaseName("IX_EntityPersonPesel")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.CompanyName)
-                .HasName("IX_EntityPersonCompanyName")
+                .HasDatabaseName("IX_EntityPersonCompanyName")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Nip)
-                .HasName("IX_EntityNip")
+                .HasDatabaseName("IX_EntityNip")
                 .IsUnique(false);
 
             entity.Property(e => e.DateOfCreate)

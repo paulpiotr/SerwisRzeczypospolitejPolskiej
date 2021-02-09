@@ -19,42 +19,42 @@ namespace ApiWykazuPodatnikowVatData.Data
         public void Configure(EntityTypeBuilder<EntityCheck> entity)
         {
             entity.HasIndex(e => e.Id)
-                .HasName("IX_EntityCheckId")
+                .HasDatabaseName("IX_EntityCheckId")
                 .IsUnique(true);
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
-                .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser")
+                .HasDatabaseName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.RequestAndResponseHistoryId)
-                .HasName("IX_EntityCheckRequestAndResponseHistoryId")
+                .HasDatabaseName("IX_EntityCheckRequestAndResponseHistoryId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Nip)
-                .HasName("IX_EntityCheckNip")
+                .HasDatabaseName("IX_EntityCheckNip")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Regon)
-                .HasName("IX_EntityCheckRegon")
+                .HasDatabaseName("IX_EntityCheckRegon")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.AccountNumber)
-                .HasName("IX_EntityCheckAccountNumber")
+                .HasDatabaseName("IX_EntityCheckAccountNumber")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.RequestId)
-                .HasName("IX_EntityCheckRequestId")
+                .HasDatabaseName("IX_EntityCheckRequestId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.DateOfCreate)
-                .HasName("IX_EntityCheckDateOfCreate")
+                .HasDatabaseName("IX_EntityCheckDateOfCreate")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.DateOfModification)
-                .HasName("IX_EntityCheckDateOfModification")
+                .HasDatabaseName("IX_EntityCheckDateOfModification")
                 .IsUnique(false);
 
             entity.Property(e => e.DateOfCreate)

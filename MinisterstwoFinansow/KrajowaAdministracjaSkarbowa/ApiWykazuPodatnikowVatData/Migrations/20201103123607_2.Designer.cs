@@ -130,40 +130,40 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DateOfChecking")
-                        .HasName("IX_EntityDateOfChecking");
+                        .HasDatabaseName("IX_EntityDateOfChecking");
 
                     b.HasIndex("DateOfCreate")
-                        .HasName("IX_EntityDateOfCreate");
+                        .HasDatabaseName("IX_EntityDateOfCreate");
 
                     b.HasIndex("DateOfModification")
-                        .HasName("IX_EntityDateOfModification");
+                        .HasDatabaseName("IX_EntityDateOfModification");
 
                     b.HasIndex("Id")
                         .IsUnique()
-                        .HasName("IX_EntityId");
+                        .HasDatabaseName("IX_EntityId");
 
                     b.HasIndex("Krs")
-                        .HasName("IX_EntityKrs");
+                        .HasDatabaseName("IX_EntityKrs");
 
                     b.HasIndex("Name")
-                        .HasName("IX_EntityName");
+                        .HasDatabaseName("IX_EntityName");
 
                     b.HasIndex("Nip")
-                        .HasName("IX_EntityNip");
+                        .HasDatabaseName("IX_EntityNip");
 
                     b.HasIndex("Pesel")
                         .IsUnique()
-                        .HasName("IX_EntityPesel")
+                        .HasDatabaseName("IX_EntityPesel")
                         .HasFilter("[Pesel] IS NOT NULL");
 
                     b.HasIndex("Regon")
-                        .HasName("IX_EntityRegon");
+                        .HasDatabaseName("IX_EntityRegon");
 
                     b.HasIndex("RequestAndResponseHistoryId")
-                        .HasName("IX_EntityRequestAndResponseHistoryId");
+                        .HasDatabaseName("IX_EntityRequestAndResponseHistoryId");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
+                        .HasDatabaseName("IX_EntityUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("Entity","awpv");
                 });
@@ -203,21 +203,21 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
-                        .HasName("IX_EntityAccountNumberAccountNumber");
+                        .HasDatabaseName("IX_EntityAccountNumberAccountNumber");
 
                     b.HasIndex("EntityId")
-                        .HasName("IX_EntityAccountEntityId");
+                        .HasDatabaseName("IX_EntityAccountEntityId");
 
                     b.HasIndex("Id")
                         .IsUnique()
-                        .HasName("IX_EntityAccountNumberId");
+                        .HasDatabaseName("IX_EntityAccountNumberId");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
+                        .HasDatabaseName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser");
 
                     b.HasIndex("EntityId", "AccountNumber")
                         .IsUnique()
-                        .HasName("IX_EntityAccountNumberUniqueKey")
+                        .HasDatabaseName("IX_EntityAccountNumberUniqueKey")
                         .HasFilter("[EntityId] IS NOT NULL");
 
                     b.ToTable("EntityAccountNumber","awpv");
@@ -289,32 +289,32 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountNumber")
-                        .HasName("IX_EntityCheckAccountNumber");
+                        .HasDatabaseName("IX_EntityCheckAccountNumber");
 
                     b.HasIndex("DateOfCreate")
-                        .HasName("IX_EntityCheckDateOfCreate");
+                        .HasDatabaseName("IX_EntityCheckDateOfCreate");
 
                     b.HasIndex("DateOfModification")
-                        .HasName("IX_EntityCheckDateOfModification");
+                        .HasDatabaseName("IX_EntityCheckDateOfModification");
 
                     b.HasIndex("Id")
                         .IsUnique()
-                        .HasName("IX_EntityCheckId");
+                        .HasDatabaseName("IX_EntityCheckId");
 
                     b.HasIndex("Nip")
-                        .HasName("IX_EntityCheckNip");
+                        .HasDatabaseName("IX_EntityCheckNip");
 
                     b.HasIndex("Regon")
-                        .HasName("IX_EntityCheckRegon");
+                        .HasDatabaseName("IX_EntityCheckRegon");
 
                     b.HasIndex("RequestAndResponseHistoryId")
-                        .HasName("IX_EntityCheckRequestAndResponseHistoryId");
+                        .HasDatabaseName("IX_EntityCheckRequestAndResponseHistoryId");
 
                     b.HasIndex("RequestId")
-                        .HasName("IX_EntityCheckRequestId");
+                        .HasDatabaseName("IX_EntityCheckRequestId");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .HasName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
+                        .HasDatabaseName("IX_EntityCheckUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityCheck","awpv");
                 });
@@ -380,29 +380,29 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyName")
-                        .HasName("IX_EntityPersonCompanyName");
+                        .HasDatabaseName("IX_EntityPersonCompanyName");
 
                     b.HasIndex("EntityAuthorizedClerkId")
-                        .HasName("IX_EntityPersonEntityAuthorizedClerkId");
+                        .HasDatabaseName("IX_EntityPersonEntityAuthorizedClerkId");
 
                     b.HasIndex("EntityPartnerId")
-                        .HasName("IX_EntityPersonEntityPartnerId");
+                        .HasDatabaseName("IX_EntityPersonEntityPartnerId");
 
                     b.HasIndex("EntityRepresentativeId")
-                        .HasName("IX_EntityPersonEntityRepresentativeId");
+                        .HasDatabaseName("IX_EntityPersonEntityRepresentativeId");
 
                     b.HasIndex("Id")
                         .IsUnique()
-                        .HasName("IX_EntityPersonId");
+                        .HasDatabaseName("IX_EntityPersonId");
 
                     b.HasIndex("Nip")
-                        .HasName("IX_EntityNip");
+                        .HasDatabaseName("IX_EntityNip");
 
                     b.HasIndex("Pesel")
-                        .HasName("IX_EntityPersonPesel");
+                        .HasDatabaseName("IX_EntityPersonPesel");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .HasName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
+                        .HasDatabaseName("IX_EntityPersonUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("EntityPerson","awpv");
                 });
@@ -487,36 +487,36 @@ namespace ApiWykazuPodatnikowVatData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DateOfCreate")
-                        .HasName("IX_RequestAndResponseHistoryDateOfCreate");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryDateOfCreate");
 
                     b.HasIndex("DateOfModification")
-                        .HasName("IX_RequestAndResponseHistoryDateOfModification");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryDateOfModification");
 
                     b.HasIndex("Id")
                         .IsUnique()
-                        .HasName("IX_RequestAndResponseHistoryId");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryId");
 
                     b.HasIndex("ObjectMD5Hash")
                         .IsUnique()
-                        .HasName("IX_RequestAndResponseHistoryRequestObjectMD5Hash");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryRequestObjectMD5Hash");
 
                     b.HasIndex("RequestDateTime")
-                        .HasName("IX_RequestAndResponseHistoryRequestDateTime");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryRequestDateTime");
 
                     b.HasIndex("RequestDateTimeAsDateTime")
-                        .HasName("IX_RequestAndResponseHistoryRequestDateTimeAsDateTime");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryRequestDateTimeAsDateTime");
 
                     b.HasIndex("RequestId")
-                        .HasName("IX_RequestAndResponseHistoryRequestId");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryRequestId");
 
                     b.HasIndex("RequestUrl")
-                        .HasName("IX_RequestAndResponseHistoryRequestUrl");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryRequestUrl");
 
                     b.HasIndex("ResponseStatusCode")
-                        .HasName("IX_RequestAndResponseHistoryResponseStatusCode");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryResponseStatusCode");
 
                     b.HasIndex("UniqueIdentifierOfTheLoggedInUser")
-                        .HasName("IX_RequestAndResponseHistoryUniqueIdentifierOfTheLoggedInUser");
+                        .HasDatabaseName("IX_RequestAndResponseHistoryUniqueIdentifierOfTheLoggedInUser");
 
                     b.ToTable("RequestAndResponseHistory","awpv");
                 });

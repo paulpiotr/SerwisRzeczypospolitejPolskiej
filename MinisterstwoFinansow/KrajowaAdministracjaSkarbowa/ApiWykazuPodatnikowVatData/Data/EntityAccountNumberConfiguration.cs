@@ -19,26 +19,26 @@ namespace ApiWykazuPodatnikowVatData.Data
         public void Configure(EntityTypeBuilder<EntityAccountNumber> entity)
         {
             entity.HasIndex(e => e.Id)
-                .HasName("IX_EntityAccountNumberId")
+                .HasDatabaseName("IX_EntityAccountNumberId")
                 .IsUnique(true);
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
-                .HasName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser")
+                .HasDatabaseName("IX_EntityAccountNumberUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.EntityId)
-                .HasName("IX_EntityAccountEntityId")
+                .HasDatabaseName("IX_EntityAccountEntityId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.AccountNumber)
-                .HasName("IX_EntityAccountNumberAccountNumber")
+                .HasDatabaseName("IX_EntityAccountNumberAccountNumber")
                 .IsUnique(false);
 
             entity.HasIndex(e => new { e.EntityId, e.AccountNumber })
-                .HasName("IX_EntityAccountNumberUniqueKey")
+                .HasDatabaseName("IX_EntityAccountNumberUniqueKey")
                 .IsUnique(true);
 
             entity.Property(e => e.DateOfCreate)

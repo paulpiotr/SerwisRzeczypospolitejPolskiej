@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RestSharp;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
@@ -254,7 +254,8 @@ namespace ApiWykazuPodatnikowVatData.Models
             }
             catch (Exception)
             {
-                ResponseStatusCode = HttpStatusCode.NotFound.ToString(); ;
+                ResponseStatusCode = HttpStatusCode.NotFound.ToString();
+                ;
             }
         }
         #endregion
@@ -376,7 +377,7 @@ namespace ApiWykazuPodatnikowVatData.Models
         {
             try
             {
-                JObject jObject = (JObject)JsonConvert.DeserializeObject(RestResponse.Content);
+                var jObject = (JObject)JsonConvert.DeserializeObject(RestResponse.Content);
                 if (null != jObject)
                 {
                     RequestId = jObject["result"]["requestId"].Value<string>();

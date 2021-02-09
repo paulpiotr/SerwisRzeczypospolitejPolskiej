@@ -1,10 +1,10 @@
-﻿using ApiWykazuPodatnikowVatData.Models;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using NetAppCommon;
-using System;
-//using System.Data.Entity;
-using System.Reflection;
 
 namespace ApiWykazuPodatnikowVatData.Data
 {
@@ -13,22 +13,22 @@ namespace ApiWykazuPodatnikowVatData.Data
     /// Klasa kontekstu bazy danych api wykazu podatników VAT
     /// Database context class api list of VAT taxpayers
     /// </summary>
-    //[DbConfigurationType(typeof(ApiWykazuPodatnikowVatDataDbConfiguration))
     public partial class ApiWykazuPodatnikowVatDataDbContext : DbContext
     {
-        #region Log4 Net Logger
+        #region private readonly log4net.ILog _log4Net
         /// <summary>
         /// Log4 Net Logger
+        /// Log4 Net Logger
         /// </summary>
-        private readonly log4net.ILog log4net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly log4net.ILog _log4Net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod()?.DeclaringType);
         #endregion
 
-        #region private static readonly AppSettings appSettings...
+        #region private readonly AppSettings _appSettings
         /// <summary>
         /// Instancja do klasy modelu ustawień jako AppSettings
         /// Instance to the settings model class as AppSettings
         /// </summary>
-        private static readonly AppSettings appSettings = AppSettings.GetInstance();
+        private readonly AppSettings _appSettings = new AppSettings();
         #endregion
 
         #region private static readonly MemoryCacheEntryOptions memoryCacheEntryOptions
@@ -36,18 +36,7 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// Opcje wpisu pamięci podręcznej
         /// Memory Cache Entry Options
         /// </summary>
-        private static readonly MemoryCacheEntryOptions memoryCacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(appSettings.CacheLifeTime > 0 ? appSettings.CacheLifeTime : 86400));
-        #endregion
-
-        #region public ApiWykazuPodatnikowVatDataDbContext()
-        /// <summary>
-        /// Konstruktor Klasy kontekstu bazy danych
-        /// Constructor Database Context Classes
-        /// </summary>
-        public ApiWykazuPodatnikowVatDataDbContext()
-        {
-            //CheckForUpdateAndMigrate();
-        }
+        private readonly MemoryCacheEntryOptions _memoryCacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
         #endregion
 
         #region public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
@@ -62,60 +51,72 @@ namespace ApiWykazuPodatnikowVatData.Data
         public ApiWykazuPodatnikowVatDataDbContext(DbContextOptions<ApiWykazuPodatnikowVatDataDbContext> options)
             : base(options)
         {
-            //CheckForUpdateAndMigrate();
+            CheckAndMigrate();
         }
         #endregion
 
-        # region public async System.Threading.Tasks.Task CheckForUpdateAndMigrateAsync()
+        #region public void CheckAndMigrate()
         /// <summary>
-        /// Sprawdź warunek daty ostatniej migracji i przeprowadź migrację jeśli warunek jest spełniony
-        /// Check the condition of the last migration date and perform the migration if the condition is met
+        /// Sprawdź ostatnią datę migracji bazy danych lub wymuś wykonanie, jeśli opcja CheckAndMigrate jest zaznaczona i wykonaj migrację bazy danych.
+        /// Check the latest database migration date or force execution if CheckAndMigrate is selected and perform database migration.
+        /// </summary>
+        public void CheckAndMigrate()
+        {
+            Task.Run(async () =>
+            {
+                await CheckAndMigrateAsync();
+            }).Wait();
+        }
+        #endregion
+
+        #region public async Task CheckAndMigrateAsync()
+        /// <summary>
+        /// Sprawdź ostatnią datę migracji bazy danych lub wymuś wykonanie, jeśli opcja CheckAndMigrate jest zaznaczona i wykonaj migrację bazy danych.
+        /// Check the latest database migration date or force execution if CheckAndMigrate is selected and perform database migration.
         /// </summary>
         /// <returns>
-        /// Metoda asynchroniczna
-        /// Asynchronous method
+        /// async Task
+        /// async Task
         /// </returns>
-        public async System.Threading.Tasks.Task CheckForUpdateAndMigrateAsync()
+        public async Task CheckAndMigrateAsync()
         {
+            DateTime? lastMigrateDateTime = null;
             try
             {
-                int result = (DateTime.Now - appSettings.LastMigrateDateTime).Days;
-                log4net.Debug($"Check for update and migrate, compare { DateTime.Now } and { appSettings.LastMigrateDateTime } is { result } CheckForUpdateEveryDays is { appSettings.CheckForUpdateEveryDays }");
-                if (/*CheckForUpdateEveryDays > 0 && */result >= appSettings.CheckForUpdateEveryDays)
+                lastMigrateDateTime = await _appSettings.AppSettingsRepository.GetValueAsync<DateTime>(_appSettings, "LastMigrateDateTime");
+                var isCheckAndMigrate = await _appSettings.AppSettingsRepository.GetValueAsync<bool>(_appSettings, "CheckAndMigrate");
+                var dateTimeDiffDays = (DateTime.Now - (DateTime)lastMigrateDateTime).Days;
+                if ((isCheckAndMigrate || dateTimeDiffDays >= 1) && (await Database.GetPendingMigrationsAsync()).Any())
                 {
                     try
                     {
-                        try
-                        {
-                            DatabaseMssqlMdf.GetInstance(Database.GetDbConnection().ConnectionString).Create();
-                        }
-                        catch (Exception e)
-                        {
-                            log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
-                        }
-                        try
-                        {
-                            await Database.MigrateAsync();
-                        }
-                        catch (Exception e)
-                        {
-                            log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
-                        }
+#if DEBUG
+                        _log4Net.Debug($"Try CheckAndMigrateAsync...");
+#endif
+                        await NetAppCommon.Helpers.EntityContextHelper.RunMigrationAsync(this);
+#if DEBUG
+                        _log4Net.Debug($"Ok");
+#endif
                     }
                     catch (Exception e)
                     {
-                        log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
+                        _log4Net.Warn($"\n{e.GetType()}\n{e.InnerException?.GetType()}\n{e.Message}\n{e.StackTrace}\n", e);
                     }
-                    finally
-                    {
-                        appSettings.LastMigrateDateTime = DateTime.Now;
-                        await appSettings.SaveAsync();
-                    }
+                    _appSettings.LastMigrateDateTime = DateTime.Now;
+                    await _appSettings.AppSettingsRepository.MergeAndSaveAsync(_appSettings);
                 }
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
+                _log4Net.Error($"\n{e.GetType()}\n{e.InnerException?.GetType()}\n{e.Message}\n{e.StackTrace}\n", e);
+            }
+            finally
+            {
+                if (null == lastMigrateDateTime || lastMigrateDateTime == DateTime.MinValue)
+                {
+                    _appSettings.LastMigrateDateTime = DateTime.Now;
+                    await _appSettings.AppSettingsRepository.MergeAndSaveAsync(_appSettings);
+                }
             }
         }
         #endregion
@@ -184,12 +185,12 @@ namespace ApiWykazuPodatnikowVatData.Data
                 //#endif
                 if (!optionsBuilder.IsConfigured)
                 {
-                    optionsBuilder.UseSqlServer(appSettings.GetConnectionString());
+                    optionsBuilder.UseSqlServer(_appSettings.GetConnectionString());
                 }
             }
             catch (Exception e)
             {
-                log4net.Error(string.Format("\n{0}\n{1}\n{2}\n{3}\n", e.GetType(), e.InnerException?.GetType(), e.Message, e.StackTrace), e);
+                _log4Net.Error($"\n{e.GetType()}\n{e.InnerException?.GetType()}\n{e.Message}\n{e.StackTrace}\n", e);
             }
         }
         #endregion
@@ -236,7 +237,7 @@ namespace ApiWykazuPodatnikowVatData.Data
         /// </returns>
         public MemoryCacheEntryOptions GetMemoryCacheEntryOptions()
         {
-            return memoryCacheEntryOptions;
+            return _memoryCacheEntryOptions;
         }
         #endregion
     }

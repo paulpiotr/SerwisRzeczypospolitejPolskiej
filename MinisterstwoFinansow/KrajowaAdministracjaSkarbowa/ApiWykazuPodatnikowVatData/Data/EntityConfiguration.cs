@@ -19,50 +19,50 @@ namespace ApiWykazuPodatnikowVatData.Data
         public void Configure(EntityTypeBuilder<Entity> entity)
         {
             entity.HasIndex(e => e.Id)
-                .HasName("IX_EntityId")
+                .HasDatabaseName("IX_EntityId")
                 .IsUnique(true);
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
 
             entity.HasIndex(e => e.UniqueIdentifierOfTheLoggedInUser)
-                .HasName("IX_EntityUniqueIdentifierOfTheLoggedInUser")
+                .HasDatabaseName("IX_EntityUniqueIdentifierOfTheLoggedInUser")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.RequestAndResponseHistoryId)
-                .HasName("IX_EntityRequestAndResponseHistoryId")
+                .HasDatabaseName("IX_EntityRequestAndResponseHistoryId")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Name)
-                .HasName("IX_EntityName")
+                .HasDatabaseName("IX_EntityName")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Nip)
-                .HasName("IX_EntityNip")
+                .HasDatabaseName("IX_EntityNip")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Regon)
-                .HasName("IX_EntityRegon")
+                .HasDatabaseName("IX_EntityRegon")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.Pesel)
-                .HasName("IX_EntityPesel")
+                .HasDatabaseName("IX_EntityPesel")
                 .IsUnique(true);
 
             entity.HasIndex(e => e.Krs)
-                .HasName("IX_EntityKrs")
+                .HasDatabaseName("IX_EntityKrs")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.DateOfCreate)
-                .HasName("IX_EntityDateOfCreate")
+                .HasDatabaseName("IX_EntityDateOfCreate")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.DateOfModification)
-                .HasName("IX_EntityDateOfModification")
+                .HasDatabaseName("IX_EntityDateOfModification")
                 .IsUnique(false);
 
             entity.HasIndex(e => e.DateOfChecking)
-                .HasName("IX_EntityDateOfChecking")
+                .HasDatabaseName("IX_EntityDateOfChecking")
                 .IsUnique(false);
 
             entity.Property(e => e.DateOfCreate)
