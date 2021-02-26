@@ -17,8 +17,8 @@ namespace ApiWykazuPodatnikowVatData.Data
     {
         #region private readonly log4net.ILog _log4Net
         /// <summary>
-        /// Log4 Net Logger
-        /// Log4 Net Logger
+        /// private readonly ILog _log4Net
+        /// private readonly ILog _log4Net
         /// </summary>
         private readonly log4net.ILog _log4Net = Log4netLogger.Log4netLogger.GetLog4netInstance(MethodBase.GetCurrentMethod()?.DeclaringType);
         #endregion
@@ -176,16 +176,9 @@ namespace ApiWykazuPodatnikowVatData.Data
         {
             try
             {
-                //#if DEBUG
-                //                ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
-                //                {
-                //                    builder.AddFilter(level => level == LogLevel.Debug).AddConsole();
-                //                });
-                //                optionsBuilder.UseLoggerFactory(loggerFactory);
-                //#endif
                 if (!optionsBuilder.IsConfigured)
                 {
-                    optionsBuilder.UseSqlServer(_appSettings.GetConnectionString());
+                    optionsBuilder.UseSqlServer(_appSettings.GetConnectionString(), x => x.MigrationsHistoryTable("__EFMigrationsHistory", "awpv"));
                 }
             }
             catch (Exception e)
