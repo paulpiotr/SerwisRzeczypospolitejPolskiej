@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿#region using
+
+using System.ComponentModel.DataAnnotations.Schema;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
     [NotMapped]
-    public partial class EntityListResponse
+    public class EntityListResponse
     {
         public EntityList Result { get; set; }
     }

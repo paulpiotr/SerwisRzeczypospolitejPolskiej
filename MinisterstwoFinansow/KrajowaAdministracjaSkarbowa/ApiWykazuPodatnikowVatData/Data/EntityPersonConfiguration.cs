@@ -1,26 +1,31 @@
-﻿using ApiWykazuPodatnikowVatData.Models;
+﻿#region using
+
+using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Data
 {
     #region class EntityPersonConfiguration : IEntityTypeConfiguration<EntityPerson>
+
     /// <summary>
-    /// Klasa konfiguracji dodatkowych ustawień bazy danych dla modelu encji EntityPerson
+    ///     Klasa konfiguracji dodatkowych ustawień bazy danych dla modelu encji EntityPerson
     /// </summary>
     internal class EntityPersonConfiguration : IEntityTypeConfiguration<EntityPerson>
     {
         /// <summary>
-        /// Konfiguruj
+        ///     Konfiguruj
         /// </summary>
         /// <param name="entity">
-        /// Kreator typów jednostek jako EntityTypeBuilder dla modelu EntityPerson
+        ///     Kreator typów jednostek jako EntityTypeBuilder dla modelu EntityPerson
         /// </param>
         public void Configure(EntityTypeBuilder<EntityPerson> entity)
         {
             entity.HasIndex(e => e.Id)
                 .HasDatabaseName("IX_EntityPersonId")
-                .IsUnique(true);
+                .IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
@@ -57,5 +62,6 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasDefaultValueSql("(getdate())");
         }
     }
+
     #endregion
 }

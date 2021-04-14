@@ -1,4 +1,8 @@
-﻿using System.Data.Entity;
+﻿#region using
+
+using System.Data.Entity;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Data
 {

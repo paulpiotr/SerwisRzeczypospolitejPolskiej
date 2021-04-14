@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿#region using
+
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Models
 {
     [NotMapped]
-    public partial class EntityList
+    public class EntityList
     {
         public IEnumerable<Entity> Subjects { get; set; }
 

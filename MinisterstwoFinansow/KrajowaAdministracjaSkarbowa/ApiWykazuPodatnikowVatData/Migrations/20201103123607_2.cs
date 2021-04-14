@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#region using
+
+using Microsoft.EntityFrameworkCore.Migrations;
 using NetAppCommon.Helpers.Db.Mssql;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Migrations
 {

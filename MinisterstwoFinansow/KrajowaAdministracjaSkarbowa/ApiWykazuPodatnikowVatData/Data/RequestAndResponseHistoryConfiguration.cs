@@ -1,29 +1,34 @@
-﻿using ApiWykazuPodatnikowVatData.Models;
+﻿#region using
+
+using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Data
 {
     #region internal class RequestAndResponseHistoryConfiguration : IEntityTypeConfiguration<RequestAndResponseHistory>
+
     /// <summary>
-    /// Klasa konfiguracji dodatkowych ustawień dla modelu encji RequestAndResponseHistory
-    /// Additional settings configuration class for RequestAndResponseHistory entity model
+    ///     Klasa konfiguracji dodatkowych ustawień dla modelu encji RequestAndResponseHistory
+    ///     Additional settings configuration class for RequestAndResponseHistory entity model
     /// </summary>
     internal class RequestAndResponseHistoryConfiguration : IEntityTypeConfiguration<RequestAndResponseHistory>
     {
         /// <summary>
-        /// Konfiguruj
-        /// Configure
+        ///     Konfiguruj
+        ///     Configure
         /// </summary>
         /// <param name="entity">
-        /// Kreator typów jednostek jako EntityTypeBuilder dla modelu RequestAndResponseHistory
-        /// Entity type wizard as EntityTypeBuilder for the RequestAndResponseHistory model
+        ///     Kreator typów jednostek jako EntityTypeBuilder dla modelu RequestAndResponseHistory
+        ///     Entity type wizard as EntityTypeBuilder for the RequestAndResponseHistory model
         /// </param>
         public void Configure(EntityTypeBuilder<RequestAndResponseHistory> entity)
         {
             entity.HasIndex(e => e.Id)
                 .HasDatabaseName("IX_RequestAndResponseHistoryId")
-                .IsUnique(true);
+                .IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
@@ -54,7 +59,7 @@ namespace ApiWykazuPodatnikowVatData.Data
 
             entity.HasIndex(e => e.ObjectMD5Hash)
                 .HasDatabaseName("IX_RequestAndResponseHistoryRequestObjectMD5Hash")
-                .IsUnique(true);
+                .IsUnique();
 
             entity.HasIndex(e => e.DateOfCreate)
                 .HasDatabaseName("IX_RequestAndResponseHistoryDateOfCreate")
@@ -68,5 +73,6 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasDefaultValueSql("(getdate())");
         }
     }
+
     #endregion
 }

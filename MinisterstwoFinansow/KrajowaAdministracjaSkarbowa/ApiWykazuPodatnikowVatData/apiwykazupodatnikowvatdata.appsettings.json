@@ -5,6 +5,7 @@
   "LastMigrateDateTime": null,
   "ConnectionStrings": {
     //Uwaga! Dla IIS to¿samoœæ Puli Apikacji musi byæ ustawiona na LocalSystem !!!
-    "ApiWykazuPodatnikowVatDataDbContext": "Data Source=(LocalDB)\\MSSQLLocalDB; AttachDbFilename=%Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)%\\MSSQLLocalDB\\MSSQLLocalDB.mdf; Database=%AttachDbFilename%; MultipleActiveResultSets=true; Integrated Security=SSPI; Trusted_Connection=Yes; Max Pool Size=65536; Pooling=True"
+    "ApiWykazuPodatnikowVatDataDbContext":
+      "Data Source=(LocalDB)\\MSSQLLocalDB; AttachDbFilename=%Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)%\\MSSQLLocalDB\\MSSQLLocalDB.mdf; Database=%AttachDbFilename%; MultipleActiveResultSets=true; Integrated Security=SSPI; Trusted_Connection=Yes; Max Pool Size=65536; Pooling=True"
   }
 }

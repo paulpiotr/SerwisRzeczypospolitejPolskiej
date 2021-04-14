@@ -1,26 +1,31 @@
-﻿using ApiWykazuPodatnikowVatData.Models;
+﻿#region using
+
+using ApiWykazuPodatnikowVatData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace ApiWykazuPodatnikowVatData.Data
 {
     #region class EntityCheckConfiguration : IEntityTypeConfiguration<EntityCheck>
+
     /// <summary>
-    /// Klasa konfiguracji dodatkowych ustawień bazy danych dla modelu encji EntityCheck
+    ///     Klasa konfiguracji dodatkowych ustawień bazy danych dla modelu encji EntityCheck
     /// </summary>
     internal class EntityCheckConfiguration : IEntityTypeConfiguration<EntityCheck>
     {
         /// <summary>
-        /// Konfiguruj
+        ///     Konfiguruj
         /// </summary>
         /// <param name="entity">
-        /// Kreator typów jednostek jako EntityTypeBuilder dla modelu EntityCheck
+        ///     Kreator typów jednostek jako EntityTypeBuilder dla modelu EntityCheck
         /// </param>
         public void Configure(EntityTypeBuilder<EntityCheck> entity)
         {
             entity.HasIndex(e => e.Id)
                 .HasDatabaseName("IX_EntityCheckId")
-                .IsUnique(true);
+                .IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newsequentialid())");
@@ -61,5 +66,6 @@ namespace ApiWykazuPodatnikowVatData.Data
                 .HasDefaultValueSql("(getdate())");
         }
     }
+
     #endregion
 }

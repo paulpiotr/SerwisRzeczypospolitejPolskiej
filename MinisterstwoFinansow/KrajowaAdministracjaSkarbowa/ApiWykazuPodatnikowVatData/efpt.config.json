@@ -1,41 +1,41 @@
 ﻿{
-   "ContextClassName": "Doradob2bContext",
-   "ContextNamespace": null,
-   "DefaultDacpacSchema": null,
-   "FilterSchemas": false,
-   "IncludeConnectionString": true,
-   "ModelNamespace": null,
-   "OutputContextPath": "EF\\Data",
-   "OutputPath": "EF\\Models",
-   "ProjectRootNamespace": "ApiWykazuPodatnikowVatData",
-   "Schemas": null,
-   "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 0,
-   "Tables": [
-      {
-         "HasPrimaryKey": true,
-         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntity]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityAccountNumber]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPerson]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPesel]"
-      }
-   ],
-   "UseDatabaseNames": false,
-   "UseDbContextSplitting": false,
-   "UseFluentApiOnly": false,
-   "UseHandleBars": true,
-   "UseInflector": false,
-   "UseLegacyPluralizer": false,
-   "UseNodaTime": false,
-   "UseSpatial": false,
-   "UseStoredProcedures": false
+  "ContextClassName": "Doradob2bContext",
+  "ContextNamespace": null,
+  "DefaultDacpacSchema": null,
+  "FilterSchemas": false,
+  "IncludeConnectionString": true,
+  "ModelNamespace": null,
+  "OutputContextPath": "EF\\Data",
+  "OutputPath": "EF\\Models",
+  "ProjectRootNamespace": "ApiWykazuPodatnikowVatData",
+  "Schemas": null,
+  "SelectedHandlebarsLanguage": 0,
+  "SelectedToBeGenerated": 0,
+  "Tables": [
+    {
+      "HasPrimaryKey": true,
+      "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntity]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityAccountNumber]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPerson]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[ApiWykazuPodatnikowVat].[ApiWykazuPodatnikowVatDataEntityPesel]"
+    }
+  ],
+  "UseDatabaseNames": false,
+  "UseDbContextSplitting": false,
+  "UseFluentApiOnly": false,
+  "UseHandleBars": true,
+  "UseInflector": false,
+  "UseLegacyPluralizer": false,
+  "UseNodaTime": false,
+  "UseSpatial": false,
+  "UseStoredProcedures": false
 }
