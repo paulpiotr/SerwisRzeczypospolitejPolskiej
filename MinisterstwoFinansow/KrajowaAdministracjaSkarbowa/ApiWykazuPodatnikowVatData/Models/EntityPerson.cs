@@ -54,9 +54,9 @@ namespace ApiWykazuPodatnikowVatData.Models
         /// </summary>
         [JsonProperty(nameof(UniqueIdentifierOfTheLoggedInUser))]
         [Column("UniqueIdentifierOfTheLoggedInUser", TypeName = "varchar(512)")]
-        [Display(Name = "Identyfikator zalogowanego użytkownika",
+        [Display(Name = "Użytkownik",
             Prompt = "Wybierz identyfikator zalogowanego użytkownika",
-            Description = "Identyfikator zalogowanego użytkownika")]
+            Description = "Użytkownik")]
         [StringLength(512)]
         [Required]
         public string UniqueIdentifierOfTheLoggedInUser { get; set; }
